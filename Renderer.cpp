@@ -1,0 +1,297 @@
+#include "Renderer.h"
+#include <algorithm>
+
+Renderer::Renderer()
+{
+    this->tileVertVBO = 0;
+    this->tileUvVBO = 0;
+    this->defFB = NULL;
+    this->fwdFB = NULL;
+}
+
+Renderer::~Renderer()
+{
+}
+
+void Renderer::initPlaceholderTexture()
+{
+    Texture * placeholder = new Texture();
+    placeholder->createEmpty();
+    this->assets->add((char*)"EMPTY_TEX", (Asset*)placeholder);
+}
+
+void Renderer::initStockShaders()
+{
+    // Load the BGTiles' shader.
+    Shader * bgTileShader = new Shader();
+    // TODO: Use relative paths.
+    bgTileShader->load((char*)"Shaders/bg_tile_shader.vert",
+           (char*)"Shaders/bg_tile_shader.frag");
+    bgTileShader->addUniform((char*)"transform", UNI_MAT3);
+    bgTileShader->addUniform((char*)"depth", UNI_FLOAT);
+    bgTileShader->addUniform((char*)"texture", UNI_TEX);
+    this->assets->add((char*)"bg_tile_shader", (Asset*)bgTileShader);
+    
+    // Load the SceneTile's shader.
+    Shader * sceneTileShader = new Shader();
+    sceneTileShader->load((char*)"shaders/STOCK_scene_tile_shader.vert",
+           (char*)"shaders/STOCK_scene_tile_shader.frag");
+    sceneTileShader->addUniform((char*)"transform", UNI_MAT3);
+    sceneTileShader->addUniform((char*)"depth", UNI_FLOAT);
+    sceneTileShader->addUniform((char*)"texture", UNI_TEX);
+    this->assets->add((char*)"scene_tile_shader", (Asset*)sceneTileShader);
+    
+    // Load the AnimTile's shader.
+    Shader * animTileShader = new Shader();
+    animTileShader->load((char*)"shaders/STOCK_anim_tile_shader.vert",
+           (char*)"shaders/STOCK_anim_tile_shader.frag");
+    animTileShader->addUniform((char*)"fractFrameDim", UNI_VEC2);
+    animTileShader->addUniform((char*)"curFrame", UNI_INT);
+    animTileShader->addUniform((char*)"transform", UNI_MAT3);
+    animTileShader->addUniform((char*)"depth", UNI_FLOAT);
+    animTileShader->addUniform((char*)"texture", UNI_TEX);
+    this->assets->add((char*)"anim_tile_shader", (Asset*)animTileShader);
+    
+    // Load the final pass shader.
+    Shader * finalPassShader = new Shader();
+    finalPassShader->load((char*)"shaders/STOCK_final_pass_shader.vert",
+           (char*)"shaders/STOCK_final_pass_shader.frag");
+    finalPassShader->addUniform((char*)"transform", UNI_MAT3);
+    finalPassShader->addUniform((char*)"fwdFB", UNI_TEX);
+    finalPassShader->addUniform((char*)"defFB", UNI_TEX);
+    this->assets->add((char*)"final_pass_shader", (Asset*)finalPassShader);
+}
+
+void Renderer::initTileVAO()
+{
+    // Now we get to create a VBO!
+    // First we need some values.
+    GLfloat tileVerts[18] = {
+        -0.5f, -0.5f, -0.5f,    0.5f,  0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,   -0.5f, -0.5f, -0.5f,
+        -0.5f,  0.5f, -0.5f,    0.5f,  0.5f, -0.5f
+    };
+    GLfloat tileUVs[12] = {
+        0.0f,  1.0f,    1.0f,  0.0f,
+        1.0f,  1.0f,    0.0f,  1.0f,
+        0.0f,  0.0f,    1.0f,  0.0f
+    };
+        
+    // Now we generate the buffers.
+    glGenBuffers( 1, &(this->tileVertVBO) );
+    glGenBuffers( 1, &(this->tileUvVBO) );
+    
+    // Bind to the vertex positions buffer.
+    glBindBuffer(GL_ARRAY_BUFFER, this->tileVertVBO);
+    // Feed it the vertex positions data.
+    glBufferData(GL_ARRAY_BUFFER, 18*sizeof(float), tileVerts, GL_STATIC_DRAW);
+    
+    // Do the same for the UV buffer.
+    glBindBuffer(GL_ARRAY_BUFFER, this->tileUvVBO);
+    glBufferData(GL_ARRAY_BUFFER, 12*sizeof(float), tileUVs, GL_STATIC_DRAW);
+    
+    // Now that we've created the VBOs, we can create the VAO and tie them together.
+    glGenVertexArrays(1, &(this->tileVAO));
+    glBindVertexArray(this->tileVAO);
+    
+    // Attach the vertex VBO to the VAO.
+    glBindBuffer(GL_ARRAY_BUFFER, this->tileVertVBO);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    // Do the UV VBO.
+    glBindBuffer(GL_ARRAY_BUFFER, this->tileUvVBO);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+    
+    // Tell the VAO which indices we're actually using.
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+}
+
+bool Renderer::init(GLuint width, GLuint height)
+{
+    // First initialize the Asset Manager.
+    this->assets = new AssetManager();
+    
+    // Next initialize the Camera.
+    this->camera = new Camera(0.0, 0.0);
+        
+    // Then initialize the Tiles' VAO.
+    initTileVAO();
+    
+    // Oh go ahead and initialize the final pass Tile.
+    this->finalPass = new SceneTile();
+    this->finalPass->init(0,0,PLANE_PLAYFIELD_B,2,2,false,"#doesn't_matter");
+    
+    // Now that that's done, we load the stock shaders for the tiles
+    // that use them.
+    initStockShaders();
+    
+    // The placeholder texture is mighty important.
+    initPlaceholderTexture();
+    
+    // Oh and also we need to init the framebuffers.
+    bool success;
+    this->defFB = new Framebuffer();
+    success = this->defFB->init(width, height);
+    if(!success) this->destroy();
+    this->fwdFB = new Framebuffer();
+    success = this->fwdFB->init(width, height);
+    if(!success) this->destroy();
+    return success;
+    
+}
+
+bool Renderer::resize(GLuint width, GLuint height)
+{
+    return this->defFB->resize(width, height) &&
+           this->fwdFB->resize(width, height);
+}
+
+AssetManager * Renderer::getAssetManager()
+{
+    return this->assets;
+}
+
+Camera * Renderer::getCamera()
+{
+    return this->camera;
+}
+
+GLuint Renderer::getTileVAO()
+{
+    return this->tileVAO;
+}
+
+Framebuffer * Renderer::getFwdPass()
+{
+    return this->fwdFB;
+}
+
+Framebuffer * Renderer::getDefPass()
+{
+    return this->defFB;
+}
+
+void Renderer::addToRenderQueue(tile_type type, Tile * tile)
+{
+    this->renderQueue.push_back(TileWithType(type,tile));
+}
+
+void Renderer::flushRenderQueue()
+{
+    this->renderQueue.clear();
+}
+
+bool tileSortingPredicate(TileWithType lhs, TileWithType rhs)
+{
+    Tile * a = lhs.second;
+    Tile * b = rhs.second;
+    // We need to render transparent objects last.
+    if(  a->hasTrans() && !b->hasTrans() ) return false;
+    if( !a->hasTrans() &&  b->hasTrans() ) return true;
+    
+    // At this point both operands will have the same transparency status.
+    
+    // Now we're comparing rendering planes. We want to
+    // draw the closest Tiles first, so we can take
+    // advantage of depth testing and thusly minimize redraw.
+    if( a->getPlane() <= b->getPlane() ) return true;
+    if( a->getPlane() >  b->getPlane() ) return false;
+    return true; // Just to get rid of the warnings.
+}
+
+void Renderer::renderFinalPass()
+{
+    glDepthFunc(GL_ALWAYS);
+    Shader * program = (Shader*) this->assets->get("final_pass_shader");
+    
+    glUseProgram(program->getID());
+    
+    float * lm = finalPass->getMatrix()->getLinear();
+    program->setUniform((char*)"transform", &lm);
+    program->setTextureUniform("fwdFB", this->fwdFB->getRenderTexture(), 0);
+    program->setTextureUniform("defFB", this->defFB->getRenderTexture(), 1);
+    
+    glDrawArrays(GL_TRIANGLES, 0, 6); 
+}
+
+void Renderer::render(Window * window)
+{
+    // Rendering a bunch of Tiles is a multi-step process. First we
+    // really should sort them to cut down on overdraw.
+    std::sort(this->renderQueue.begin(), this->renderQueue.end(), tileSortingPredicate);
+    
+    // Bind to the VAO.
+    glBindVertexArray( this->tileVAO );
+    
+    // Enable these just in case.
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    
+    // We want to render all the normal Tiles to the framebuffer first.
+    this->defFB->setAsRenderTarget();
+    glClearColor(1,0,1,1);
+    glClearDepth(0.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+    
+    int count = 0;
+    // Now that we've sorted things, we go through and render the
+    // non-post-process Tiles.
+    for(std::vector<TileWithType>::iterator it = renderQueue.begin(); it != renderQueue.end(); ++it)
+    {
+        // it->first is the tile_type;
+        // it->second is the Tile*.
+        
+        // If this is a PostTile, then we go ahead and save it for later.
+        if( it->first == POST_TILE ) continue;
+        // Otherwise we render the tile.
+        it->second->render(this);
+        ++count;
+    }
+    
+    // Let's draw to a new framebuffer, so we don't feed back into ourselves.
+    this->defFB->setAsRenderTarget();
+    glClearColor(0,0,1,1); // Here's a trick. We set the clear color alpha to zero, so when we
+                           // meld the forward and deferred passes together, we can have a
+    glClearDepth(0.0f);    // shortcut to know when we should use the first pass.
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+    
+    count = 0;
+    // Now that the primary-pass Tiles have been rendered...
+    for(std::vector<TileWithType>::iterator it = renderQueue.begin(); it != renderQueue.end(); ++it)
+    {
+        // Now we only render PostTiles.
+        if( it->first == POST_TILE ) 
+        {
+            it->second->render(this);
+            ++count;
+        }
+    }
+    
+    window->setAsRenderTarget();
+    glClearColor(0,1,1,1);
+    glClearDepth(0.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+    
+    this->renderFinalPass();
+}
+
+void Renderer::destroyTileVAO()
+{
+    glDeleteBuffers(1, &this->tileVertVBO);
+    glDeleteBuffers(1, &this->tileUvVBO);
+    glDeleteVertexArrays(1, &this->tileVAO);
+}
+
+void Renderer::destroyFBOs()
+{
+    this->fwdFB->destroy();
+    this->defFB->destroy();
+    delete this->fwdFB;
+    delete this->defFB;
+}
+
+void Renderer::destroy()
+{
+    this->assets->clear();
+    delete this->assets;
+}
