@@ -46,6 +46,7 @@ bool Framebuffer::init(GLuint width, GLuint height)
     this->width = width;
     this->height = height;
     
+    // Create the color attachment.
     glGenTextures(1, &this->renderbuffer);
     glBindTexture(GL_TEXTURE_2D, this->renderbuffer);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -55,20 +56,32 @@ bool Framebuffer::init(GLuint width, GLuint height)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, this->width, this->height,
                  0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
     
-    glGenFramebuffersEXT(1, &this->framebuffer);
-    std::cout << "Framebuffer ID: " << this->framebuffer << std::endl;
-    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, this->framebuffer);
+    // Create the depth attachment.
+    glGenTextures(1, &this->depthbuffer);
+    glBindTexture(GL_TEXTURE_2D, this->depthbuffer);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, this->width, this->height,
+                 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
+                 
+    // Create the framebuffer.
+    glGenFramebuffers(1, &this->framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, this->framebuffer);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glDepthRange(0.0001, 0.9999);
     
-    glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                              GL_TEXTURE_2D, this->renderbuffer, 0);
-                              
-    glGenRenderbuffersEXT(1, &this->depthbuffer);
-    glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, this->depthbuffer);
-    glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT24,
-                            this->width, this->height);
+    glBindTexture(GL_TEXTURE_2D, this->renderbuffer);
+    // Attach the color texture as the framebuffer's color attachment.
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                           GL_TEXTURE_2D, this->renderbuffer, 0);
     
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
-                              GL_RENDERBUFFER_EXT, this->depthbuffer);
+    // Attach the depth texture as the framebuffer's depth attachment.
+    glBindTexture(GL_TEXTURE_2D, this->depthbuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, 
+                           GL_TEXTURE_2D, this->depthbuffer, 0);
 
     GLenum e = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER);
     
@@ -90,8 +103,11 @@ bool Framebuffer::resize(GLuint width, GLuint height)
 
 void Framebuffer::setAsRenderTarget()
 {
-    glBindFramebufferEXT(GL_FRAMEBUFFER, this->framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, this->framebuffer);
     glViewport(0,0, this->width, this->height);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glClearDepth(110.0f);
 }
 
 GLuint Framebuffer::getWidth()

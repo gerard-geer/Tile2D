@@ -55,13 +55,11 @@ void BGTile::render(Renderer * r)
     this->setY(y);
     
     // Feed this tile's depth information to the shader.
-    program->setUniform((char*)"depth", &Fp);
+    float depth = Tile::getTileDepth(this->getPlane());
+    program->setUniform((char*)"depth", &depth);
 
     // Now we set up this texture.
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, tex->getID());
     program->setTextureUniform((char*)"texture", tex->getID(), 0); 
-    
     
     // Draw the vertex arrays. We want the primitives drawn to be
     // triangles, and to start at the 0th vertex, and to draw a

@@ -50,7 +50,6 @@ window_error Window::initGLState(unsigned int width, unsigned int height)
     
     // Set the front face to CCW.
     glFrontFace(GL_CCW);
-    glShadeModel(GL_FLAT);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     
@@ -63,14 +62,9 @@ window_error Window::initGLState(unsigned int width, unsigned int height)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_VERTEX_ARRAY);
-    
-    // Set up the initial projection matrix.
+        
     glViewport(0, 0, width, height);
     
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    float aspect = (float)width/(float)height;
-    glOrtho(0.0f, 1.0f*aspect, 1.0f, 0.0f, 0.0f, 1.0f);
     
     return WIN_NO_ERROR;
 
@@ -208,6 +202,16 @@ window_error Window::setFullscreen(bool fullscreen)
 GLFWwindow* Window::getWindow()
 {
     return this->baseWindow;
+}
+
+unsigned int Window::getWidth() const
+{
+    return this->width;
+}
+
+unsigned int Window::getHeight() const
+{
+    return this->height;
 }
 
 Renderer * Window::getRenderer()

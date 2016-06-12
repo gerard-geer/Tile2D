@@ -73,11 +73,18 @@ public:
     static const GLuint FLIP_HORIZ = 2;
     
     /**
-     * @brief Converts a Tile rendering plane to an appropriate Z depth.
+     * @brief Converts a Tile rendering plane to a parallax scrolling factor.
      * @param plane The rendering plane.
      * @return A depth value.
      */
     static GLfloat getParallaxFactor(tile_plane plane);
+    
+    /**
+     * @brief Converts a Tile rendering plane to an appropriate Z depth.
+     * @param plane The rendering plane.
+     * @return A parallax scrolling factor.
+     */
+    static GLfloat getTileDepth(tile_plane plane);
     
     /**
      * @brief Constructs a new Tile instance.

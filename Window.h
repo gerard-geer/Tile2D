@@ -154,6 +154,10 @@ public:
      */
     GLFWwindow * getWindow();
     
+    unsigned int getWidth() const;
+    
+    unsigned int getHeight() const;
+    
     /**
      * @brief Returns a reference to this window's Renderer.
      * @return A reference to this window's Renderer.

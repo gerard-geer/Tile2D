@@ -37,6 +37,23 @@ GLfloat Tile::getParallaxFactor(tile_plane plane)
     }
 }
 
+GLfloat Tile::getTileDepth(tile_plane plane)
+{
+    switch(plane)
+    {
+        case PLANE_BG: return .999;
+        case PLANE_NEG_4: return .9;
+        case PLANE_NEG_3: return .8;
+        case PLANE_NEG_2: return .7;
+        case PLANE_NEG_1: return .6;
+        case PLANE_PLAYFIELD_A: return .5;
+        case PLANE_PLAYFIELD_B: return .4;
+        case PLANE_PLAYFIELD_C: return .3;
+        case PLANE_POS_1: return .2;
+        case PLANE_POS_2: return .101;
+    }
+}
+
 GLfloat Tile::getX() const
 {
     return this->m->get(0,2);

@@ -13,9 +13,7 @@ void ShaderUniform::init(GLuint program, uniform_type type, char * name)
 {
     this->type = type;
     glUseProgram(program);
-    this->location = glGetUniformLocation(program, name);
-    std::cout << "Name: " << name << " Position: " << this->location << std::endl;
-    
+    this->location = glGetUniformLocation(program, name);    
     
 }
 
@@ -76,7 +74,7 @@ void ShaderUniform::set(void * data)
         case UNI_TEX: 
         {
             int* d = (int*) data; 
-            glUniform1d(this->location, *d);
+            glUniform1i(this->location, *d);
             break;
         }
         default: 

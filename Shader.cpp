@@ -65,6 +65,7 @@ shader_error Shader::loadSource(char* filename, char*** source, int* numLines)
     // If we weren't able to open the file, we have to return an error.
     else
     {
+        std::cout << "Could not load " << filename << std::endl;
         free(*source); // We didn't initialize the individiual pointers yet.
         return SHADER_COULD_NOT_OPEN;
     }

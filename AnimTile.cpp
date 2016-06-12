@@ -56,7 +56,7 @@ void AnimTile::render(Renderer* r)
     program->setUniform("curFrame", &this->curFrame);
 
     // Now let's get the parallax factor.
-    float Fp = this->getParallaxFactor(this->getPlane());
+    float Fp = Tile::getParallaxFactor(this->getPlane());
     
     // Now habitually preserve the current X and Y position of the AnimTile.
     GLfloat x = this->getX();
@@ -77,7 +77,8 @@ void AnimTile::render(Renderer* r)
     this->setY(y);
     
     // Feed this tile's depth information to the shader.
-    program->setUniform((char*)"depth", &Fp);
+    float depth = Tile::getTileDepth(this->getPlane());
+    program->setUniform((char*)"depth", &depth);
     
     // Now we set up this texture.
     program->setTextureUniform((char*)"texture", frames->getID(), 0);   

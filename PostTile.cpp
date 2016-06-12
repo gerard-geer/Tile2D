@@ -25,6 +25,7 @@ Shader * PostTile::createPostTileShader(char * vertPath, char * fragPath)
     Shader * s = new Shader();
     shader_error e = s->load(vertPath, fragPath);
     s->addUniform((char*)"transform", UNI_MAT3);
+    s->addUniform((char*)"pFactor", UNI_FLOAT);
     s->addUniform((char*)"depth", UNI_FLOAT);
     s->addUniform((char*)"camera", UNI_VEC2);
     s->addUniform((char*)"time", UNI_FLOAT);
@@ -66,6 +67,7 @@ char * PostTile::getTexA()
 {
     return texA;
 }
+
 char * PostTile::getTexB()
 {
     return texB;
@@ -74,6 +76,7 @@ char * PostTile::getTexC()
 {
     return texC;
 }
+
 char * PostTile::getTexD()
 {
     return texD;
@@ -122,9 +125,13 @@ void PostTile::render(Renderer * r)
     float time = glfwGetTime();
     program->setUniform("time", &time);
     
-    // Get the parallax factor and send it in as "depth."
-    float Fp = this->getParallaxFactor(this->getPlane());
-    program->setUniform((char*)"depth", &Fp);
+    // Get the parallax factor and send it in.
+    float Fp = Tile::getParallaxFactor(this->getPlane());
+    program->setUniform((char*)"pFactor", &Fp);
+    
+    // Send in the depth of this Tile as well.
+    float depth = Tile::getTileDepth(this->getPlane());
+    program->setUniform((char*)"depth", &depth);
     
     // The usual call to glDrawArrays()
     glDrawArrays(GL_TRIANGLES, 0, 6);

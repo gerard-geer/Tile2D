@@ -15,69 +15,48 @@ using namespace std;
 int main(int argc, char **argv)
 {
     Window window = Window();
-    window.create(720, 480, (char*)"WOO", 8);
+    window.create(1000, 716, (char*)"WOO", 1);
     Renderer * r = window.getRenderer();
     
-    if(GLEW_ARB_vertex_array_object) cout << "WE CAN DO VAOs" << endl;
-    if(GLEW_ARB_texture_non_power_of_two) cout << "WE CAN DO NPOT" << endl;
-    if(GLEW_EXT_framebuffer_object) cout << "WE CAN DO FBO" << endl;
-    if(GLEW_ARB_framebuffer_object) cout << "WE CAN REALLY DO FBO" << endl;
-    cout << glGetString(GL_VERSION) << endl;
-    cout << GL_TEXTURE0 << ' ' << GL_TEXTURE1 << ' ' << GL_TEXTURE2 << endl;
+    Texture * pups = new Texture();
+    pups->load((char*)"/home/gerard/Pictures/mrpups.png");
+    r->getAssetManager()->add("pups", (Asset*)pups);
     
-        
-    Texture * yum24 = new Texture();
-    yum24->load((char*)"/home/gerard/Pictures/mrpups.png");
-    r->getAssetManager()->add("yum24", (Asset*)yum24);
+    Texture * kitten = new Texture();
+    kitten->load((char*)"/home/gerard/Pictures/kitten512.png");
+    r->getAssetManager()->add("kitten", (Asset*)kitten);
     
-    Shader * s = new Shader();
-    s = PostTile::createPostTileShader((char*)"shaders/example_post_tile_shader.vert", (char*)"shaders/example_post_tile_shader.frag");
-    r->getAssetManager()->add("post_shader", (Asset*)s);
-    PostTile * pt = new PostTile();
-    pt->init(0,0, PLANE_NEG_2, .5, .5, NULL, NULL, NULL, NULL, "post_shader");
+    Texture * travis = new Texture();
+    travis->load((char*)"/home/gerard/Pictures/travis.PNG");
+    r->getAssetManager()->add("travis", (Asset*)travis);
     
-    window.setAsRenderTarget();
-    
-    // Texture * yum32 = new Texture();
-    // yum32->load((char*)"/home/gerard/Pictures/yumetarou32bit.png");
-    
+    Texture * yumetarou = new Texture();
+    yumetarou->load((char*)"/home/gerard/Pictures/yumetarou_frame16x20.png");
+    r->getAssetManager()->add("yumetarou", (Asset*)yumetarou);
     
     BGTile * bg = new BGTile();
-    bg->init(0,0,1.5,1.5, "yum24");
+    bg->init(0,0,1.5,1.5, "pups");
     r->addToRenderQueue(BG_TILE, bg);
+    
+    Shader * exPostShader = PostTile::createPostTileShader((char*)"../Shaders/ex_post_tile_shader.vert",
+                                                           (char*)"../Shaders/ex_post_tile_shader.frag");
+    r->getAssetManager()->add("example_post_shader", (Asset*)exPostShader);
+    
+    PostTile * pt = new PostTile();
+    pt->init(0, 0, PLANE_PLAYFIELD_A, .5, .5, "pups", "kitten", NULL, NULL, "example_post_shader");
     r->addToRenderQueue(POST_TILE, pt);
     
-   /* Texture * kitten = new Texture();
-    kitten->load((char*)"/home/gerard/Pictures/kitten512.png");
-    Texture * letter = new Texture();
-    letter->load((char*)"/home/gerard/Pictures/PURPLE_C.png");
-    Texture * yumetarou = new Texture();
-    yumetarou->load((char*)"/home/gerard/Pictures/yumetarou32bit.png");
-    cout << kitten->getWidth() << "x" << kitten->getHeight() << endl;
+    SceneTile * st = new SceneTile();
+    st->init(0, .0, PLANE_NEG_2, .3, .25, false, "travis");
+    r->addToRenderQueue(SCENE_TILE, st);
     
-    Renderer renderer = Renderer();
-    renderer.init();
-    
-    renderer.getAssetManager()->add("kitten_tex", (Asset*)kitten);
-    renderer.getAssetManager()->add("purple_c", (Asset*)letter);
-    renderer.getAssetManager()->add("yumetarou", (Asset*)yumetarou);
-    
-    BGTile * bgt = new BGTile();
-    bgt->init(0.0,0.0,.5,.5,"kitten_tex");
-    renderer.addToRenderQueue(BG_TILE, (Tile*)bgt);
-    
-    SceneTile * sct = new SceneTile();
-    sct->init(0,0,PLANE_NEG_3, .25, .25, true, "purple_c");
-    renderer.addToRenderQueue(SCENE_TILE, (Tile*)sct);
-    AnimTile * ant = new AnimTile();
-    ant->init(0.1, 0.0, PLANE_PLAYFIELD_B, .16, .20, false, "yumetarou", 6, 16, 20
-    , .05);
-    renderer.addToRenderQueue(ANIM_TILE, (Tile*)ant);*/
+    AnimTile * at = new AnimTile();
+    at->init(.4, .4, PLANE_POS_1, .6, .6, false, "yumetarou", 6, 16, 20, 1.0/20.0);
+    r->addToRenderQueue(ANIM_TILE, at);
     
     GLuint framecount = 0;
     while(!glfwWindowShouldClose(window.getWindow()))
     {
-        //window.setSSFactor((int)(abs(16*sin(glfwGetTime()))+1));
         
         if(framecount == 10)
         {

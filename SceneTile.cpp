@@ -43,7 +43,8 @@ void SceneTile::render(Renderer * r)
     this->setY(y);
     
     // Feed this tile's depth information to the shader.
-    program->setUniform((char*)"depth", &Fp);
+    float depth = Tile::getTileDepth(this->getPlane());
+    program->setUniform((char*)"depth", &depth);
     
     // Now we set up this texture.
     program->setTextureUniform((char*)"texture", tex->getID(), 0); 

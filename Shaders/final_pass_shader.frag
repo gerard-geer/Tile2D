@@ -14,5 +14,5 @@ void main(void)
     // Sample the textures and mix based on alpha. That's it!
     vec4 fwd = texture2D(fwdFB, fragUV);
     vec4 def = texture2D(defFB, fragUV);
-    gl_FragColor = vec4(fwd.xyz, 1);
+    gl_FragColor = vec4(mix(fwd.rgb, def.rgb, def.a), 1.0);
 }

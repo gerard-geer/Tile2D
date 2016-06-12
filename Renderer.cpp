@@ -25,8 +25,8 @@ void Renderer::initStockShaders()
     // Load the BGTiles' shader.
     Shader * bgTileShader = new Shader();
     // TODO: Use relative paths.
-    bgTileShader->load((char*)"Shaders/bg_tile_shader.vert",
-           (char*)"Shaders/bg_tile_shader.frag");
+    bgTileShader->load((char*)"../Shaders/bg_tile_shader.vert",
+           (char*)"../Shaders/bg_tile_shader.frag");
     bgTileShader->addUniform((char*)"transform", UNI_MAT3);
     bgTileShader->addUniform((char*)"depth", UNI_FLOAT);
     bgTileShader->addUniform((char*)"texture", UNI_TEX);
@@ -34,8 +34,8 @@ void Renderer::initStockShaders()
     
     // Load the SceneTile's shader.
     Shader * sceneTileShader = new Shader();
-    sceneTileShader->load((char*)"shaders/STOCK_scene_tile_shader.vert",
-           (char*)"shaders/STOCK_scene_tile_shader.frag");
+    sceneTileShader->load((char*)"../Shaders/scene_tile_shader.vert",
+           (char*)"../Shaders/scene_tile_shader.frag");
     sceneTileShader->addUniform((char*)"transform", UNI_MAT3);
     sceneTileShader->addUniform((char*)"depth", UNI_FLOAT);
     sceneTileShader->addUniform((char*)"texture", UNI_TEX);
@@ -43,8 +43,8 @@ void Renderer::initStockShaders()
     
     // Load the AnimTile's shader.
     Shader * animTileShader = new Shader();
-    animTileShader->load((char*)"shaders/STOCK_anim_tile_shader.vert",
-           (char*)"shaders/STOCK_anim_tile_shader.frag");
+    animTileShader->load((char*)"../Shaders/anim_tile_shader.vert",
+           (char*)"../Shaders/anim_tile_shader.frag");
     animTileShader->addUniform((char*)"fractFrameDim", UNI_VEC2);
     animTileShader->addUniform((char*)"curFrame", UNI_INT);
     animTileShader->addUniform((char*)"transform", UNI_MAT3);
@@ -54,8 +54,8 @@ void Renderer::initStockShaders()
     
     // Load the final pass shader.
     Shader * finalPassShader = new Shader();
-    finalPassShader->load((char*)"shaders/STOCK_final_pass_shader.vert",
-           (char*)"shaders/STOCK_final_pass_shader.frag");
+    finalPassShader->load((char*)"../Shaders/final_pass_shader.vert",
+           (char*)"../Shaders/final_pass_shader.frag");
     finalPassShader->addUniform((char*)"transform", UNI_MAT3);
     finalPassShader->addUniform((char*)"fwdFB", UNI_TEX);
     finalPassShader->addUniform((char*)"defFB", UNI_TEX);
@@ -130,11 +130,11 @@ bool Renderer::init(GLuint width, GLuint height)
     
     // Oh and also we need to init the framebuffers.
     bool success;
-    this->defFB = new Framebuffer();
-    success = this->defFB->init(width, height);
-    if(!success) this->destroy();
     this->fwdFB = new Framebuffer();
     success = this->fwdFB->init(width, height);
+    if(!success) this->destroy();
+    this->defFB = new Framebuffer();
+    success = this->defFB->init(width, height);
     if(!success) this->destroy();
     return success;
     
@@ -142,8 +142,9 @@ bool Renderer::init(GLuint width, GLuint height)
 
 bool Renderer::resize(GLuint width, GLuint height)
 {
-    return this->defFB->resize(width, height) &&
-           this->fwdFB->resize(width, height);
+    this->defFB->resize(width, height);
+    this->fwdFB->resize(width, height);
+    return true;
 }
 
 AssetManager * Renderer::getAssetManager()
@@ -227,12 +228,9 @@ void Renderer::render(Window * window)
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     
-    // We want to render all the normal Tiles to the framebuffer first.
-    this->defFB->setAsRenderTarget();
-    glClearColor(1,0,1,1);
-    glClearDepth(0.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-    
+    this->fwdFB->setAsRenderTarget();
+    glClearColor(0.5f, 0.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     int count = 0;
     // Now that we've sorted things, we go through and render the
     // non-post-process Tiles.
@@ -248,13 +246,9 @@ void Renderer::render(Window * window)
         ++count;
     }
     
-    // Let's draw to a new framebuffer, so we don't feed back into ourselves.
     this->defFB->setAsRenderTarget();
-    glClearColor(0,0,1,1); // Here's a trick. We set the clear color alpha to zero, so when we
-                           // meld the forward and deferred passes together, we can have a
-    glClearDepth(0.0f);    // shortcut to know when we should use the first pass.
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-    
+    glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     count = 0;
     // Now that the primary-pass Tiles have been rendered...
     for(std::vector<TileWithType>::iterator it = renderQueue.begin(); it != renderQueue.end(); ++it)
@@ -268,10 +262,8 @@ void Renderer::render(Window * window)
     }
     
     window->setAsRenderTarget();
-    glClearColor(0,1,1,1);
-    glClearDepth(0.0f);
+    glClearColor(1.0f,0.0f,1.0f,1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-    
     this->renderFinalPass();
 }
 
