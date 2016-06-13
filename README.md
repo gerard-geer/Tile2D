@@ -1,6 +1,6 @@
 # Tile2D
 A Tile-based 2D rendering engine.
-=================================
+---------------------------------
 Ever just want a decent way to just make a window, load some sprites and blit them?
 This is for you. Ever want a 2D engine that's super light, but also highly capable?
 This is also for you.
@@ -9,7 +9,7 @@ Quickstart
 ----------
 In just six steps you can draw sprites to the screen.
 
-**Step 1:** Include common header. Don't forget to link against ```-lglfw -lGL -lGLU -lpng -lGLEW```
+**Step 1:** Setup. Include common header. Put ```/Assets``` one directory above where your executable will go, and don't forget to link against ```-lglfw -lGL -lGLU -lpng -lGLEW```
 ```c++
 #include "tile2d.h"
 ```
