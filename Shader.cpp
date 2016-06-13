@@ -23,27 +23,47 @@ const char * Shader::getShaderType(GLenum type)
 
 void Shader::scanLineForUniforms(char* line)
 {
+    // Number of tokens found in the line.
     unsigned int numTokens = 0;
+    // The current token.
     char * token;
+    // An array to store all the tokens in.
     char ** tokens = (char**) malloc( sizeof(char*) * 3 );
     
+    // Get the first token.
     token = strtok(line, " ;,/*+-^&!()\n=?.!{}[]");
+    
+    // While we've no more than three tokens, and the prior token
+    // read returned something. (Since all uniform declarations
+    // in GLSL 1.2 and earlier are three tokens, we only need the
+    // first three.)
     while( numTokens < 3 && token != NULL )
     {
+        // Store the token.
         tokens[numTokens] = token;
+        // Update how many tokens we have.
         ++numTokens;
+        // Get the next token.
         token = strtok(NULL, " ;,/*+-^&!()\n=?.!{}[]");
     }
+    
+    // If we have three tokens, there's a chance this is a uniform!
     if(numTokens == 3)
     {
+        // If the first token is "uniform" then the next should be
+        // the type and the third is the variable name.
         if( strcmp(tokens[0], "uniform") == 0 )
         {
             this->addUniform( tokens[2], ShaderUniform::getType(tokens[1]) );
         }
     }
+    
+    // Gotta free the token array.
+    free(tokens);
 }
 void Shader::scanSourceForUniforms(char** source, int numLines)
 {
+    // Just go through and check each line.
     for( unsigned int i = 0; i < numLines; ++i )
     {
         this->scanLineForUniforms((source)[i]);
