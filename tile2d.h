@@ -1,5 +1,5 @@
 /**
- * File: g2d.h
+ * File: tile2d.h
  * Author: Gerard Geer
  * License: GPL v3.0
  * 
