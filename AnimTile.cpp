@@ -33,8 +33,6 @@ void AnimTile::render(Renderer* r)
     if( glfwGetTime() > this->lastChange+this->frameTime )
     {
         this->lastChange = glfwGetTime();
-        std::cout << "Times are changing" << std::endl;
-        std::cout << this->curFrame << std::endl;
         this->curFrame = (this->curFrame + 1)%this->numFrames;
     }
     
@@ -133,22 +131,7 @@ void AnimTile::setCurFrame(unsigned int curFrame)
     this->curFrame = curFrame;
 }
 
-void AnimTile::setFrameHeight(unsigned int frameHeight) 
-{
-    this->frameHeight = frameHeight;
-}
-
-void AnimTile::setFrameWidth(unsigned int frameWidth) 
-{
-    this->frameWidth = frameWidth;
-}
-
 void AnimTile::setNumFrames(unsigned int numFrames) 
 {
     this->numFrames = numFrames;
-}
-
-void AnimTile::setTexture(char* texture) 
-{
-    this->texture = texture;
 }

@@ -8,6 +8,7 @@
  * @date 05/31/16
  * @file Camera.h
  * @brief This is a simple class to encapsulate a camera for the renderer.
+ *        It has an X and Y location.
  */
 class Camera
 {

@@ -7,13 +7,42 @@
 #include "Shader.h"
 #include "BasicMatrix.h"
 
+/**
+ * @class PostTile
+ * @author Gerard Geer
+ * @date 06/13/16
+ * @file PostTile.h
+ * @brief A PostTile, short for Post-processing Tile. This variety of Tile
+ *        allows you to specify up to four custom Textures and have a custom
+ *        shader (GLSL 1.2) as well. The shader can only access certain uniforms
+ *        though:
+ *        resolution: Buffer resolution (vec2)
+ *        time: Time since the window was created (float)
+ *        camera: The current position of the camera (vec2)
+ *        transform: The Tile's transformation matrix. Note though that unlike
+ *         other Tiles, this one must have the Camera position taken into its 
+ *         account by the vertex shader. (mat3)
+ *        fwdColor: The color buffer of the first pass. (sampler2D)
+ *        fwdDepth: The depth buffer of the first pass. (sampler2D)
+ *        texA: The first custom texture. (sampler2D)
+ *        texB: The second custom texture. (sampler2D)
+ *        texC: The third custom texture. (sampler2D)
+ *        texD: The fourth custom texture. (sampler2D)
+ */
 class PostTile : public Tile
 {
 private:
+    /*
+     * The keys to the four custom textures.
+     */
     char * texA;
     char * texB;
     char * texC;
     char * texD;
+    
+    /*
+     * The key to the PostTile's custom shader.
+     */
     char * shader;
 public:
     
@@ -55,17 +84,6 @@ public:
     void init(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
               GLfloat height, char * texA, char * texB,
               char * texC, char * texD, char * shader);
-              
-    /**
-     * @brief Creates a Shader instance, initializes it from the source
-     *        code given, and even preconfigures all the expected
-     *        PostTile shader uniforms before giving it back.
-     * @param vertPath The path to the vertex shader source.
-     * @param fragPath The path to the fragment shader source.
-     * @param s A shader pointer that we can allocate and initialize.
-     * @return Any shader_errors returned in the process.
-     */
-    static Shader * createPostTileShader(char * vertPath, char * fragPath);
 
     /**
      * @brief Called by the Renderer to draw this Tile.
@@ -105,12 +123,32 @@ public:
     
     /**
      * @brief Returns the key used to access this PostTile's shader.
-     * @return 
+     * @return The key used to access this PostTile's Shader.
      */
     char * getShader();
+    
+    /**
+     * @brief Returns the key used to access this PostTile's first custom texture.
+     * @return The key used to access this PostTile's first custom texture.
+     */
     char * getTexA();
+    
+    /**
+     * @brief Returns the key used to access this PostTile's second custom texture.
+     * @return The key used to access this PostTile's second custom texture.
+     */
     char * getTexB();
+    
+    /**
+     * @brief Returns the key used to access this PostTile's second custom texture.
+     * @return The key used to access this PostTile's second custom texture.
+     */
     char * getTexC();
+    
+    /**
+     * @brief Returns the key used to access this PostTile's second custom texture.
+     * @return The key used to access this PostTile's second custom texture.
+     */
     char * getTexD();
 };
 

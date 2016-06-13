@@ -9,13 +9,17 @@
  * @param action How it was pressed.
  * @param mods Potential modifier keys, OR'd together if necessary.
  */
- 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if ( (key == GLFW_KEY_ESCAPE || key == GLFW_KEY_ENTER) && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
+/**
+ * @brief A callback used by GLFW in the event of an error.
+ * @param error
+ * @param desc
+ */
 static void error_callback(int error, const char* desc)
 {
     fputs(desc, stderr);
@@ -65,18 +69,20 @@ window_error Window::initGLState(unsigned int width, unsigned int height)
         
     glViewport(0, 0, width, height);
     
+    glfwSwapInterval(1);
+    
     
     return WIN_NO_ERROR;
 
 }
 
-window_error Window::create(unsigned int width, unsigned int height, char* title, ss_factor ssFactor)
+window_error Window::create(unsigned int windowW, unsigned int windowH,
+                            unsigned int fbW, unsigned int fbH, char* title)
 {
     // Store the width and height and title for later use.
-    this->width = width;
-    this->height = height;
+    this->width = windowW;
+    this->height = windowH;
     this->title = title;
-    this->ssFactor = ssFactor;
     
     // Initialize GLFW.
     if(!glfwInit()) return WIN_COULD_NOT_INIT_GLFW;
@@ -115,7 +121,7 @@ window_error Window::create(unsigned int width, unsigned int height, char* title
     
     // Initialize the renderer.
     this->renderer = new Renderer();
-    bool rErr = this->renderer->init(this->width/this->ssFactor, this->height/this->ssFactor);
+    bool rErr = this->renderer->init(fbW, fbH);
     return WIN_NO_ERROR;
 }
 
@@ -124,18 +130,11 @@ void Window::setResolution(unsigned int width, unsigned int height)
     this->width = width;
     this->height = height;
     glfwSetWindowSize(this->baseWindow, this->width, this->height);
-    this->renderer->resize(this->width/this->ssFactor, this->height/this->ssFactor);
 }
 
-void Window::setSSFactor(ss_factor ssFactor)
+void Window::setFBResolution(unsigned int width, unsigned int height)
 {
-    this->ssFactor = ssFactor;
-    this->renderer->resize(this->width/this->ssFactor, this->height/this->ssFactor);
-}
-
-ss_factor Window::getSSFactor()
-{
-    return this->ssFactor;
+    this->renderer->resize(width, height);
 }
 
 window_error Window::setFullscreen(bool fullscreen)
@@ -189,7 +188,7 @@ window_error Window::setFullscreen(bool fullscreen)
     this->renderer->initTileVAO();
     
     // We should probably resize the framebuffers to recreate them.
-    this->renderer->resize(this->width/this->ssFactor, this->height/this->ssFactor);
+    this->renderer->resize(this->renderer->getWidth(), this->renderer->getHeight());
     
     // Now that we've successfully actually changed the fullscreen status
     // we can say something about it.

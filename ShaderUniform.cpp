@@ -9,6 +9,21 @@ ShaderUniform::~ShaderUniform()
 }
 
 #include <iostream>
+uniform_type ShaderUniform::getType(char * typeAsText)
+{
+    std::cout << "type being added: " << typeAsText << std::endl;
+    if( strcmp(typeAsText, "int") == 0 ) return UNI_INT;
+    if( strcmp(typeAsText, "float") == 0 ) return UNI_FLOAT;
+    if( strcmp(typeAsText, "vec2") == 0 ) return UNI_VEC2;
+    if( strcmp(typeAsText, "vec3") == 0 ) return UNI_VEC3;
+    if( strcmp(typeAsText, "vec4") == 0 ) return UNI_VEC4;
+    if( strcmp(typeAsText, "mat2") == 0 ) return UNI_MAT2;
+    if( strcmp(typeAsText, "mat3") == 0 ) return UNI_MAT3;
+    if( strcmp(typeAsText, "mat4") == 0 ) return UNI_MAT4;
+    if( strcmp(typeAsText, "sampler2D") == 0 ) return UNI_TEX;
+    return UNI_INT;
+}
+
 void ShaderUniform::init(GLuint program, uniform_type type, char * name)
 {
     this->type = type;

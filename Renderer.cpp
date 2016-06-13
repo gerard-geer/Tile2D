@@ -17,49 +17,23 @@ void Renderer::initPlaceholderTexture()
 {
     Texture * placeholder = new Texture();
     placeholder->createEmpty();
-    this->assets->add((char*)"EMPTY_TEX", (Asset*)placeholder);
+    this->assets->addNewTexture((char*)"EMPTY_TEX", NULL);
 }
 
 void Renderer::initStockShaders()
 {
-    // Load the BGTiles' shader.
-    Shader * bgTileShader = new Shader();
-    // TODO: Use relative paths.
-    bgTileShader->load((char*)"../Shaders/bg_tile_shader.vert",
-           (char*)"../Shaders/bg_tile_shader.frag");
-    bgTileShader->addUniform((char*)"transform", UNI_MAT3);
-    bgTileShader->addUniform((char*)"depth", UNI_FLOAT);
-    bgTileShader->addUniform((char*)"texture", UNI_TEX);
-    this->assets->add((char*)"bg_tile_shader", (Asset*)bgTileShader);
-    
-    // Load the SceneTile's shader.
-    Shader * sceneTileShader = new Shader();
-    sceneTileShader->load((char*)"../Shaders/scene_tile_shader.vert",
-           (char*)"../Shaders/scene_tile_shader.frag");
-    sceneTileShader->addUniform((char*)"transform", UNI_MAT3);
-    sceneTileShader->addUniform((char*)"depth", UNI_FLOAT);
-    sceneTileShader->addUniform((char*)"texture", UNI_TEX);
-    this->assets->add((char*)"scene_tile_shader", (Asset*)sceneTileShader);
-    
-    // Load the AnimTile's shader.
-    Shader * animTileShader = new Shader();
-    animTileShader->load((char*)"../Shaders/anim_tile_shader.vert",
-           (char*)"../Shaders/anim_tile_shader.frag");
-    animTileShader->addUniform((char*)"fractFrameDim", UNI_VEC2);
-    animTileShader->addUniform((char*)"curFrame", UNI_INT);
-    animTileShader->addUniform((char*)"transform", UNI_MAT3);
-    animTileShader->addUniform((char*)"depth", UNI_FLOAT);
-    animTileShader->addUniform((char*)"texture", UNI_TEX);
-    this->assets->add((char*)"anim_tile_shader", (Asset*)animTileShader);
-    
-    // Load the final pass shader.
-    Shader * finalPassShader = new Shader();
-    finalPassShader->load((char*)"../Shaders/final_pass_shader.vert",
-           (char*)"../Shaders/final_pass_shader.frag");
-    finalPassShader->addUniform((char*)"transform", UNI_MAT3);
-    finalPassShader->addUniform((char*)"fwdFB", UNI_TEX);
-    finalPassShader->addUniform((char*)"defFB", UNI_TEX);
-    this->assets->add((char*)"final_pass_shader", (Asset*)finalPassShader);
+    this->assets->addNewShader((char*)"bg_tile_shader", 
+                               (char*)"../Assets/Rendering Assets/Shaders/bg_tile_shader.vert",
+                               (char*)"../Assets/Rendering Assets/Shaders/bg_tile_shader.frag");
+    this->assets->addNewShader((char*)"scene_tile_shader",
+                               (char*)"../Assets/Rendering Assets/Shaders/scene_tile_shader.vert",
+                               (char*)"../Assets/Rendering Assets/Shaders/scene_tile_shader.frag");
+    this->assets->addNewShader((char*)"anim_tile_shader", 
+                               (char*)"../Assets/Rendering Assets/Shaders/anim_tile_shader.vert",
+                               (char*)"../Assets/Rendering Assets/Shaders/anim_tile_shader.frag");
+    this->assets->addNewShader((char*)"final_pass_shader",
+                               (char*)"../Assets/Rendering Assets/Shaders/final_pass_shader.vert",
+                               (char*)"../Assets/Rendering Assets/Shaders/final_pass_shader.frag");    
 }
 
 void Renderer::initTileVAO()
@@ -67,9 +41,9 @@ void Renderer::initTileVAO()
     // Now we get to create a VBO!
     // First we need some values.
     GLfloat tileVerts[18] = {
-        -0.5f, -0.5f, -0.5f,    0.5f,  0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,   -0.5f, -0.5f, -0.5f,
-        -0.5f,  0.5f, -0.5f,    0.5f,  0.5f, -0.5f
+        -0.5f, -0.5f, 1.0f,    0.5f,  0.5f, 1.0f,
+         0.5f, -0.5f, 1.0f,   -0.5f, -0.5f, 1.0f,
+        -0.5f,  0.5f, 1.0f,    0.5f,  0.5f, 1.0f
     };
     GLfloat tileUVs[12] = {
         0.0f,  1.0f,    1.0f,  0.0f,
@@ -172,6 +146,16 @@ Framebuffer * Renderer::getDefPass()
     return this->defFB;
 }
 
+unsigned int Renderer::getWidth()
+{
+    return this->fwdFB->getWidth();
+}
+
+unsigned int Renderer::getHeight()
+{
+    return this->fwdFB->getHeight();
+}
+
 void Renderer::addToRenderQueue(tile_type type, Tile * tile)
 {
     this->renderQueue.push_back(TileWithType(type,tile));
@@ -207,8 +191,6 @@ void Renderer::renderFinalPass()
     
     glUseProgram(program->getID());
     
-    float * lm = finalPass->getMatrix()->getLinear();
-    program->setUniform((char*)"transform", &lm);
     program->setTextureUniform("fwdFB", this->fwdFB->getRenderTexture(), 0);
     program->setTextureUniform("defFB", this->defFB->getRenderTexture(), 1);
     
@@ -267,6 +249,110 @@ void Renderer::render(Window * window)
     this->renderFinalPass();
 }
 
+BGTile * Renderer::makeBGTile(GLfloat x, GLfloat y, GLfloat width, GLfloat height, 
+                              bool normalize, char* texture)
+{
+    BGTile * t = new BGTile();
+    if(normalize)
+    {
+        width /= this->getWidth()*.5;
+        height /= this->getHeight()*.5;
+        x = (x/this->getWidth()*.5)-1.0+width*.5;
+        y = (y/this->getHeight()*.5)-1.0+height*.5;
+    }
+    t->init(x, y, width, height, texture);
+    return t;
+}
+
+SceneTile * Renderer::makeSceneTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
+                                  GLfloat height, bool normalize, char* texture)
+{
+    SceneTile * t = new SceneTile();
+    if(normalize)
+    {
+        width /= this->getWidth()*.5;
+        height /= this->getHeight()*.5;
+        x = (x/this->getWidth()*.5)-1.0+width*.5;
+        y = (y/this->getHeight()*.5)-1.0+height*.5;
+    }
+    t->init(x, y, plane, width, height, 
+            // Oh hey look since we're part of Renderer, we can just go see if
+            // the texture has an alpha channel.
+            ((Texture*)(this->getAssetManager()->get(texture)))->hasAlpha(),
+            texture);
+    return t;
+}
+
+AnimTile * Renderer::makeAnimTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
+                                GLfloat height, bool normalize, char* texture, 
+                                unsigned int numFrames, unsigned int framewidth, 
+                                unsigned int frameHeight, float frameTime)
+{
+    AnimTile * t = new AnimTile();
+    if(normalize)
+    {
+        width /= this->getWidth()*.5;
+        height /= this->getHeight()*.5;
+        x = (x/this->getWidth()*.5)-1.0+width*.5;
+        y = (y/this->getHeight()*.5)-1.0+height*.5;
+    }
+    t->init(x, y, plane, width, height, 
+            ((Texture*)(this->getAssetManager()->get(texture)))->hasAlpha(),
+            texture, numFrames, framewidth, frameHeight, frameTime);
+    return t;
+}
+
+PostTile * Renderer::makePostTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
+                                GLfloat height, bool normalize, char* texA, char* texB,
+                                char* texC, char* texD, char* shader)
+{
+    PostTile * t = new PostTile();
+    if(normalize)
+    {
+        width /= this->getWidth()*.5;
+        height /= this->getHeight()*.5;
+        x = (x/this->getWidth()*.5)-1.0+width*.5;
+        y = (y/this->getHeight()*.5)-1.0+height*.5;
+    }
+    t->init(x, y, plane, width, height, texA, texB, texC, texD, shader);
+    return t;
+}
+
+GLfloat Renderer::getTileSSX(Tile * tile)
+{
+    return ( tile->getX()+1.0 ) * this->getWidth() * .5;
+}
+
+GLfloat Renderer::getTileSSY(Tile * tile)
+{
+    return ( tile->getY()+1.0 ) * this->getHeight() * .5;
+}
+
+void Renderer::setTileSSPos(Tile * tile, GLfloat x, GLfloat y)
+{
+    x = (x-1.0)/this->getWidth()*.5;
+    y = (y-1.0)/this->getHeight()*.5;
+    tile->setX(x);
+    tile->setY(y);
+}
+
+GLfloat Renderer::getTileSSW(Tile * tile)
+{
+    return ( tile->getWidth() ) * this->getWidth() * .5;
+}
+
+GLfloat Renderer::getTileSSH(Tile * tile)
+{
+    return ( tile->getHeight() ) * this->getHeight() * .5;
+}
+
+void Renderer::setTileSSDim(Tile * tile, GLfloat w, GLfloat h)
+{
+    w /= this->getWidth()*.5;
+    h /= this->getHeight()*.5;
+    tile->setWidth(w);
+    tile->setHeight(h);
+}
 void Renderer::destroyTileVAO()
 {
     glDeleteBuffers(1, &this->tileVertVBO);

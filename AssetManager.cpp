@@ -10,8 +10,27 @@ AssetManager::~AssetManager()
 
 void AssetManager::add(char * key, Asset * asset)
 {
+    std::cout << "adding: " << key << std::endl;
     if( !this->contains(key) )
-        this->assetHash.insert(pair<string,Asset*>(key,asset));
+        this->assetHash.insert(std::pair<std::string,Asset*>(key,asset));
+}
+
+tex_error AssetManager::addNewTexture(char * key, char * filepath)
+{
+    Texture * t = new Texture();
+    tex_error e;
+    if(filepath == NULL) e = t->createEmpty();
+    else e = t->load(filepath);
+    if( e == TEX_NO_ERROR ) this->add(key,(Asset*)t);
+    return e;
+}
+
+shader_error AssetManager::addNewShader(char * key, char * vertPath, char * fragPath)
+{
+    Shader * s = new Shader();
+    shader_error e = s->load(vertPath, fragPath);
+    if( e == SHADER_NO_ERROR ) this->add(key,(Asset*)s);
+    return e;
 }
 
 bool AssetManager::contains(char * key)

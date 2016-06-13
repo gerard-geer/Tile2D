@@ -6,7 +6,15 @@
 #include "Renderer.h"
 #include "BasicMatrix.h"
 
-
+/**
+ * @class AnimTile
+ * @author Gerard Geer
+ * @date 06/13/16
+ * @file AnimTile.h
+ * @brief An animated Tile. What do I mean by animated? Well this can have a
+ *        a texture divided horizontally into different frames, and the shader
+ *        steps through them at a specified step.
+ */
 class AnimTile : public Tile
 {
 private:
@@ -71,8 +79,7 @@ public:
      * @param numFrames The number of frames held in the texture.
      * @param framewidth The width of each individual frame.
      * @param frameHeight The height of each individual frame.
-     * @param framesToWait The number of frames to wait between changing the currently
-     *        displayed frame.
+     * @param frameTime The duration of each frame.
      */
     void init(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
               GLfloat height, bool trans, char * texture,
@@ -135,31 +142,11 @@ public:
     void setCurFrame(unsigned int curFrame);
     
     /**
-     * @brief Sets the height of each frame.
-     * @param frameHeight The new height of individual frames.
-     */
-    void setFrameHeight(unsigned int frameHeight);
-    
-    /**
-     * @brief Sets the width of each frame.
-     * @param frameWidth The new width of each frame.
-     */
-    void setFrameWidth(unsigned int frameWidth);
-    
-    /**
      * @brief Sets the number of frames. Dishonest values will
      *        mess things up in ways that aren't fun.
      * @param numFrames The new number of frames stored in the texture.
      */
     void setNumFrames(unsigned int numFrames);
-    
-    /**
-     * @brief Changes this AnimTile's texture key.
-     * @param texture The new texture key.
-     */
-    void setTexture(char* texture);
-
-
 
 };
 

@@ -7,8 +7,6 @@
 #include <cstring>
 #include <map>
 #include <stdlib.h>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include "Asset.h"
 #include "ShaderUniform.h"
 
@@ -26,6 +24,18 @@ enum shader_error{
     SHADER_COULD_NOT_LINK = 3
 };
 
+/**
+ * @class Shader
+ * @author Gerard Geer
+ * @date 06/13/16
+ * @file Shader.h
+ * @brief Ties up all the boiler plate with setting up Shaders. Simply pass a shader
+ *        two filenames, and it will be set up entirely automatically. Just call 
+ *        setUniform() to set the value of uniform variables, and use() to use it.
+ *        This is meant to target GLSL 1.2, but any shader without fixed position
+ *        uniforms should work. (E.g., any shader that declares uniforms in this way:
+ *        "uniform <type> <identifier>;"
+ */
 class Shader : public Asset
 {
 private:
@@ -45,6 +55,10 @@ private:
      * @return A string telling us in plain English what stage we're working with.
      */
     static const char * getShaderType(GLenum type);
+    
+    void scanLineForUniforms(char* line);
+    
+    void scanSourceForUniforms(char** source, int numLines);
     
     /**
      * @brief Loads source code from a text file, and dumps the result into source,
@@ -151,6 +165,11 @@ public:
      * @return The ID of this shader.
      */
     GLuint getID();
+    
+    /**
+     * @brief Tells OpenGL to use this shader.
+     */
+    void use();
     
     /**
      * @brief Returns an error description given a shader_error.

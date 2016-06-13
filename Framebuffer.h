@@ -5,6 +5,14 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+/**
+ * @class Framebuffer
+ * @author Gerard Geer
+ * @date 06/13/16
+ * @file Framebuffer.h
+ * @brief Encapsulates an OpenGL framebuffer Object. Both the color0 and depth
+ *        attachments are readable textures. (RGBA and DEPTH_COMPONENT).
+ */
 class Framebuffer
 {
 private:

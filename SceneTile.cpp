@@ -63,9 +63,3 @@ char * SceneTile::getTexture()
 {
     return this->texture;
 }
-
-void SceneTile::setTexture(char * texture)
-{
-    this->texture = texture;
-}
-

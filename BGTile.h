@@ -6,6 +6,14 @@
 #include "Renderer.h"
 #include "BasicMatrix.h"
 
+/**
+ * @class BGTile
+ * @author Gerard Geer
+ * @date 06/13/16
+ * @file BGTile.h
+ * @brief A BGTile, or rather, Background Tile. This type of Tile isn't animated
+ *        and is relegated to the PLANE_BG parallax plane.
+ */
 class BGTile : public Tile
 {
 private:
@@ -46,13 +54,6 @@ public:
      * @brief Renders the Tile.
      */
     void render(Renderer * r);
-    
-    
-    /**
-     * @brief Changes the key used to access this SceneTile's texture.
-     * @param texture The new key.
-     */
-    void setTexture(char * texture);
     
     /**
      * @brief Returns the key used to access this SceneTile's texture.

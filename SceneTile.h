@@ -54,12 +54,6 @@ public:
     void render(Renderer * r);
     
     /**
-     * @brief Changes the key used to access this SceneTile's texture.
-     * @param texture The new key.
-     */
-    void setTexture(char * texture);
-    
-    /**
      * @brief Returns the key used to access this SceneTile's texture.
      * @return This SceneTile's texture key.
      */

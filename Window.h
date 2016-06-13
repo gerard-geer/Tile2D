@@ -1,7 +1,6 @@
 #ifndef TEST_WINDOW_H
 #define TEST_WINDOW_H
 
-#define GLFW_INCLUDE_GLU
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <stdlib.h>
@@ -36,15 +35,6 @@ enum window_error
     WIN_COULD_NOT_INIT_RENDERER
 };
 
-/*
- * We don't have to render the scene at full pixel density.
- * We can cut that down so that you can have a nice, pixelated
- * view. ***Note that these are values >=1 that are used as
- * follows:
- * framebuffer_resolution = (window_resolution)/ss_factor;
- */
-typedef unsigned int ss_factor;
-
 class Window
 {
 private:
@@ -58,12 +48,6 @@ private:
      * The height of the window.
      */
     unsigned int height;
-    
-    /*
-     * The subsampling factor used to make the framebuffers of the
-     * renderer a lower resolution than the window.
-     */
-    ss_factor ssFactor;
     
     /*
      * The title of the window.
@@ -113,33 +97,29 @@ public:
     
     /**
      * @brief Initializes GLFW and creates the window.
-     * @param x Width of the window.
-     * @param y Height of the window.
+     * @param windowW Horizontal resolution of the window.
+     * @param windowH Vertical resolution of the window.
+     * @param fbW Horizontal resolution of the framebuffer.
+     * @param fbH Vertical resolution of the framebuffer.
      * @param title The title of the window.
-     * @param ssFactor The pixel density of the rendered image, relative to the window.
      */
-    window_error create(unsigned int width, unsigned int height, char* title, ss_factor ssFactor);
+    window_error create(unsigned int windowW, unsigned int windowH,
+                        unsigned int fbW, unsigned int fbH, char* title);
     
     /**
      * @brief Changes the resolution of the window. This can also be used to change
      *        fullscreen resolution.
      * @param width The new width of the window.
-     * @param height
+     * @param height The new height of the window.
      */
     void setResolution(unsigned int width, unsigned int height);
     
     /**
-     * @brief Changes the subsampling factor used to pixelate the 
-     *        rendering result.
-     * @param ssFactor The new subsampling factor.
+     * @brief Changes the resolution of the underlying framebuffer.
+     * @param width The new width of the window.
+     * @param height The new height of the window.
      */
-    void setSSFactor(ss_factor ssFactor);
-    
-    /**
-     * @brief Returns the current subsampling factor.
-     * @return The current subsampling factor.
-     */
-    ss_factor getSSFactor();
+    void setFBResolution(unsigned int width, unsigned int height);
     
     /**
      * @brief Sets the fullscreen status of this window.

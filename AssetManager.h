@@ -4,8 +4,11 @@
 #include <string>
 #include <map>
 #include "Asset.h"
+#include "Shader.h"
+#include "Texture.h"
 
-using namespace std;
+class Texture;
+class Shader;
 
 /**
  * @class AssetManager
@@ -23,7 +26,14 @@ private:
     /*
      * The underlying map that holds all the Assets.
      */
-    map<string, Asset*> assetHash;
+    std::map<std::string, Asset*> assetHash;
+    
+    /**
+     * @brief Adds an Asset pointer to the manager.
+     * @param key The key to associate this Asset with.
+     */
+    void add(char * key, Asset * asset);
+    
 public:
     
     /*
@@ -37,10 +47,23 @@ public:
     ~AssetManager();
     
     /**
-     * @brief Adds an Asset pointer to the manager.
-     * @param key The key to associate this Asset with.
+     * @brief Loads a Texture and adds it to the asset manager under the given key.
+     *        If an error occurs during loading the asset is not added.
+     * @param key The key to associate this Texture with.
+     * @param filepath The path to the texture image file.
+     * @return A tex_error. If no error occurred, TEX_NO_ERROR is returned.
      */
-    void add(char * key, Asset * asset);
+    tex_error addNewTexture(char * key, char * filepath);
+    
+    /**
+     * @brief Loads a Shader and adds it to the asset manager under the given key.
+     *        If an error occurs during loading the asset is not added.
+     * @param key The key to associate this Shader with.
+     * @param vertPath The filepath to the vertex shader source.
+     * @param fragPath The filepath to the fragment shader source.
+     * @return A shader_error. If no error occurred, SHADER_NO_ERROR is returned.
+     */
+    shader_error addNewShader(char * key, char * vertPath, char * fragPath);
     
     /**
      * @brief Tests whether an Asset exists in the Manager.

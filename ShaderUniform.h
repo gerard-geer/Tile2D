@@ -1,6 +1,7 @@
 #ifndef SHADERUNIFORM_H
 #define SHADERUNIFORM_H
 
+#include <cstring>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -49,10 +50,19 @@ public:
      * Constructor. Doesn't do much.
      */
     ShaderUniform();
+    
     /*
      * Destructor. Also doesn't do much.
      */
     ~ShaderUniform();
+    
+    /**
+     * @brief Takes a string representing a shader uniform type, 
+     *        and returns the enumerated equivalent.
+     * @param typeAsText The string representing the type.
+     * @return The enumerated equivalent.
+     */
+    static uniform_type getType(char * typeAsText);
     
     /**
      * @brief Locates this uniform within the shader program and stores

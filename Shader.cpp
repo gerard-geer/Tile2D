@@ -21,6 +21,35 @@ const char * Shader::getShaderType(GLenum type)
     }
 }
 
+void Shader::scanLineForUniforms(char* line)
+{
+    unsigned int numTokens = 0;
+    char * token;
+    char ** tokens = (char**) malloc( sizeof(char*) * 3 );
+    
+    token = strtok(line, " ;,/*+-^&!()\n=?.!{}[]");
+    while( numTokens < 3 && token != NULL )
+    {
+        tokens[numTokens] = token;
+        ++numTokens;
+        token = strtok(NULL, " ;,/*+-^&!()\n=?.!{}[]");
+    }
+    if(numTokens == 3)
+    {
+        if( strcmp(tokens[0], "uniform") == 0 )
+        {
+            this->addUniform( tokens[2], ShaderUniform::getType(tokens[1]) );
+        }
+    }
+}
+void Shader::scanSourceForUniforms(char** source, int numLines)
+{
+    for( unsigned int i = 0; i < numLines; ++i )
+    {
+        this->scanLineForUniforms((source)[i]);
+    }
+}
+
 shader_error Shader::loadSource(char* filename, char*** source, int* numLines)
 {
     // Initialize numLines to zero.
@@ -78,6 +107,8 @@ shader_error Shader::initShader(char* filename, GLenum type, GLuint* shaderID)
     
     // An array of strings to store the lines of the source code.
     char** source = NULL;
+    
+    std::cout << "Loading " << filename << "..." << std::endl;
     
     // Actually load the shader.
     shader_error e = Shader::loadSource(filename, &source, &numLines);
@@ -229,6 +260,16 @@ shader_error Shader::load(char* vertFile, char* fragFile)
     // Now that we've compiled the shaders, we can link them.
     e = linkShaders(vertID, fragID);
     if(e) return e;
+    
+    // Now we need to parse for uniforms. Let's just reload the source.
+    char ** vertSource = NULL;
+    char ** fragSource = NULL;
+    int vertLines = 0;
+    int fragLines = 0;
+    this->loadSource(vertFile, &vertSource, &vertLines);
+    this->scanSourceForUniforms(vertSource, vertLines);
+    this->loadSource(fragFile, &fragSource, &fragLines);
+    this->scanSourceForUniforms(fragSource, fragLines);
 
     // Return the no_error that was returned last.
     return e;
@@ -240,7 +281,7 @@ void Shader::addUniform(char * name, uniform_type type)
 {
     // Create a new ShaderUniform.
     ShaderUniform* s = new ShaderUniform();
-    
+    std::cout << "Adding a new uniform! " << name << std::endl;
     // Initialize it.
     s->init(this->id, type, name);
     
@@ -294,6 +335,11 @@ void Shader::setTextureUniform(char * name, GLuint texID, GLuint texUnit)
 GLuint Shader::getID()
 {
     return this->id;
+}
+
+void Shader::use()
+{
+    glUseProgram(this->id);
 }
 
 const char* Shader::getErrorDesc(shader_error e)

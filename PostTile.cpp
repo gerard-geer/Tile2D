@@ -20,25 +20,6 @@ void PostTile::init(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
     this->shader = shader;
 }
 
-Shader * PostTile::createPostTileShader(char * vertPath, char * fragPath)
-{
-    Shader * s = new Shader();
-    shader_error e = s->load(vertPath, fragPath);
-    s->addUniform((char*)"transform", UNI_MAT3);
-    s->addUniform((char*)"pFactor", UNI_FLOAT);
-    s->addUniform((char*)"depth", UNI_FLOAT);
-    s->addUniform((char*)"camera", UNI_VEC2);
-    s->addUniform((char*)"time", UNI_FLOAT);
-    s->addUniform((char*)"resolution", UNI_VEC2);
-    s->addUniform((char*)"fwdColor", UNI_TEX);
-    s->addUniform((char*)"fwdDepth", UNI_TEX);
-    s->addUniform((char*)"texA", UNI_TEX);
-    s->addUniform((char*)"texB", UNI_TEX);
-    s->addUniform((char*)"texC", UNI_TEX);
-    s->addUniform((char*)"texD", UNI_TEX);
-    return s;
-}
-
 void PostTile::setShader(char* shader)
 {
     this->shader = shader;

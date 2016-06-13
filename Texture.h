@@ -45,26 +45,32 @@ enum tex_error
 class Texture : public Asset
 {
 private:
+    
     /*
      * The texture ID given to us by OpenGL.
      */
     GLuint texID;
+    
     /*
      * The width of this texture.
      */
     GLuint width;
+    
     /*
      * The height of this texture.
      */
     GLuint height;
+    
     /*
      * The color type of this texture.
      */
     png_byte colorType;
+    
     /*
      * The color depth of this texture.
      */
     png_byte colorDepth;
+    
     /*
      * Whether or not this texture contains an
      * alpha channel.
@@ -81,15 +87,18 @@ private:
     tex_error loadPNG(char* filename, png_bytep** data);
     
 public:
+
     /**
      * @brief Construtor. Simply initializes some values. Use
      *        load() to actually load the texture from file.
      */
     Texture();
+
     /**
      * @brief Destructor. Doesn't really need to do much.
      */
     ~Texture();
+
     /**
      * @brief Loads a texture from file, and hands it directly
      *        OpenGL.
@@ -97,38 +106,51 @@ public:
      * @return A tex_error, if any.
      */
     tex_error load(char* filename);
+
     /**
      * @brief Creates a blank, empty texture. Useful for making 
      *        placeholder textures.
      * @return A tex_error, if any.
      */
     tex_error createEmpty();
+
     /**
      * @brief Takes an error code and gives you a description.
      * @return A description of an error code's error.
      */
     static const char* getErrorDesc(int error);
+    
+    /**
+     * @brief Returns a text description of a png_color_type.
+     * @param t The png_byte containing the color type.
+     * @return A string containing a text description of the png_color_type.
+     */
     static const char* getColorType(png_byte t);
+    
     /**
      * @brief Returns the texture ID given to us by OpenGL.
      * @return Returns the texture ID given to us by OpenGL.
      */
     GLuint getID();
+    
     /**
      * @brief Returns the width of this texture.
      * @return The width of this texture.
      */
     GLuint getWidth();
+    
     /**
      * @brief Returns the height of this texture.
      * @return The height of this texture.
      */
     GLuint getHeight();
+    
     /**
      * @brief Returns whether or not this texture has an alpha channel.
      * @return Whether or not this texture has an alpha channel.
      */
     bool hasAlpha();
+    
     /**
      * @brief Frees texture resources. Call this when the GPU will no
      * longer need this texture data.

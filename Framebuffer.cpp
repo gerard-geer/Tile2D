@@ -71,7 +71,6 @@ bool Framebuffer::init(GLuint width, GLuint height)
     glBindFramebuffer(GL_FRAMEBUFFER, this->framebuffer);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-    glDepthRange(0.0001, 0.9999);
     
     glBindTexture(GL_TEXTURE_2D, this->renderbuffer);
     // Attach the color texture as the framebuffer's color attachment.
@@ -82,10 +81,9 @@ bool Framebuffer::init(GLuint width, GLuint height)
     glBindTexture(GL_TEXTURE_2D, this->depthbuffer);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, 
                            GL_TEXTURE_2D, this->depthbuffer, 0);
-
-    GLenum e = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER);
     
-    std::cout << getFramebufferError(e) << std::endl;
+    // Best practice to check framebuffer completeness.
+    GLenum e = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER);
     
     // Go ahead and set the render target back to the window's backbuffer.
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
