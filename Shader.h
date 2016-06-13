@@ -56,8 +56,17 @@ private:
      */
     static const char * getShaderType(GLenum type);
     
+    /**
+     * @brief Scans a single line of source for "uniform <type> <identifier>;"
+     * @param line The line to scan.
+     */
     void scanLineForUniforms(char* line);
     
+    /**
+     * @brief Scans all of a source file for uniforms.
+     * @param source The array of strings that make up the source flie.
+     * @param numLines How many lines are in that array.
+     */
     void scanSourceForUniforms(char** source, int numLines);
     
     /**
