@@ -290,6 +290,12 @@ shader_error Shader::load(char* vertFile, char* fragFile)
     this->scanSourceForUniforms(vertSource, vertLines);
     this->loadSource(fragFile, &fragSource, &fragLines);
     this->scanSourceForUniforms(fragSource, fragLines);
+    
+    // Now that we're done with it (again) we need to free it (again).
+    for(unsigned int i = 0; i < vertLines; ++i) free(vertSource[i]);
+    for(unsigned int i = 0; i < fragLines; ++i) free(fragSource[i]);
+    free(vertSource);
+    free(fragSource);
 
     // Return the no_error that was returned last.
     return e;
