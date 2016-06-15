@@ -53,7 +53,6 @@ r->addToRenderQueue(ANIM_TILE, at);
 glfwPollEvents();
 glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 r->render(&window);
-r->getCamera()->setX(sin(glfwGetTime()));
 glfwSwapBuffers(window.getWindow());
 ++framecount;
 ```
