@@ -320,30 +320,30 @@ PostTile * Renderer::makePostTile(GLfloat x, GLfloat y, tile_plane plane, GLfloa
 
 GLfloat Renderer::getTileSSX(Tile * tile)
 {
-    return ( tile->getX()+1.0 ) * this->getWidth() * .5;
+    return ( tile->getX()+1.0 ) * (this->getWidth() * .5);
 }
 
 GLfloat Renderer::getTileSSY(Tile * tile)
 {
-    return ( tile->getY()+1.0 ) * this->getHeight() * .5;
+    return ( tile->getY()+1.0 ) * (this->getHeight() * .5);
 }
 
 void Renderer::setTileSSPos(Tile * tile, GLfloat x, GLfloat y)
 {
-    x = (x-1.0)/this->getWidth()*.5;
-    y = (y-1.0)/this->getHeight()*.5;
+    x = (x/(this->getWidth()*.5))-1.0+tile->getWidth()*.5;
+    y = (y/(this->getHeight()*.5))-1.0+tile->getHeight()*.5;
     tile->setX(x);
     tile->setY(y);
 }
 
 GLfloat Renderer::getTileSSW(Tile * tile)
 {
-    return ( tile->getWidth() ) * this->getWidth() * .5;
+    return ( tile->getWidth() ) * (this->getWidth() * .5);
 }
 
 GLfloat Renderer::getTileSSH(Tile * tile)
 {
-    return ( tile->getHeight() ) * this->getHeight() * .5;
+    return ( tile->getHeight() ) * (this->getHeight() * .5);
 }
 
 void Renderer::setTileSSDim(Tile * tile, GLfloat w, GLfloat h)
