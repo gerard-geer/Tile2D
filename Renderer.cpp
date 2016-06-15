@@ -257,8 +257,8 @@ BGTile * Renderer::makeBGTile(GLfloat x, GLfloat y, GLfloat width, GLfloat heigh
     {
         width /= this->getWidth()*.5;
         height /= this->getHeight()*.5;
-        x = (x/this->getWidth()*.5)-1.0+width*.5;
-        y = (y/this->getHeight()*.5)-1.0+height*.5;
+        x = (x/(this->getWidth()*.5))-1.0+width*.5;
+        y = (y/(this->getHeight()*.5))-1.0+height*.5;
     }
     t->init(x, y, width, height, texture);
     return t;
@@ -272,8 +272,8 @@ SceneTile * Renderer::makeSceneTile(GLfloat x, GLfloat y, tile_plane plane, GLfl
     {
         width /= this->getWidth()*.5;
         height /= this->getHeight()*.5;
-        x = (x/this->getWidth()*.5)-1.0+width*.5;
-        y = (y/this->getHeight()*.5)-1.0+height*.5;
+        x = (x/(this->getWidth()*.5))-1.0+width*.5;
+        y = (y/(this->getHeight()*.5))-1.0+height*.5;
     }
     t->init(x, y, plane, width, height, 
             // Oh hey look since we're part of Renderer, we can just go see if
@@ -293,8 +293,8 @@ AnimTile * Renderer::makeAnimTile(GLfloat x, GLfloat y, tile_plane plane, GLfloa
     {
         width /= this->getWidth()*.5;
         height /= this->getHeight()*.5;
-        x = (x/this->getWidth()*.5)-1.0+width*.5;
-        y = (y/this->getHeight()*.5)-1.0+height*.5;
+        x = (x/(this->getWidth()*.5))-1.0+width*.5;
+        y = (y/(this->getHeight()*.5))-1.0+height*.5;
     }
     t->init(x, y, plane, width, height, 
             ((Texture*)(this->getAssetManager()->get(texture)))->hasAlpha(),
@@ -311,8 +311,8 @@ PostTile * Renderer::makePostTile(GLfloat x, GLfloat y, tile_plane plane, GLfloa
     {
         width /= this->getWidth()*.5;
         height /= this->getHeight()*.5;
-        x = (x/this->getWidth()*.5)-1.0+width*.5;
-        y = (y/this->getHeight()*.5)-1.0+height*.5;
+        x = (x/(this->getWidth()*.5))-1.0+width*.5;
+        y = (y/(this->getHeight()*.5))-1.0+height*.5;
     }
     t->init(x, y, plane, width, height, texA, texB, texC, texD, shader);
     return t;
