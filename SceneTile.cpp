@@ -49,6 +49,12 @@ void SceneTile::render(Renderer * r)
     // Now we set up this texture.
     program->setTextureUniform((char*)"texture", tex->getID(), 0); 
     
+    // Let's not forget about texture flip!
+    GLuint hFlip = (GLuint)(Tile::getTextureFlip() & Tile::FLIP_HORIZ);
+    GLuint vFlip = (GLuint)(Tile::getTextureFlip() & Tile::FLIP_VERT);
+    std::cout << "hFlip: " << vFlip << std::endl;
+    program->setUniform((char*)"hFlip", &hFlip);
+    program->setUniform((char*)"vFlip", &vFlip);
     
     // Draw the vertex arrays. We want the primitives drawn to be
     // triangles, and to start at the 0th vertex, and to draw a
