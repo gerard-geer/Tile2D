@@ -21,7 +21,7 @@ void SceneTile::render(Renderer * r)
     
     Texture * tex = (Texture*) r->getAssetManager()->get(this->texture);
     
-    glUseProgram(program->getID());
+    program->use();
     
     // Store the original values so we can put them back.
     GLfloat x = this->getX();
