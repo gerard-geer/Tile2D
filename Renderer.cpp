@@ -166,6 +166,13 @@ void Renderer::flushRenderQueue()
     this->renderQueue.clear();
 }
 
+/**
+ * @brief This is used as the predicate when sorting Tiles. It places opaque
+ *        from front to back, then transparent Tiles from back to front.
+ * @param lhs The left-hand-side Tile in the comparision.
+ * @param rhs The right-hand-size Tile in the comparison.
+ * @return Whether or not the first one is less than the second.
+ */
 bool tileSortingPredicate(TileWithType lhs, TileWithType rhs)
 {
     Tile * a = lhs.second;
@@ -186,14 +193,18 @@ bool tileSortingPredicate(TileWithType lhs, TileWithType rhs)
 
 void Renderer::renderFinalPass()
 {
-    glDepthFunc(GL_ALWAYS);
+    // Get the shader that we need for the final pass' screen quad.
     Shader * program = (Shader*) this->assets->get("final_pass_shader");
     
-    glUseProgram(program->getID());
+    // Tell OpenGL to use that program.
+    program->use();
     
+    // Assign the forward and deferred passes to a texture unit, then pass
+    // that unit to the shader program.
     program->setTextureUniform("fwdFB", this->fwdFB->getRenderTexture(), 0);
     program->setTextureUniform("defFB", this->defFB->getRenderTexture(), 1);
     
+    // Now we just draw the triangles.
     glDrawArrays(GL_TRIANGLES, 0, 6); 
 }
 
