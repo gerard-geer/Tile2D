@@ -307,7 +307,6 @@ void Shader::addUniform(char * name, uniform_type type)
 {
     // Create a new ShaderUniform.
     ShaderUniform* s = new ShaderUniform();
-    std::cout << "Adding a new uniform! " << name << std::endl;
     // Initialize it.
     s->init(this->id, type, name);
     
@@ -338,11 +337,7 @@ bool Shader::hasUniform(char * name)
 
 void Shader::setUniform(char * name, void * data)
 {
-    if(!this->hasUniform(name))
-    {
-        std::cout << "This shader doesn't have a " << name << "uniform." << std::endl;
-        return;
-    }
+    if(!this->hasUniform(name)) return;
     // Pretty straightforward really. It's so straight
     // forward that it has not one but two arrows pointing
     // straight forward! How about that.
