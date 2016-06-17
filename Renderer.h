@@ -158,6 +158,13 @@ private:
     void initTileVAO();  
 
     /**
+     * @brief Tests to see if a Tile is on screen for proactive culling.
+     * @param t The TileWithType containing the Tile to test.
+     * @return Whether or not the Tile is on screen.
+     */
+    bool onScreenTest(TileWithType t);
+    
+    /**
      * @brief Draws the finished framebuffer onto a full screen Tile and
      *        renders it to the screen.
      */
