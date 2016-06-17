@@ -20,26 +20,26 @@ resolutions specified.
 ```c++
 Window window = Window();
 // Window::create(winH, winV, fboH, fboV, title)
-window.create(1280, 800, 256, 240, (char*)"Tile2D Window");
+window.create(1280, 800, 256, 240, "Tile2D Window");
 ```
 **Step 3:** Add some stuff to the Renderer's Asset Manager. This is where all graphics
         related Assets (Shaders and Textures) are stored, so they can be shared across
         Tiles.
 ```c++
 Renderer* r = window.getRenderer();
-r->getAssetManager()->addNewTexture((char*)"puppy", (char*)"path_to_puppy_picture.png");
-r->getAssetManager()->addNewTexture((char*)"kitten", (char*)"path_to_kitten_picture.png");
-r->getAssetManager()->addNewTexture((char*)"fish", (char*)"path_to_fish_picture.png");
-r->getAssetManager()->addNewTexture((char*)"yumetarou", (char*)"path_to_yumetarou_frames_texture.png");
-r->getAssetManager()->addNewShader((char*)"example_post_tile_shader", (char*)"path_to_vert_shader.vert",
-                                                           (char*)"path_to_frag_shader.frag");
+r->getAssetManager()->addNewTexture("puppy", "path_to_puppy_picture.png");
+r->getAssetManager()->addNewTexture("kitten", "path_to_kitten_picture.png");
+r->getAssetManager()->addNewTexture("fish", "path_to_fish_picture.png");
+r->getAssetManager()->addNewTexture("yumetarou", "path_to_yumetarou_frames_texture.png");
+r->getAssetManager()->addNewShader("example_post_tile_shader", "path_to_vert_shader.vert",
+                                                           "path_to_frag_shader.frag");
 ```
 **Step 4:** Make some Tiles. Generally Tiles take a position, rendering plane, size, and Texture.
 ```c++
 BGTile * bg = r->makeBGTile(0,0,1.5,1.5,false,"puppy");
-PostTile * pt = r->makePostTile(.025, .25, PLANE_POS_1, .5, .5, false, (char*)"puppy", (char*)"kitten", NULL, NULL, (char*)"example_post_tile_shader");
-SceneTile * st = r->makeSceneTile(.25, 0, PLANE_NEG_2, .5, .5, false, (char*)"fish");
-AnimTile * at = r->makeAnimTile(100.0, 40.0, PLANE_PLAYFIELD_A, 16.0, 20.0, true, (char*)"yumetarou", 6, 16, 20, 1.0/20.0);
+PostTile * pt = r->makePostTile(.025, .25, PLANE_POS_1, .5, .5, false, "puppy", "kitten", NULL, NULL, (char*)"example_post_tile_shader");
+SceneTile * st = r->makeSceneTile(.25, 0, PLANE_NEG_2, .5, .5, false, "fish");
+AnimTile * at = r->makeAnimTile(100.0, 40.0, PLANE_PLAYFIELD_A, 16.0, 20.0, true, "yumetarou", 6, 16, 20, 1.0/20.0);
 ```
 **Step 5:** Add those tiles to the Renderer's rendering queue.
 ```c++
