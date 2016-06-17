@@ -30,6 +30,10 @@ uniform mat3 transform;
 // The depth of this AnimTile.
 uniform float depth;
 
+// Texture flip requests.
+uniform int hFlip;
+uniform int vFlip;
+
 // The texture coordinates we're going to send to the fragment stage.
 varying vec2 fragUV;
 
@@ -44,6 +48,12 @@ void main(void)
     // Now we do the texture coordinates.
     fragUV = vertUV * fractFrameDim;
     fragUV.x += fractFrameDim.x * float(curFrame);
+    
+    // If we've got horizontal flip, we need to flip.
+    if( hFlip > 0 ) fragUV.x = 1.0-fragUV.x;
+    
+    // Do the same for horizontal.
+    if( vFlip > 0 ) fragUV.y = 1.0-fragUV.y;
 }
     
 

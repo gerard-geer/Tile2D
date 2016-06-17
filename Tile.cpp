@@ -18,6 +18,7 @@ void Tile::init(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, GLfloat h
     this->m->set(1,1, height);
     this->plane = plane;
     this->trans = trans;
+    this->texFlip = 0;
 }
 
 GLfloat Tile::getParallaxFactor(tile_plane plane)

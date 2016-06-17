@@ -24,6 +24,10 @@ uniform mat3 transform;
 // always be the same.
 uniform float depth;
 
+// Texture flip requests.
+uniform int hFlip;
+uniform int vFlip;
+
 // The texture coordinate that we'll send off to get interpolated
 // and passed to the fragment stage.
 varying vec2 fragUV;
@@ -43,4 +47,10 @@ void main(void)
     
     // Get the texture coordinate squared away.
     fragUV = vertUV;
+    
+    // If we've got horizontal flip, we need to flip.
+    if( hFlip > 0 ) fragUV.x = 1.0-fragUV.x;
+    
+    // Do the same for horizontal.
+    if( vFlip > 0 ) fragUV.y = 1.0-fragUV.y;
 }

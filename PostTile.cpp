@@ -114,6 +114,12 @@ void PostTile::render(Renderer * r)
     float depth = Tile::getTileDepth(this->getPlane());
     program->setUniform((char*)"depth", &depth);
     
+    // Let's not forget about texture flip!
+    GLuint hFlip = (GLuint)(this->getTextureFlip() & Tile::FLIP_HORIZ);
+    GLuint vFlip = (GLuint)(this->getTextureFlip() & Tile::FLIP_VERT);
+    program->setUniform((char*)"hFlip", &hFlip);
+    program->setUniform((char*)"vFlip", &vFlip);
+    
     // The usual call to glDrawArrays()
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }

@@ -12,6 +12,8 @@
  *  possible to disable it in the vertex stage. If you want the
  *  scolling, you'll have to do it yourself. (This example shows
  *  you how.)
+ * -You also need to do texture flipping yourself if you want it.
+ *  (There's an example of this down below as well.)
  * -Second, your shaders must declare the two attribute variables.
  *  GLSL doesn't care if you implement the uniforms, but if you
  *  want to use them, you'll have to declare them yourself.
@@ -38,6 +40,10 @@ uniform float pFactor;
 
 // The depth of this PostTile.
 uniform float depth;
+
+// Texture flip requests.
+uniform int hFlip;
+uniform int vFlip;
 
 // We want to give the fragment shader a texture coordinate, right?
 varying vec2 fragUV;
@@ -78,4 +84,10 @@ void main(void)
     
     // Oh, let's not forget to send over a texture coordinate.
     fragUV = vertUV;
+    
+    // If we've got horizontal flip, we need to flip.
+    if( hFlip > 0 ) fragUV.x = 1.0-fragUV.x;
+    
+    // Do the same for horizontal.
+    if( vFlip > 0 ) fragUV.y = 1.0-fragUV.y;
 }

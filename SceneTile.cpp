@@ -18,7 +18,7 @@ void SceneTile::init(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, GLfl
 void SceneTile::render(Renderer * r)
 {
     Shader * program = (Shader*) r->getAssetManager()->get((char*)"scene_tile_shader");
-    
+
     Texture * tex = (Texture*) r->getAssetManager()->get(this->texture);
     
     program->use();
@@ -50,9 +50,8 @@ void SceneTile::render(Renderer * r)
     program->setTextureUniform((char*)"texture", tex->getID(), 0); 
     
     // Let's not forget about texture flip!
-    GLuint hFlip = (GLuint)(Tile::getTextureFlip() & Tile::FLIP_HORIZ);
-    GLuint vFlip = (GLuint)(Tile::getTextureFlip() & Tile::FLIP_VERT);
-    std::cout << "hFlip: " << vFlip << std::endl;
+    GLuint hFlip = (GLuint)(this->getTextureFlip() & Tile::FLIP_HORIZ);
+    GLuint vFlip = (GLuint)(this->getTextureFlip() & Tile::FLIP_VERT);
     program->setUniform((char*)"hFlip", &hFlip);
     program->setUniform((char*)"vFlip", &vFlip);
     
