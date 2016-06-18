@@ -224,6 +224,21 @@ void Window::setAsRenderTarget()
     glViewport(0,0,this->width, this->height);
 }
 
+void Window::update()
+{
+    // Make sure we poll for keyboard and such events.
+    glfwPollEvents();
+    
+    // Clear the buffer.
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    
+    // Tell the Renderer to do its thing.
+    this->renderer->render(this);
+    
+    // Flip front/back buffers.
+    glfwSwapBuffers(this->getWindow());
+}
+
 void Window::destroy()
 {
     glfwDestroyWindow(this->baseWindow);

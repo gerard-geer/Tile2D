@@ -152,6 +152,11 @@ public:
     void setAsRenderTarget();
     
     /**
+     * @brief Tells the window to draw a frame.
+     */
+    void update();
+    
+    /**
      * @brief Destroys the window, clearing its resources, and the OpenGL 
      *        context bound to it.
      */
