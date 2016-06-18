@@ -84,7 +84,6 @@ void AnimTile::render(Renderer* r)
     // Let's not forget about texture flip!
     GLuint hFlip = (GLuint)(this->getTextureFlip() & Tile::FLIP_HORIZ);
     GLuint vFlip = (GLuint)(this->getTextureFlip() & Tile::FLIP_VERT);
-    std::cout << "Vflip? " << this->getTextureFlip() << std::endl;
     program->setUniform((char*)"hFlip", &hFlip);
     program->setUniform((char*)"vFlip", &vFlip);
     
