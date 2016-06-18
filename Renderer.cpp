@@ -191,14 +191,14 @@ bool tileSortingPredicate(TileWithType lhs, TileWithType rhs)
     return true; // Just to get rid of the warnings.
 }
 
-bool Renderer::onScreenTest(TileWithType t)
+bool Renderer::onScreenTest(Tile * t)
 {
     // First we check if the distance between the center of the screen and the
     // center of the Tile is greater than 1 + the width of the Tile. If so the
     // Tile is not on screen.
-    if( abs( this->camera->getX() - t.second->getX() ) > 1.0 + t.second.getWidth()*.5 ) return false;
+    if( abs( this->camera->getX() - t->getX() ) > 1.0 + t->getWidth()*.5 ) return false;
     // We do the same in the vertical axis.
-    if( abs( this->camera->getY() - t.second->getY() ) > 1.0 + t.second.getHeight()*.5 ) return false;
+    if( abs( this->camera->getY() - t->getY() ) > 1.0 + t->getHeight()*.5 ) return false;
     return true;
 }
 
@@ -249,7 +249,7 @@ void Renderer::render(Window * window)
         if( it->first == POST_TILE ) continue;
         
         // Also if it's offscreen we don't need to render it.
-        if( !this->onScreenTest(it) ) continue;
+        if( !this->onScreenTest(it->second) ) continue;
         
         // Otherwise we render the tile.
         it->second->render(this);
@@ -263,7 +263,6 @@ void Renderer::render(Window * window)
                                           // identifiable attribute. This makes mixing the
                                           // two framebuffers much easier later on.
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Flush again.
-    count = 0;
     // Now that the primary-pass Tiles have been rendered...
     for(std::vector<TileWithType>::iterator it = renderQueue.begin(); it != renderQueue.end(); ++it)
     {
@@ -271,13 +270,14 @@ void Renderer::render(Window * window)
         if( it->first != POST_TILE ) continue;
         
         // Again, if it's offscreen we don't need to render it.
-        if( !this->onScreenTest(it) ) continue;
+        if( !this->onScreenTest(it->second) ) continue;
         
         // Render the PostTile.
         it->second->render(this);
         ++count;
     }
     
+    std::cout << "Tiles drawn: " << count << std::endl;
     // Now we go back to renderering to the window.
     window->setAsRenderTarget();
     glClearColor(1.0f,0.0f,1.0f,1.0f); // This clear color doesn't really matter.
