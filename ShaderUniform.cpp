@@ -8,10 +8,8 @@ ShaderUniform::~ShaderUniform()
 {
 }
 
-#include <iostream>
 uniform_type ShaderUniform::getType(char * typeAsText)
 {
-    std::cout << "type being added: " << typeAsText << std::endl;
     if( strcmp(typeAsText, "int") == 0 ) return UNI_INT;
     if( strcmp(typeAsText, "float") == 0 ) return UNI_FLOAT;
     if( strcmp(typeAsText, "vec2") == 0 ) return UNI_VEC2;
