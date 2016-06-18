@@ -277,7 +277,6 @@ void Renderer::render(Window * window)
         ++count;
     }
     
-    std::cout << "Tiles drawn: " << count << std::endl;
     // Now we go back to renderering to the window.
     window->setAsRenderTarget();
     glClearColor(1.0f,0.0f,1.0f,1.0f); // This clear color doesn't really matter.
