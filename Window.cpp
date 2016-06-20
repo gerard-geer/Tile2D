@@ -54,6 +54,9 @@ window_error Window::initGLState(unsigned int width, unsigned int height)
     // two framebuffers much easier later on.
     glClearColor(0.0f, 1.0f, 1.0f, 0.0f);
     
+    // Clear the depth to a very large value.
+    glClearDepth(110.0f);
+    
     // Set the front face to CCW.
     glFrontFace(GL_CCW);
     glEnable(GL_DEPTH_TEST);

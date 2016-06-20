@@ -8,15 +8,6 @@
 #include <iostream>
 #include "Renderer.h"
 
-/**
- * @class Window
- * @author Gerard Geer
- * @date 05/17/16
- * @file Window.h
- * @brief This class encapsulates the creation and destruction
- *        of a GLFW window.
- */
-
 /*
  * Error codes:
  * WIN_NO_ERROR: No error occured.
@@ -35,6 +26,15 @@ enum window_error
     WIN_COULD_NOT_INIT_RENDERER
 };
 
+/**
+ * @class Window
+ * @author Gerard Geer
+ * @date 05/17/16
+ * @file Window.h
+ * @brief This class encapsulates the creation and destruction
+ *        of a GLFW window, as well as rendering and basic
+ *        single window management.
+ */
 class Window
 {
 private:

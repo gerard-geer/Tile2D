@@ -101,11 +101,16 @@ bool Framebuffer::resize(GLuint width, GLuint height)
 
 void Framebuffer::setAsRenderTarget()
 {
+    // Tell OpenGL to do what we want.
     glBindFramebuffer(GL_FRAMEBUFFER, this->framebuffer);
+    
+    // Make sure that we're rendering to the framebuffer's dimensions.
     glViewport(0,0, this->width, this->height);
+    
+    // Enable depth testing.
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-    glClearDepth(110.0f);
+    
 }
 
 GLuint Framebuffer::getWidth()
