@@ -379,7 +379,7 @@ public:
      * @param tile The Tile instance to check.
      * @return The Tile's X position in the range[0, FBO horizontal resolution].
      */
-    GLfloat getTileSSX(Tile * tile);
+    GLfloat getTilePxX(Tile * tile);
     
     /**
      * @brief Helper function.
@@ -387,7 +387,7 @@ public:
      * @param tile The Tile instance to check.
      * @return The Tile's Y position in the range[0, FBO vertical resolution].
      */
-    GLfloat getTileSSY(Tile * tile);
+    GLfloat getTilePxY(Tile * tile);
     
     /**
      * @brief Helper function.
@@ -396,7 +396,7 @@ public:
      * @param x The Tile's new X position in the range[0, FBO horizontal resolution].
      * @param y The Tile's new Y position in the range[0, FBO vertical resolution].
      */
-    void setTileSSPos(Tile * tile, GLfloat x, GLfloat y);
+    void setTilePxPos(Tile * tile, GLfloat x, GLfloat y);
     
     /**
      * @brief Helper function.
@@ -404,7 +404,7 @@ public:
      * @param tile The Tile instance to check.
      * @return The Tile's width in the range [0, FBO horizontal resolution].
      */
-    GLfloat getTileSSW(Tile * tile);
+    GLfloat getTilePxW(Tile * tile);
     
     /**
      * @brief Helper function.
@@ -412,7 +412,7 @@ public:
      * @param tile The Tile instance to check.
      * @return The Tile's width in the range [0, FBO horizontal resolution].
      */
-    GLfloat getTileSSH(Tile * tile);
+    GLfloat getTilePxH(Tile * tile);
     
     /**
      * @brief Helper function.
@@ -421,7 +421,7 @@ public:
      * @param w The Tile's new width in the range [0, FBO horizontal resolution].
      * @param h The Tile's new height in the range [0, FBO vertical resolution].
      */
-    void setTileSSDim(Tile * tile, GLfloat w, GLfloat h);
+    void setTilePxDim(Tile * tile, GLfloat w, GLfloat h);
     
     /**
      * @brief Destroys the Renderer, clearing its AssetManager and freeing

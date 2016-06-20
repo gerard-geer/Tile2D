@@ -45,6 +45,7 @@ void Renderer::initTileVAO()
          0.5f, -0.5f, 1.0f,   -0.5f, -0.5f, 1.0f,
         -0.5f,  0.5f, 1.0f,    0.5f,  0.5f, 1.0f
     };
+
     GLfloat tileUVs[12] = {
         0.0f,  1.0f,    1.0f,  0.0f,
         1.0f,  1.0f,    0.0f,  1.0f,
@@ -71,7 +72,8 @@ void Renderer::initTileVAO()
     // Attach the vertex VBO to the VAO.
     glBindBuffer(GL_ARRAY_BUFFER, this->tileVertVBO);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-    // Do the UV VBO.
+    
+    // Attach the texture coordinate VBO as well.
     glBindBuffer(GL_ARRAY_BUFFER, this->tileUvVBO);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, NULL);
     
@@ -348,17 +350,17 @@ PostTile * Renderer::makePostTile(GLfloat x, GLfloat y, tile_plane plane, GLfloa
     return t;
 }
 
-GLfloat Renderer::getTileSSX(Tile * tile)
+GLfloat Renderer::getTilePxX(Tile * tile)
 {
     return ( tile->getX()+1.0 ) * (this->getWidth() * .5);
 }
 
-GLfloat Renderer::getTileSSY(Tile * tile)
+GLfloat Renderer::getTilePxY(Tile * tile)
 {
     return ( tile->getY()+1.0 ) * (this->getHeight() * .5);
 }
 
-void Renderer::setTileSSPos(Tile * tile, GLfloat x, GLfloat y)
+void Renderer::setTilePxPos(Tile * tile, GLfloat x, GLfloat y)
 {
     x = (x/(this->getWidth()*.5))-1.0+tile->getWidth()*.5;
     y = (y/(this->getHeight()*.5))-1.0+tile->getHeight()*.5;
@@ -366,17 +368,17 @@ void Renderer::setTileSSPos(Tile * tile, GLfloat x, GLfloat y)
     tile->setY(y);
 }
 
-GLfloat Renderer::getTileSSW(Tile * tile)
+GLfloat Renderer::getTilePxW(Tile * tile)
 {
     return ( tile->getWidth() ) * (this->getWidth() * .5);
 }
 
-GLfloat Renderer::getTileSSH(Tile * tile)
+GLfloat Renderer::getTilePxH(Tile * tile)
 {
     return ( tile->getHeight() ) * (this->getHeight() * .5);
 }
 
-void Renderer::setTileSSDim(Tile * tile, GLfloat w, GLfloat h)
+void Renderer::setTilePxDim(Tile * tile, GLfloat w, GLfloat h)
 {
     w /= this->getWidth()*.5;
     h /= this->getHeight()*.5;
