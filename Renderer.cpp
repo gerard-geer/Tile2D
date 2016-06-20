@@ -236,7 +236,6 @@ void Renderer::render(Window * window)
     this->fwdFB->setAsRenderTarget();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear out what was in the framebuffer.
     
-    int count = 0;
     // Now that we've sorted things, we go through and render the
     // non-post-process Tiles.
     for(std::vector<TileWithType>::iterator it = renderQueue.begin(); it != renderQueue.end(); ++it)
@@ -252,7 +251,6 @@ void Renderer::render(Window * window)
         
         // Otherwise we render the tile.
         it->second->render(this);
-        ++count;
     }
     
     // Now for the PostTiles we flip to the second framebuffer.
@@ -273,7 +271,6 @@ void Renderer::render(Window * window)
         
         // Render the PostTile.
         it->second->render(this);
-        ++count;
     }
     
     // Now we go back to renderering to the window.
