@@ -96,7 +96,6 @@ window_error Window::create(unsigned int windowW, unsigned int windowH,
     // Create the GLFW window.
     this->baseWindow = glfwCreateWindow(this->width, this->height, this->title, NULL, NULL);
     if(!this->baseWindow) return WIN_COULD_NOT_CREATE_WINDOW;
-    glfwSetWindowSizeCallback(this->baseWindow, this->resize_callback);
     
     // Make the context current so we can set up some OpenGL stuff.
     // (And also initialize GLEW.)
@@ -110,6 +109,9 @@ window_error Window::create(unsigned int windowW, unsigned int windowH,
     
     // Implement the base callback. Do not forget to call
     // glfwPollEvents()!
+    glfwSetWindowSizeCallback(this->baseWindow, this->resize_callback);
+    
+    // Also set our keyboard callback.
     glfwSetKeyCallback(this->baseWindow, key_callback);
     
     // At this point we should also create the renderer.
