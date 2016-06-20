@@ -64,12 +64,7 @@ int main(int argc, char **argv)
     GLuint framecount = 0;
     while(!glfwWindowShouldClose(window.getWindow()))
     {
-        glfwPollEvents();
-        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-        r->render(&window);
-        r->setTileSSDim(hud_01, 164 + sin(glfwGetTime()), 20);
-        //r->getCamera()->setX(sin(glfwGetTime()));
-        glfwSwapBuffers(window.getWindow());
+        window.update();
         ++framecount;
     }
     return 0;

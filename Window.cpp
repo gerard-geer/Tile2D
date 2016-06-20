@@ -48,9 +48,11 @@ Window::~Window()
 
 window_error Window::initGLState(unsigned int width, unsigned int height)
 {
-    // Set the clear color to magenta.
-    glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // Set the clear color to have an alpha of zero
+    // so that any pixel not rendered to has an easily
+    // identifiable attribute. This makes mixing the
+    // two framebuffers much easier later on.
+    glClearColor(0.0f, 1.0f, 1.0f, 0.0f);
     
     // Set the front face to CCW.
     glFrontFace(GL_CCW);
@@ -65,6 +67,9 @@ window_error Window::initGLState(unsigned int width, unsigned int height)
     // Enable alpha blending.
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
+    // Enable use of vertex arrays, so that we can pack our vertex positions
+    // and texture coordinates into a single OpenGL object.
     glEnable(GL_VERTEX_ARRAY);
         
     glViewport(0, 0, width, height);
@@ -96,7 +101,6 @@ window_error Window::create(unsigned int windowW, unsigned int windowH,
     // Create the GLFW window.
     this->baseWindow = glfwCreateWindow(this->width, this->height, this->title, NULL, NULL);
     if(!this->baseWindow) return WIN_COULD_NOT_CREATE_WINDOW;
-    glfwSetWindowSizeCallback(this->baseWindow, this->resize_callback);
     
     // Make the context current so we can set up some OpenGL stuff.
     // (And also initialize GLEW.)
@@ -110,6 +114,9 @@ window_error Window::create(unsigned int windowW, unsigned int windowH,
     
     // Implement the base callback. Do not forget to call
     // glfwPollEvents()!
+    glfwSetWindowSizeCallback(this->baseWindow, this->resize_callback);
+    
+    // Also set our keyboard callback.
     glfwSetKeyCallback(this->baseWindow, key_callback);
     
     // At this point we should also create the renderer.
@@ -222,6 +229,21 @@ void Window::setAsRenderTarget()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0,0,this->width, this->height);
+}
+
+void Window::update()
+{
+    // Make sure we poll for keyboard and such events.
+    glfwPollEvents();
+    
+    // Clear the buffer.
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    
+    // Tell the Renderer to do its thing.
+    this->renderer->render(this);
+    
+    // Flip front/back buffers.
+    glfwSwapBuffers(this->getWindow());
 }
 
 void Window::destroy()

@@ -134,8 +134,16 @@ public:
      */
     GLFWwindow * getWindow();
     
+    /**
+     * @brief Returns the width/horizontal resolution of the Window.
+     * @return The width/horizontal resolution of the Window.
+     */
     unsigned int getWidth() const;
     
+    /**
+     * @brief Returns the height/vertical resolution of the Window.
+     * @return The height/vertical resolution of the Window.
+     */
     unsigned int getHeight() const;
     
     /**
@@ -150,6 +158,11 @@ public:
      *        any framebuffer.)
      */
     void setAsRenderTarget();
+    
+    /**
+     * @brief Tells the window to draw a frame.
+     */
+    void update();
     
     /**
      * @brief Destroys the window, clearing its resources, and the OpenGL 
