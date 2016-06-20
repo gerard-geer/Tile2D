@@ -234,8 +234,7 @@ void Renderer::render(Window * window)
     
     // Start drawing to the forward framebuffer.
     this->fwdFB->setAsRenderTarget();
-    glClearColor(0.5f, 0.0f, 1.0f, 1.0f); // Set the clear color to purple...
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // And flush!
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear out what was in the framebuffer.
     
     int count = 0;
     // Now that we've sorted things, we go through and render the
@@ -258,7 +257,7 @@ void Renderer::render(Window * window)
     
     // Now for the PostTiles we flip to the second framebuffer.
     this->defFB->setAsRenderTarget();
-    glClearColor(1.0f, 0.0f, 0.0f, 0.0f); // Set the clear color to have an alpha of zero
+    //glClearColor(1.0f, 0.0f, 0.0f, 0.0f); // Set the clear color to have an alpha of zero
                                           // so that any pixel not rendered to has an easily
                                           // identifiable attribute. This makes mixing the
                                           // two framebuffers much easier later on.
@@ -279,7 +278,6 @@ void Renderer::render(Window * window)
     
     // Now we go back to renderering to the window.
     window->setAsRenderTarget();
-    glClearColor(1.0f,0.0f,1.0f,1.0f); // This clear color doesn't really matter.
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Jiggle the handle.
     this->renderFinalPass(); // Draws a full screen quad with the two FBOs mixed.
 }

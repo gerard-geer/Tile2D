@@ -48,9 +48,11 @@ Window::~Window()
 
 window_error Window::initGLState(unsigned int width, unsigned int height)
 {
-    // Set the clear color to magenta.
-    glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // Set the clear color to have an alpha of zero
+    // so that any pixel not rendered to has an easily
+    // identifiable attribute. This makes mixing the
+    // two framebuffers much easier later on.
+    glClearColor(0.0f, 1.0f, 1.0f, 0.0f);
     
     // Set the front face to CCW.
     glFrontFace(GL_CCW);
@@ -65,6 +67,9 @@ window_error Window::initGLState(unsigned int width, unsigned int height)
     // Enable alpha blending.
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
+    // Enable use of vertex arrays, so that we can pack our vertex positions
+    // and texture coordinates into a single OpenGL object.
     glEnable(GL_VERTEX_ARRAY);
         
     glViewport(0, 0, width, height);
