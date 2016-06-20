@@ -60,8 +60,8 @@ mat3 parallaxSetup()
     // Now we do the actual math to enable the parallax.
     // This boils down to essentially:
     // TilePosition = (TilePosition - CameraPosition) / ParallaxFactor
-    m[2][0] = (m[2][0] - camera.x) / pFactor;
-    m[2][1] = (m[2][1] - camera.y) / pFactor;
+    m[2][0] = (m[2][0] - camera.x) * pFactor;
+    m[2][1] = (m[2][1] - camera.y) * pFactor;
     
     return m;
 }
