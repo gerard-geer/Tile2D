@@ -30,10 +30,10 @@ GLfloat Tile::getParallaxFactor(tile_plane plane)
         case PLANE_NEG_3: return .4;
         case PLANE_NEG_2: return .6;
         case PLANE_NEG_1: return .8;
-        case PLANE_PLAYFIELD_A: return 0.9999; // Even though these all represent the same
-        case PLANE_PLAYFIELD_B: return 1.0000; // scrolling plane, they vary slightly such that
-        case PLANE_PLAYFIELD_C: return 1.0001; // they can be used to differentiate depth, but
-        case PLANE_POS_1: return 2.0;          // not present any scrolling difficulties.
+        case PLANE_PLAYFIELD_A: return 1.0;
+        case PLANE_PLAYFIELD_B: return 1.0;
+        case PLANE_PLAYFIELD_C: return 1.0;
+        case PLANE_POS_1: return 2.0;
         case PLANE_POS_2: return 4.0;
     }
 }
