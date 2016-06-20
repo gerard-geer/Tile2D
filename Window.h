@@ -134,8 +134,16 @@ public:
      */
     GLFWwindow * getWindow();
     
+    /**
+     * @brief Returns the width/horizontal resolution of the Window.
+     * @return The width/horizontal resolution of the Window.
+     */
     unsigned int getWidth() const;
     
+    /**
+     * @brief Returns the height/vertical resolution of the Window.
+     * @return The height/vertical resolution of the Window.
+     */
     unsigned int getHeight() const;
     
     /**
