@@ -82,6 +82,10 @@ bool Framebuffer::init(GLuint width, GLuint height)
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, 
                            GL_TEXTURE_2D, this->depthbuffer, 0);
     
+    // Enable depth testing.
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    
     // Best practice to check framebuffer completeness.
     GLenum e = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER);
     
@@ -106,10 +110,6 @@ void Framebuffer::setAsRenderTarget()
     
     // Make sure that we're rendering to the framebuffer's dimensions.
     glViewport(0,0, this->width, this->height);
-    
-    // Enable depth testing.
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
     
 }
 
