@@ -180,6 +180,10 @@ private:
      */
     void destroyFBOs();
     
+    /**
+     * @brief Destroys the AssetManager.
+     */
+    void destroyAssetManager();
     
 public:
 
