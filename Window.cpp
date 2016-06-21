@@ -251,8 +251,9 @@ void Window::update()
 
 void Window::destroy()
 {
-    glfwDestroyWindow(this->baseWindow);
+    if(fullscreen) this->setFullscreen(false);
     this->renderer->destroy();
+    glfwDestroyWindow(this->baseWindow);
 }
 
 
