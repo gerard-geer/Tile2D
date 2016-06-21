@@ -15,6 +15,9 @@
  *  compositor knows to display the first pass rather than this one.
  * -Also remember to target GLSL version 1.2.
  * -Want to have transparent fragments? Just output a transparent fragment.
+ * -The clear color used by the renderer has an alpha of zero. Therefore if
+ *  you wish to output blank regions of the forward pass' color buffer, you
+ *  must set the alpha to 1.0 manually.
  */
 
 // The time since the window was created.
@@ -51,12 +54,13 @@ bool depthTest(float existingDepth)
  */
 vec4 someCoolStuff(vec2 uv)
 {
-    uv *= 10.0;
-    return texture2D(fwdColor, fragUV*vec2(1,-1));
-    return abs(vec4(sin(uv.x+time), 
-                    cos(uv.y+time*1.1), 
-                    cos(uv.x+time*1.3), 
-                    .5));
+    vec4 kitten = texture2D(texA, fragUV);
+    
+    vec4 fwdPass = texture2D(fwdColor, fragUV*vec2(1,-1));
+    // Remember that the clear color of the fwd pass is 0.
+    fwdPass.a = 1.0;
+    
+    return mix(fwdPass, kitten, .66);
 }
 
 /**
