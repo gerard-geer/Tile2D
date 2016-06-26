@@ -10,9 +10,14 @@ AssetManager::~AssetManager()
 
 void AssetManager::add(char * key, Asset * asset)
 {
-    std::cout << "adding: " << key << std::endl;
     if( !this->contains(key) )
+        #ifdef TILE2D_VERBOSE_OUTPUT
+        std::cout << "Adding " << key << " to AssetManager." << std::endl;
+        #endif
         this->assetHash.insert(std::pair<std::string,Asset*>(key,asset));
+    #ifdef TILE2D_VERBOSE_OUTPUT
+    else std::cout << "Adding " << key << " to AssetManager." << std::endl;
+    #endif
 }
 
 tex_error AssetManager::addNewTexture(char * key, char * filepath)
