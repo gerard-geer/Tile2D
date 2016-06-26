@@ -158,18 +158,6 @@ unsigned int Renderer::getHeight()
     return this->fwdFB->getHeight();
 }
 
-void Renderer::addToRenderQueue(tile_type type, Tile * tile)
-{
-    this->renderQueue.push_back(TileWithType(type,tile));
-    // Sort the Tiles to cut down on overdraw.
-    std::sort(this->renderQueue.begin(), this->renderQueue.end(), tileSortingPredicate);
-}
-
-void Renderer::flushRenderQueue()
-{
-    this->renderQueue.clear();
-}
-
 /**
  * @brief This is used as the predicate when sorting Tiles. It places opaque
  *        from front to back, then transparent Tiles from back to front.
@@ -193,6 +181,18 @@ bool tileSortingPredicate(TileWithType lhs, TileWithType rhs)
     if( a->getPlane() <= b->getPlane() ) return true;
     if( a->getPlane() >  b->getPlane() ) return false;
     return true; // Just to get rid of the warnings.
+}
+
+void Renderer::addToRenderQueue(tile_type type, Tile * tile)
+{
+    this->renderQueue.push_back(TileWithType(type,tile));
+    // Sort the Tiles to cut down on overdraw.
+    std::sort(this->renderQueue.begin(), this->renderQueue.end(), tileSortingPredicate);
+}
+
+void Renderer::flushRenderQueue()
+{
+    this->renderQueue.clear();
 }
 
 bool Renderer::onScreenTest(Tile * t)
