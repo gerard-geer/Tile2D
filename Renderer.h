@@ -120,7 +120,14 @@ private:
      * one adds Tiles to the renderQueue, and then calls render()
      * to render them all.
      */
-    std::vector< std::pair<tile_type,Tile*> > renderQueue;
+    std::vector< TileWithType > renderQueue;
+    
+    /*
+     * A memoization of all the Tiles' position in the sorted render queue,
+     * so that single Tiles can be removed in O(1) time. It's just a mapping
+     * of Tile IDs to indices.
+     */
+    std::map< unsigned long, unsigned int > rqMemo;
     
     /*
      * After the Tiles are drawn into the framebuffer, we need a
