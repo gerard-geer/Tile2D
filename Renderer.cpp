@@ -161,6 +161,8 @@ unsigned int Renderer::getHeight()
 void Renderer::addToRenderQueue(tile_type type, Tile * tile)
 {
     this->renderQueue.push_back(TileWithType(type,tile));
+    // Sort the Tiles to cut down on overdraw.
+    std::sort(this->renderQueue.begin(), this->renderQueue.end(), tileSortingPredicate);
 }
 
 void Renderer::flushRenderQueue()
@@ -223,9 +225,6 @@ void Renderer::renderFinalPass()
 
 void Renderer::render(Window * window)
 {
-    // Rendering a bunch of Tiles is a multi-step process. First we
-    // really should sort them to cut down on overdraw.
-    std::sort(this->renderQueue.begin(), this->renderQueue.end(), tileSortingPredicate);
     
     // Bind to the VAO.
     glBindVertexArray( this->tileVAO );
