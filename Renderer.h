@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <valarray>
+#include <map>
 #include "AssetManager.h"
 #include "Shader.h"
 #include "Texture.h"
@@ -170,6 +171,11 @@ private:
      * @return Whether or not the Tile is on screen.
      */
     bool onScreenTest(Tile * t);
+    
+    /**
+     * @brief Memoizes or re-memoizes the rendering queue.
+     */
+    void memoize();
     
     /**
      * @brief Draws the finished framebuffer onto a full screen Tile and

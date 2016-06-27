@@ -158,6 +158,17 @@ unsigned int Renderer::getHeight()
     return this->fwdFB->getHeight();
 }
 
+void Renderer::memoize()
+{
+    unsigned int i = 0;
+    for(std::vector<TileWithType>::iterator it = renderQueue.begin(); it != renderQueue.end(); ++it)
+    {
+        /* it->first: TileType
+         * it->second: Tile* */
+        rqMemo.insert(std::pair<unsigned long, unsigned int>(it->second->getID(), i));
+    }
+}
+
 /**
  * @brief This is used as the predicate when sorting Tiles. It places opaque
  *        from front to back, then transparent Tiles from back to front.
