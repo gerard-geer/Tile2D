@@ -31,6 +31,11 @@ class PostTile;
  */
 typedef std::pair<tile_type, Tile*> TileWithType;
 
+/*
+ * A type definition that links a Tile's ID with its index in the rendering queue.
+ */
+typedef std::pair<unsigned long, unsigned int> IdAndIndex;
+
 /**
  * @class Renderer
  * @author Gerard Geer

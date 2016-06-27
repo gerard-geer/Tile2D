@@ -165,7 +165,7 @@ void Renderer::memoize()
     {
         /* it->first: TileType
          * it->second: Tile* */
-        rqMemo.insert(std::pair<unsigned long, unsigned int>(it->second->getID(), i));
+        this->rqMemo.insert(IdAndIndex(it->second->getID(), i));
     }
 }
 
@@ -199,6 +199,8 @@ void Renderer::addToRenderQueue(tile_type type, Tile * tile)
     this->renderQueue.push_back(TileWithType(type,tile));
     // Sort the Tiles to cut down on overdraw.
     std::sort(this->renderQueue.begin(), this->renderQueue.end(), tileSortingPredicate);
+    // Now that it's sorted, we need to re-memoize.
+    this->memoize();
 }
 
 void Renderer::flushRenderQueue()
