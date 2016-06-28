@@ -286,6 +286,15 @@ public:
     void addToRenderQueue(tile_type type, Tile * tile);
     
     /**
+     * @brief Removes a single Tile from the sorted rendering queue. This does
+     *        not delete the Tile instance the pointer points to.
+     * @param tile The Tile instance to remove.
+     * @return Whether or not the Tile could be removed. If false, the Tile
+     *         was not in the RenderQueue.
+     */
+    bool removeFromRenderQueue(Tile* tile);
+    
+    /**
      * @brief Clears the rendering queue. Note that this doesn't destroy
      *        the Tiles within. It just simply clears out the line of Tiles
      *        waiting to get to be drawn.

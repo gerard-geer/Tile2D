@@ -166,6 +166,7 @@ void Renderer::memoize()
         /* it->first: TileType
          * it->second: Tile* */
         this->rqMemo.insert(IdAndIndex(it->second->getID(), i));
+        ++i;
     }
 }
 
@@ -196,11 +197,39 @@ bool tileSortingPredicate(TileWithType lhs, TileWithType rhs)
 
 void Renderer::addToRenderQueue(tile_type type, Tile * tile)
 {
+    // Just tack the Tile on the end since it'll be sorted.
     this->renderQueue.push_back(TileWithType(type,tile));
+    
     // Sort the Tiles to cut down on overdraw.
     std::sort(this->renderQueue.begin(), this->renderQueue.end(), tileSortingPredicate);
+    
     // Now that it's sorted, we need to re-memoize.
     this->memoize();
+}
+
+bool Renderer::removeFromRenderQueue(Tile* tile)
+{
+    // Check to make sure the Tile is in the memoization.
+    if ( this->rqMemo.find(tile->getID()) != this->rqMemo.end() )
+    {
+        // If it is we get the index of the item from the memoization.
+        unsigned int index = this->rqMemo[tile->getID()];
+        
+        // Use that index to erase.
+        renderQueue.erase(renderQueue.begin()+index);
+        
+        // Also erase the memoization entry.
+        rqMemo.erase(tile->getID());
+        
+        this->memoize();
+        
+        // Oh hey we did it! Return true as a reward.
+        return true;
+    }
+    
+    // Didn't exist in the queue! Return false to say so.
+    return false;
+    
 }
 
 void Renderer::flushRenderQueue()
