@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <valarray>
+#include <map>
 #include "AssetManager.h"
 #include "Shader.h"
 #include "Texture.h"
@@ -29,6 +30,11 @@ class PostTile;
  * A type definition that links a Tile with the subclass it was cast from.
  */
 typedef std::pair<tile_type, Tile*> TileWithType;
+
+/*
+ * A type definition that links a Tile's ID with its index in the rendering queue.
+ */
+typedef std::pair<unsigned long, unsigned int> IdAndIndex;
 
 /**
  * @class Renderer
@@ -120,7 +126,14 @@ private:
      * one adds Tiles to the renderQueue, and then calls render()
      * to render them all.
      */
-    std::vector< std::pair<tile_type,Tile*> > renderQueue;
+    std::vector< TileWithType > renderQueue;
+    
+    /*
+     * A memoization of all the Tiles' position in the sorted render queue,
+     * so that single Tiles can be removed in O(1) time. It's just a mapping
+     * of Tile IDs to indices.
+     */
+    std::map< unsigned long, unsigned int > rqMemo;
     
     /*
      * After the Tiles are drawn into the framebuffer, we need a
@@ -163,6 +176,11 @@ private:
      * @return Whether or not the Tile is on screen.
      */
     bool onScreenTest(Tile * t);
+    
+    /**
+     * @brief Memoizes or re-memoizes the rendering queue.
+     */
+    void memoize();
     
     /**
      * @brief Draws the finished framebuffer onto a full screen Tile and
@@ -266,6 +284,15 @@ public:
      * @param tile The Tile to add to the render queue.
      */
     void addToRenderQueue(tile_type type, Tile * tile);
+    
+    /**
+     * @brief Removes a single Tile from the sorted rendering queue. This does
+     *        not delete the Tile instance the pointer points to.
+     * @param tile The Tile instance to remove.
+     * @return Whether or not the Tile could be removed. If false, the Tile
+     *         was not in the RenderQueue.
+     */
+    bool removeFromRenderQueue(Tile* tile);
     
     /**
      * @brief Clears the rendering queue. Note that this doesn't destroy

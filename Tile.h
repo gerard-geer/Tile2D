@@ -18,7 +18,13 @@ class Renderer;
  *        renderable element in the engine. Everything is a Tile.
  *        The background, sprites, level blocks, etc. are all Tiles.
  */
- 
+
+/*
+ * Tiles can exist on nine "planes", with BG being the farthest away,
+ * and POS_2 being the one closest to the camera.
+ * Nearer planes scroll faster relative to the camera than farther 
+ * ones, with PLAYFIELD planes scrolling at the same speed as the camera.
+ */
 enum tile_plane
 {
     PLANE_BG = 9,
@@ -33,6 +39,9 @@ enum tile_plane
     PLANE_POS_2 = 0
 };
 
+/*
+ * An enum talking about Tile types so we don't need introspection.
+ */
 enum tile_type
 {
     BG_TILE,
@@ -67,9 +76,23 @@ private:
      */
     GLuint texFlip;
     
+    /*
+     * The ID of this Tile. Used for memoization in the Renderer,
+     * so a single Tile can be removed from the sorted render queue
+     * with 0(1) look-up time.
+     */
+    unsigned long id;
+    
 public:
-
+    
+    /*
+     * A flag stating to flip vertically.
+     */
     static const GLuint FLIP_VERT = 1;
+    
+    /*
+     * A flag stating to flip horizontally.
+     */
     static const GLuint FLIP_HORIZ = 2;
     
     /**
@@ -178,6 +201,12 @@ public:
      * @return A reference to this Tile's underlying BasicMatrix.
      */
     BasicMatrix * getMatrix() const;
+    
+    /**
+     * @brief Returns the unique ID of this Tile.
+     * @return The unique ID of this Tile.
+     */
+    unsigned long getID() const;
     
     /**
      * @brief Changes the X position of this Tile. Useful for animation.

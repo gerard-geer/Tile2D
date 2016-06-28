@@ -76,4 +76,8 @@ void AssetManager::clear()
         // Delete the asset instance.
         delete i->second;
     }
+    
+    // Now that all the asset hash contains has been deleted, we can
+    // clear out the underlying map.
+    this->assetHash.erase(this->assetHash.begin(), this->assetHash.end());
 }

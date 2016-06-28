@@ -19,6 +19,8 @@ void Tile::init(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, GLfloat h
     this->plane = plane;
     this->trans = trans;
     this->texFlip = 0;
+    // Oh why look at that our unique identifier is already figured out for us.
+    this->id = (unsigned long) this;
 }
 
 GLfloat Tile::getParallaxFactor(tile_plane plane)
@@ -93,6 +95,11 @@ GLuint Tile::getTextureFlip() const
 BasicMatrix * Tile::getMatrix() const
 {
     return this->m;
+}
+
+unsigned long Tile::getID() const
+{
+    return this->id;
 }
 
 void Tile::setX(GLfloat x)
