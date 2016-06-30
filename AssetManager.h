@@ -56,6 +56,14 @@ public:
     tex_error addNewTexture(char * key, char * filepath);
     
     /**
+     * @brief An error-suppressing overload of addNewTexture(). 
+     * @param key The key to associate this Texture with.
+     * @param filepath The path to the texture image file.
+     * @return A tex_error. If no error occurred, TEX_NO_ERROR is returned.
+     */
+    tex_error addNewTexture(const char * key, const char * filepath);
+    
+    /**
      * @brief Loads a Shader and adds it to the asset manager under the given key.
      *        If an error occurs during loading the asset is not added.
      * @param key The key to associate this Shader with.
@@ -64,6 +72,15 @@ public:
      * @return A shader_error. If no error occurred, SHADER_NO_ERROR is returned.
      */
     shader_error addNewShader(char * key, char * vertPath, char * fragPath);
+    
+    /**
+     * @brief An error-suppressing overload of addNewShader().
+     * @param key The key to associate this Shader with.
+     * @param vertPath The filepath to the vertex shader source.
+     * @param fragPath The filepath to the fragment shader source.
+     * @return A shader_error. If no error occurred, SHADER_NO_ERROR is returned.
+     */
+    shader_error addNewShader(const char * key, const char * vertPath, const char * fragPath);
     
     /**
      * @brief Tests whether an Asset exists in the Manager.

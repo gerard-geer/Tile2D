@@ -132,7 +132,7 @@ window_error Window::create(unsigned int windowW, unsigned int windowH,
     // Initialize the renderer.
     this->renderer = new Renderer();
     bool rErr = this->renderer->init(fbW, fbH);
-    return WIN_NO_ERROR;
+    return (rErr==false)? WIN_NO_ERROR : WIN_COULD_NOT_INIT_RENDERER;
 }
 
 void Window::setResolution(unsigned int width, unsigned int height)

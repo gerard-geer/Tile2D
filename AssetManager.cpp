@@ -30,12 +30,22 @@ tex_error AssetManager::addNewTexture(char * key, char * filepath)
     return e;
 }
 
+tex_error AssetManager::addNewTexture(const char * key, const char * filepath)
+{
+    return this->addNewTexture((char*)key, (char*)filepath);
+}
+
 shader_error AssetManager::addNewShader(char * key, char * vertPath, char * fragPath)
 {
     Shader * s = new Shader();
     shader_error e = s->load(vertPath, fragPath);
     if( e == SHADER_NO_ERROR ) this->add(key,(Asset*)s);
     return e;
+}
+
+shader_error AssetManager::addNewShader(const char * key, const char * vertPath, const char * fragPath)
+{
+    return this->addNewShader((char*)key, (char*)vertPath, (char*)fragPath);
 }
 
 bool AssetManager::contains(char * key)

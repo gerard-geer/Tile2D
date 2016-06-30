@@ -14,7 +14,7 @@ int main(int argc, char **argv)
     
     a->addNewTexture((char*)"kitten", (char*)"../Assets/Rendering Assets/Textures/kitten.png");
     
-    a->addNewTexture((char*)"fish", (char*)"../Assets/Rendering Assets/Textures/fish.png");
+    a->addNewTexture("fish", "../Assets/Rendering Assets/Textures/fish.png");
     
     a->addNewTexture((char*)"yumetarou", (char*)"../Assets/Rendering Assets/Textures/yumetarou_frame16x20.png");
     

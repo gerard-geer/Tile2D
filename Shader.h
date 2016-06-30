@@ -112,7 +112,8 @@ public:
     ~Shader();
     
     /**
-     * @brief Loads the shader sources from file, compiles and links them.
+     * @brief Loads the shader sources from file, compiles and links them. This
+     *        should only be called by the AssetManager and its addNewShader() function.
      * @param vertFile The path to the vertex shader source.
      * @param fragFile The path to the fragment shader source.
      * @return A shader_error, if any.
@@ -127,6 +128,7 @@ public:
      * @param type The data type of the uniform.
      */
     void addUniform(char * name, uniform_type type);
+    void addUniform(const char * name, uniform_type type);
     
     /**
      * @brief Removes a uniform. Main use case? Uniform adding didn't go well
@@ -136,6 +138,7 @@ public:
      *         exist in the first place.
      */
     bool removeUniform(char * name);
+    bool removeUniform(const char * name);
     
     /**
      * @brief Returns whether or not this Shader has the specified uniform
@@ -145,6 +148,7 @@ public:
      *         with it.
      */
     bool hasUniform(char * name);
+    bool hasUniform(const char * name);
     
     /**
      * @brief Sets the value of a ShaderUniform, and as such the uniform it
@@ -158,6 +162,7 @@ public:
      *             may generate will by caught by glGetError().
      */
     void setUniform(char * name, void * data);
+    void setUniform(const char * name, void * data);
     
     /**
      * @brief Setting texture uniforms takes a bit more than the other types.
@@ -168,6 +173,7 @@ public:
      * @param texUnit The desired texture unit.
      */
     void setTextureUniform(char * name, GLuint texID, GLuint texUnit);
+    void setTextureUniform(const char * name, GLuint texID, GLuint texUnit);
     
     /**
      * @brief Returns the ID of this shader.

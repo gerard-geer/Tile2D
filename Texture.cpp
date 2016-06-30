@@ -25,8 +25,8 @@ const char* Texture::getColorType(png_byte t)
         case PNG_COLOR_TYPE_PALETTE: return "PNG_COLOR_TYPE_PALETTE";
         case PNG_COLOR_TYPE_RGB: return "PNG_COLOR_TYPE_RGB";
         case PNG_COLOR_TYPE_RGBA: return "PNG_COLOR_TYPE_RGBA";
-        default: "some other type.";
     }
+    return "SOME_OTHER_ERROR";
 }
 
 

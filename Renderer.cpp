@@ -22,18 +22,18 @@ void Renderer::initPlaceholderTexture()
 
 void Renderer::initStockShaders()
 {
-    this->assets->addNewShader((char*)"bg_tile_shader", 
-                               (char*)"../Assets/Rendering Assets/Shaders/bg_tile_shader.vert",
-                               (char*)"../Assets/Rendering Assets/Shaders/bg_tile_shader.frag");
-    this->assets->addNewShader((char*)"scene_tile_shader",
-                               (char*)"../Assets/Rendering Assets/Shaders/scene_tile_shader.vert",
-                               (char*)"../Assets/Rendering Assets/Shaders/scene_tile_shader.frag");
-    this->assets->addNewShader((char*)"anim_tile_shader", 
-                               (char*)"../Assets/Rendering Assets/Shaders/anim_tile_shader.vert",
-                               (char*)"../Assets/Rendering Assets/Shaders/anim_tile_shader.frag");
-    this->assets->addNewShader((char*)"final_pass_shader",
-                               (char*)"../Assets/Rendering Assets/Shaders/final_pass_shader.vert",
-                               (char*)"../Assets/Rendering Assets/Shaders/final_pass_shader.frag");    
+    this->assets->addNewShader("bg_tile_shader", 
+                               "../Assets/Rendering Assets/Shaders/bg_tile_shader.vert",
+                               "../Assets/Rendering Assets/Shaders/bg_tile_shader.frag");
+    this->assets->addNewShader("scene_tile_shader",
+                               "../Assets/Rendering Assets/Shaders/scene_tile_shader.vert",
+                               "../Assets/Rendering Assets/Shaders/scene_tile_shader.frag");
+    this->assets->addNewShader("anim_tile_shader", 
+                               "../Assets/Rendering Assets/Shaders/anim_tile_shader.vert",
+                               "../Assets/Rendering Assets/Shaders/anim_tile_shader.frag");
+    this->assets->addNewShader("final_pass_shader",
+                               "../Assets/Rendering Assets/Shaders/final_pass_shader.vert",
+                               "../Assets/Rendering Assets/Shaders/final_pass_shader.frag");    
 }
 
 void Renderer::initTileVAO()
@@ -242,9 +242,9 @@ bool Renderer::onScreenTest(Tile * t)
     // First we check if the distance between the center of the screen and the
     // center of the Tile is greater than 1 + the width of the Tile. If so the
     // Tile is not on screen.
-    if( abs( this->camera->getX() - t->getX() ) > 1.0 + t->getWidth()*.5 ) return false;
+    if( std::abs( this->camera->getX() - t->getX() ) > 1.0 + t->getWidth()*.5 ) return false;
     // We do the same in the vertical axis.
-    if( abs( this->camera->getY() - t->getY() ) > 1.0 + t->getHeight()*.5 ) return false;
+    if( std::abs( this->camera->getY() - t->getY() ) > 1.0 + t->getHeight()*.5 ) return false;
     return true;
 }
 

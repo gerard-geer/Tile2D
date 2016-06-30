@@ -301,8 +301,6 @@ shader_error Shader::load(char* vertFile, char* fragFile)
     return e;
 }
 
-
-
 void Shader::addUniform(char * name, uniform_type type)
 {
     // Create a new ShaderUniform.
@@ -312,6 +310,11 @@ void Shader::addUniform(char * name, uniform_type type)
     
     // Speed date->court->marry the string and add it to uniforms.
     this->uniforms.insert(std::pair<std::string,ShaderUniform*>(name,s));
+}
+
+void Shader::addUniform(const char * name, uniform_type type)
+{
+    this->addUniform((char*)name, type);
 }
 
 bool Shader::removeUniform(char * name)
@@ -330,9 +333,19 @@ bool Shader::removeUniform(char * name)
     return false;
 }
 
+bool Shader::removeUniform(const char * name)
+{
+    return this->removeUniform((char*)name);
+}
+
 bool Shader::hasUniform(char * name)
 {
     return ( this->uniforms.find(name) != this->uniforms.end() );
+}
+
+bool Shader::hasUniform(const char * name)
+{
+    return this->hasUniform((char*)name);
 }
 
 void Shader::setUniform(char * name, void * data)
@@ -344,6 +357,11 @@ void Shader::setUniform(char * name, void * data)
     this->uniforms[name]->set(data);
 }
 
+void Shader::setUniform(const char * name, void * data)
+{
+    this->setUniform((char*)name, data);
+}
+
 void Shader::setTextureUniform(char * name, GLuint texID, GLuint texUnit)
 {
     glActiveTexture(GL_TEXTURE0+texUnit);
@@ -351,6 +369,11 @@ void Shader::setTextureUniform(char * name, GLuint texID, GLuint texUnit)
     int tu = texUnit;
     //std::cout << this->hasUniform(name) << " asdf" << std::endl;
     this->setUniform(name, &tu);
+}
+
+void Shader::setTextureUniform(const char * name, GLuint texID, GLuint texUnit)
+{
+    this->setTextureUniform((char*)name, texID, texUnit);
 }
 
 GLuint Shader::getID()
