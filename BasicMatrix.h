@@ -102,6 +102,12 @@ public:
     void set(unsigned int r, unsigned int c, float val);
     
     /**
+     * @brief Sets this BasicMatrix' values to that of another. 
+     * @param other The other BasicMatrix.
+     */
+    void set(BasicMatrix * other);
+    
+    /**
      * @brief Multiplies this BasicMatrix by another one.
      * @param rhs The BasicMatrix to be on the right hand side of the operation.
      */
