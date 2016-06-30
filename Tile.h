@@ -2,6 +2,7 @@
 #define TILE_H
 
 #include <GLFW/glfw3.h>
+#include <cmath>
 #include "BasicMatrix.h"
 
 // Forward definitions of Tile and Renderer since these two
@@ -63,13 +64,30 @@ private:
      * A BasicMatrix that stores this Tile's position and dimensions
      * for easy and efficient shader uniform assignment.
      */
-    BasicMatrix * m;
+    BasicMatrix * pd;
     
+    /*
+     * A BasicMatrix that stores the rotation to be applied to this
+     * Tile.
+     */
+    BasicMatrix * r;
+    
+    /*
+     * A swap-space BasicMatrix so we can multiply without having to
+     * create objects that must be deleted outside of this class.
+     */
+    BasicMatrix * mult;
     
     /*
      * Whether or not this Tile has any transparent regions.
      */
     bool trans;
+    
+    /*
+     * A reference value for the current rotation, since it is not
+     * trivial to extract the value from the rotation matrix.
+     */
+    GLfloat rotation;
     
     /*
      * How to flip the texture, if at all.
@@ -197,6 +215,13 @@ public:
     GLuint getTextureFlip() const;
     
     /**
+     * @brief Returns how much the current Tile has been rotated, in 
+     *        radians.
+     * @return How far the current Tile has been rotated, in radians.
+     */
+    GLfloat getRotation() const;
+    
+    /**
      * @brief Returns a reference to this Tile's underlying BasicMatrix.
      * @return A reference to this Tile's underlying BasicMatrix.
      */
@@ -243,6 +268,12 @@ public:
      * @param Sets whether or not this Tile has transparency.
      */
     void setTransparency(bool trans);
+    
+    /**
+     * @brief Sets the Tile's rotation.
+     * @param rotation How far to rotate the Tile. (In radians)
+     */
+    void setRotation(GLfloat rotation);
     
     /**
      * @brief Sets the texture flip mode. This is a bitwise member, so
