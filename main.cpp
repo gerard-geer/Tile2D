@@ -34,6 +34,7 @@ int main(int argc, char **argv)
 
     while(!glfwWindowShouldClose(window.getWindow()))
     {
+        at->setRotation(at->getRotation()+.01);
         window.update();
     }
     window.destroy();

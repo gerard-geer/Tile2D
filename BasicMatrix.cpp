@@ -68,6 +68,18 @@ void BasicMatrix::set(unsigned int r, unsigned int c, float val)
     this->m[ r*this->columns + c ] = val;
 }
 
+void BasicMatrix::set(BasicMatrix * other)
+{
+    // If the dimensions aren't the same, we can't really do anything.
+    if(this->columns != other->columns || this->rows != other->rows) return;
+    
+    // Otherwise we copy the underlying array.
+    for( unsigned int i = 0; i < this->columns*this->rows; ++i )
+    {
+        this->m[i] = other->m[i];
+    }
+}
+
 void BasicMatrix::multiplyBy(BasicMatrix* rhs)
 {
     // Do dimension test. If it fails, we don't do anything to
