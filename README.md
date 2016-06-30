@@ -63,6 +63,7 @@ or absence of an alpha channel.
 - **Targets OpenGL 2.1 (With FBO support).** Uses OpenGL 2.1 (GLSL 1.2) and its programmable pipeline for maximimum
 compatibility.
 - **Passive parallax scrolling.** Parallax scrolling is deferred to the vertex shader. Just set a plane and that's it.
+- **Rotation.** Not too many sprite-based rendering libraries give you clear and simple rotation. (Also deferred to the vertex shader.)
 - **Deferred rendering and post processing.** With PostTiles you can have your own vertex and fragment shader to do whatever you want with.
 - **Proactive downsampling** The Renderer and Window have independent resolutions. Therefore you can render at lower
 resolutions such as ```256```x```240```(NES) or ```320```x```224```(Genesis) and have that great pixelated appearance.
