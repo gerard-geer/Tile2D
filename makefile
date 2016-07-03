@@ -23,8 +23,9 @@ clean:
 # Creates the build directory if it doesn't exist, then navigates to
 # it.
 setup_dir:
-	@echo "Creating build directory \"$(BLD_DIR)\""
+	@echo "Creating build directory \"$(BLD_DIR)\"..."
 	@mkdir -p $(BLD_DIR)
+	@echo "...Done."
 
 # Compiles the Asset abstract class.
 Asset.o:
