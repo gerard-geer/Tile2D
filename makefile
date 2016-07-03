@@ -44,6 +44,11 @@ Camera.o:
 ShaderUniform.o:
 	@echo "$@..."
 	@$(CC) $(CFLAGS) $(SRC_DIR)ShaderUniform.cpp -o $(BLD_DIR)ShaderUniform.o
+	
+# Compiles the Shader class.
+Shader.o: 
+	@echo "$@..."
+	@$(CC) $(CFLAGS) $(SRC_DIR)Shader.cpp -o $(BLD_DIR)Shader.o
 
 # Compiles the BasicMatrix class.
 BasicMatrix.o:
@@ -89,11 +94,6 @@ Renderer.o:
 Window.o:
 	@echo "$@..."
 	@$(CC) $(CFLAGS) $(SRC_DIR)Window.cpp -o $(BLD_DIR)Window.o
-	
-# Compiles the Shader class.
-Shader.o: 
-	@echo "$@..."
-	@$(CC) $(CFLAGS) $(SRC_DIR)Shader.cpp -o $(BLD_DIR)Shader.o
 
 # A message to preceed creating the object files.
 OBJ_MESSAGE:
