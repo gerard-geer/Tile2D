@@ -112,4 +112,15 @@ OBJ_ONLY: OBJ_MESSAGE setup_dir Asset.o AssetManager.o Texture.o ShaderUniform.o
 		  Tile.o BGTile.o SceneTile.o AnimTile.o PostTile.o
 	@echo "...Done creating object files."
 	
-	
+# Compiles all of Tile2D into object files then archives them into a
+# static library.
+STATIC: OBJ_ONLY
+	@echo "Using ar to create static library in \"$(BLD_DIR)\" preserving original timestamps."
+	@ar -rcs libtile2d_static $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o \
+							  $(BLD_DIR)Texture.o $(BLD_DIR)ShaderUniform.o \
+							  $(BLD_DIR)Shader.o $(BLD_DIR)Camera.o \
+							  $(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o \
+							  $(BLD_DIR)Window.o $(BLD_DIR)BasicMatrix.o \
+		                      $(BLD_DIR)Tile.o $(BLD_DIR)BGTile.o \
+							  $(BLD_DIR)SceneTile.o $(BLD_DIR)AnimTile.o \
+							  $(BLD_DIR)PostTile.o -o -v
