@@ -14,6 +14,12 @@ BLD_DIR=bin/
 # a custom include directory of HDR_DIR.
 CFLAGS= -c -I $(HDR_DIR)
 
+# Cleans the build directory and deletes it.
+clean:
+	@echo "Cleaning out and deleting build directory \"$(BLD_DIR)\"..."
+	@rm -r -f $(BLD_DIR)
+	@echo "...Done."
+	
 # Creates the build directory if it doesn't exist, then navigates to
 # it.
 setup_dir:
