@@ -1,6 +1,12 @@
 # Set the compiler to Clang.
 CC=clang++
 
+# The output name of the static library:
+ST_NAME=libTile2d_static
+
+# The output nmame of the dynamic library:
+DY_NAME=libTile2d
+
 # The source directory.
 SRC_DIR=lib/
 
@@ -13,6 +19,9 @@ BLD_DIR=bin/
 # Compilation flags. Specifies to only compile (and not to link), as well as
 # a custom include directory of HDR_DIR.
 CFLAGS= -c -I $(HDR_DIR)
+
+# Linking flags to make sure everything is bound up tight.
+LFLAGS= -lglfw -lGL -lGLU -lpng -lGLEW
 
 # Cleans the build directory and deletes it.
 clean:
@@ -116,7 +125,7 @@ OBJ_ONLY: OBJ_MESSAGE setup_dir Asset.o AssetManager.o Texture.o ShaderUniform.o
 # static library.
 STATIC: OBJ_ONLY
 	@echo "Using ar to create static library in \"$(BLD_DIR)\" preserving original timestamps."
-	@ar -rcs libtile2d_static $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o \
+	@ar -rcs $(BLD_DIR)$(ST_NAME) $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o \
 							  $(BLD_DIR)Texture.o $(BLD_DIR)ShaderUniform.o \
 							  $(BLD_DIR)Shader.o $(BLD_DIR)Camera.o \
 							  $(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o \
@@ -124,3 +133,16 @@ STATIC: OBJ_ONLY
 		                      $(BLD_DIR)Tile.o $(BLD_DIR)BGTile.o \
 							  $(BLD_DIR)SceneTile.o $(BLD_DIR)AnimTile.o \
 							  $(BLD_DIR)PostTile.o -o -v
+							  
+# Compiles Tile2D and links it up with its dependencies (you better have them)
+# into a dynamic library.
+DYNAMIC: OBJ_ONLY
+	$(CC) -shared $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o \
+				$(BLD_DIR)Texture.o $(BLD_DIR)ShaderUniform.o \
+				$(BLD_DIR)Shader.o $(BLD_DIR)Camera.o \
+				$(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o \
+				$(BLD_DIR)Window.o $(BLD_DIR)BasicMatrix.o \
+				$(BLD_DIR)Tile.o $(BLD_DIR)BGTile.o \
+				$(BLD_DIR)SceneTile.o $(BLD_DIR)AnimTile.o \
+				$(BLD_DIR)PostTile.o
+				$(LFLAGS) -o libTile2d.so
