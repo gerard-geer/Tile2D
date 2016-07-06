@@ -20,6 +20,11 @@ void AssetManager::add(char * key, Asset * asset)
     #endif
 }
 
+void AssetManager::add(const char* key, Asset * asset)
+{
+	this->add((char*)key, asset);
+}
+
 tex_error AssetManager::addNewTexture(char * key, char * filepath)
 {
     Texture * t = new Texture();
@@ -63,6 +68,11 @@ Asset * AssetManager::get(char * key)
     else return NULL;
 }
 
+Asset * AssetManager::get(const char * key)
+{
+	return this->get((char*)key);
+}
+
 bool AssetManager::remove(char * key)
 {
     if( this->contains(key) )
@@ -72,6 +82,11 @@ bool AssetManager::remove(char * key)
         return true;
     }
     return false;
+}
+
+bool AssetManager::remove(const char * key)
+{
+	return this->remove((char*)key);
 }
 
 void AssetManager::clear()
