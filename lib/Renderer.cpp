@@ -95,7 +95,7 @@ bool Renderer::init(GLuint width, GLuint height)
     
     // Oh go ahead and initialize the final pass Tile.
     this->finalPass = new SceneTile();
-    this->finalPass->init(0,0,PLANE_PLAYFIELD_B,2,2,false,"#doesn't_matter");
+    this->finalPass->init(0,0,PLANE_PLAYFIELD_B,2,2,false,(char*)"using our own");
     
     // Now that that's done, we load the stock shaders for the tiles
     // that use them.
