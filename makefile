@@ -1,11 +1,14 @@
 # Set the compiler to Clang.
 CC=clang++
 
+# The linker.
+LINK=ld
+
 # The output name of the static library:
-ST_NAME=libTile2d_static
+ST_NAME=libTile2d.a
 
 # The output nmame of the dynamic library:
-DY_NAME=libTile2d
+DY_NAME=libTile2d.so
 
 # The source directory.
 SRC_DIR=lib/
@@ -16,12 +19,15 @@ HDR_DIR=include/
 # The build directory.
 BLD_DIR=bin/
 
+# The test code directory.
+TST_DIR=test/
+
 # Compilation flags. Specifies to only compile (and not to link), as well as
 # a custom include directory of HDR_DIR.
-CFLAGS= -c -I $(HDR_DIR)
+CFLAGS= -c -I $(HDR_DIR) 
 
 # Linking flags to make sure everything is bound up tight.
-LFLAGS= -lglfw -lGL -lGLU -lpng -lGLEW
+LFLAGS= -lglfw -lGL -lGLU -lpng -lGLEW -lm -lz -ldl
 
 # Cleans the build directory and deletes it.
 clean:
@@ -113,7 +119,7 @@ Window.o:
 
 # A message to preceed creating the object files.
 OBJ_MESSAGE:
-	@echo "Creating object files and placing them in the $(BLD_DIR) directory..."
+	@echo "Creating PIC object files and placing them in the $(BLD_DIR) directory..."
 
 # Compiles all of Tile2D's source into .o files.
 OBJ_ONLY: OBJ_MESSAGE setup_dir Asset.o AssetManager.o Texture.o ShaderUniform.o \
@@ -137,12 +143,22 @@ STATIC: OBJ_ONLY
 # Compiles Tile2D and links it up with its dependencies (you better have them)
 # into a dynamic library.
 DYNAMIC: OBJ_ONLY
-	$(CC) -shared $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o \
+	@echo "Creating shared library \"$(DY_NAME)\" in \"$(BLD_DIR)\"..."
+	@$(CC) -shared $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o \
 				$(BLD_DIR)Texture.o $(BLD_DIR)ShaderUniform.o \
 				$(BLD_DIR)Shader.o $(BLD_DIR)Camera.o \
 				$(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o \
 				$(BLD_DIR)Window.o $(BLD_DIR)BasicMatrix.o \
 				$(BLD_DIR)Tile.o $(BLD_DIR)BGTile.o \
 				$(BLD_DIR)SceneTile.o $(BLD_DIR)AnimTile.o \
-				$(BLD_DIR)PostTile.o
-				$(LFLAGS) -o libTile2d.so
+				$(BLD_DIR)PostTile.o \
+				$(LFLAGS) -o $(BLD_DIR)$(DY_NAME)
+	@echo "...Done creating shared library."
+	
+# Creates and runs the test program using the static library.
+TEST_STATIC: STATIC
+	#echo "Building \"$(TST_DIR)main.cpp\" using the static library..."
+	$(CC) $(CFLAGS) -static $(TST_DIR)main.cpp -L. -lTile2d $(L_FLAGS) -o $(BLD_DIR)static_test
+	#echo "...Done. Making executable..."
+	chmod +x $(BLD_DIR)static_test
+	#echo "...Done. Running..."
