@@ -29,11 +29,22 @@ CFLAGS= -c -I $(HDR_DIR)
 # Linking flags to make sure everything is bound up tight.
 LFLAGS= -lglfw -lGL -lGLU -lpng -lGLEW -lm -lz -ldl
 
+all:
+	@echo "Welcome to the Tile2D makefile!"
+	@echo "This makes a static or shared library, a pile of .o files, or tests for each."
+	@echo "Please run again with one of the rules below:"
+	@echo "clean        - Clears out the build directory \"$(BLD_DIR)\""
+	@echo "OBJ_FILES    - Compiles Tile2D into .o files. For those who enjoy linking."
+	@echo "STATIC       - Compiles Tile2D into a static library called \"$(ST_NAME)\"."
+	@echo "DYNAMIC      - Compiles Tile2D into a dynamic library named \"$(DY_NAME)\""
+	@echo "TEST_STATIC  - Creates and tests the static library against a test program."
+	@echo "TEST_DYNAMIC - Creates and tests the dynamic library against a test program."
+
 # Cleans the build directory and deletes it.
 clean:
-	@echo "Cleaning out and deleting build directory \"$(BLD_DIR)\"..."
+	@echo "Cleaning out and deleting build directory \"$(BLD_DIR)\"."
 	@rm -r -f $(BLD_DIR)
-	@echo "...Done."
+	@echo "Done cleaning."
 	
 # Creates the build directory if it doesn't exist, then navigates to
 # it.
@@ -82,14 +93,14 @@ OBJ_FILES: setup_dir
 # static library.
 STATIC: OBJ_FILES
 	@echo "Using ar to create static library in \"$(BLD_DIR)\" preserving original timestamps."
-	@ar -rcs $(BLD_DIR)$(ST_NAME) $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o \
-							  $(BLD_DIR)Texture.o $(BLD_DIR)ShaderUniform.o \
-							  $(BLD_DIR)Shader.o $(BLD_DIR)Camera.o \
-							  $(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o \
-							  $(BLD_DIR)Window.o $(BLD_DIR)BasicMatrix.o \
-		                      $(BLD_DIR)Tile.o $(BLD_DIR)BGTile.o \
-							  $(BLD_DIR)SceneTile.o $(BLD_DIR)AnimTile.o \
-							  $(BLD_DIR)PostTile.o -o -v
+	@ar rc $(BLD_DIR)$(ST_NAME) $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o \
+							   $(BLD_DIR)Texture.o $(BLD_DIR)ShaderUniform.o \
+							   $(BLD_DIR)Shader.o $(BLD_DIR)Camera.o \
+							   $(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o \
+							   $(BLD_DIR)Window.o $(BLD_DIR)BasicMatrix.o \
+							   $(BLD_DIR)Tile.o $(BLD_DIR)BGTile.o \
+							   $(BLD_DIR)SceneTile.o $(BLD_DIR)AnimTile.o \
+							   $(BLD_DIR)PostTile.o -o -v
 	@echo "Done archiving."
 							  
 # Compiles Tile2D and links it up with its dependencies (you better have them)
@@ -106,21 +117,25 @@ DYNAMIC: OBJ_FILES
 				$(BLD_DIR)PostTile.o \
 				$(LFLAGS) -o $(BLD_DIR)$(DY_NAME)
 	@echo "Done creating shared library."
-
-# Compiles the library and runs the test application. No libraries involved.
-TEST: OBJ_FILES
+	
+# Compiles main.cpp
+COMP_MAIN: OBJ_FILES
 	@echo "Compiling test program into PIC object file."
 	@$(CC) $(CFLAGS) $(TST_DIR)main.cpp -o $(BLD_DIR)main.o
+	
+
+# Compiles the library and runs the test application. No libraries involved.
+TEST: OBJ_FILES COMP_MAIN
 	@echo "Linking object files."
-	$(CC) -o $(BLD_DIR)test $(BLD_DIR)*.o -L. -lglfw -lGL -lGLU -lpng -lGLEW
+	$(CC) -o $(BLD_DIR)test $(BLD_DIR)*.o -lglfw -lGL -lGLU -lpng -lGLEW
 	@echo "Adding execute permission."
 	@chmod +x $(BLD_DIR)test
 	@echo "Done creating test program. Run with command ./test from $(BLD_DIR)"
 	
 # Creates and runs the test program using the static library.
-TEST_STATIC: STATIC
-	#echo "Building \"$(TST_DIR)main.cpp\" using the static library..."
-	$(CC) $(CFLAGS) -static $(TST_DIR)main.cpp -L. -lTile2d $(L_FLAGS) -o $(BLD_DIR)static_test
-	#echo "...Done. Making executable..."
+TEST_STATIC: STATIC COMP_MAIN
+	@echo "Linking \"$(TST_DIR)main.cpp\" using the static library."
+	@$(CC) -o $(BLD_DIR)static_test $(BLD_DIR)*.o -L$(BLD_DIR) -lTile2d -lglfw -lGL -lGLU -lpng -lGLEW
+	@echo "Adding execute permission."
 	chmod +x $(BLD_DIR)static_test
-	#echo "...Done. Running..."
+	@echo "Done creating test program. Run with command ./static_test from $(BLD_DIR)"
