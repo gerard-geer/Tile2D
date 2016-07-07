@@ -119,13 +119,16 @@ DYNAMIC: OBJ_FILES
 	@echo "Done creating shared library."
 	
 # Compiles main.cpp
-COMP_MAIN: OBJ_FILES
+COMP_MAIN:
+	# Asset.o had to have been created if OBJ_FILES was run.
+	@test -s $(BLD_DIR)Asset.o || { echo "Object files not created! Run \"make OBJ_FILES\" first."; exit 1; }
 	@echo "Compiling test program into PIC object file."
 	@$(CC) $(CFLAGS) $(TST_DIR)main.cpp -o $(BLD_DIR)main.o
 	
 
 # Compiles the library and runs the test application. No libraries involved.
-TEST: OBJ_FILES COMP_MAIN
+TEST: COMP_MAIN
+	@test -s $(BLD_DIR)Asset.o || { echo "Object files not created! Run \"make OBJ_FILES\" first."; exit 1; }
 	@echo "Linking object files."
 	$(CC) -o $(BLD_DIR)test $(BLD_DIR)*.o -lglfw -lGL -lGLU -lpng -lGLEW
 	@echo "Adding execute permission."
@@ -133,7 +136,8 @@ TEST: OBJ_FILES COMP_MAIN
 	@echo "Done creating test program. Run with command ./test from $(BLD_DIR)"
 	
 # Creates and runs the test program using the static library.
-TEST_STATIC: STATIC COMP_MAIN
+TEST_STATIC: COMP_MAIN
+	@test -s $(BLD_DIR)Asset.o || { echo "Static library not created! Run \"make STATIC\" first."; exit 1; }
 	@echo "Linking \"$(TST_DIR)main.cpp\" using the static library."
 	@$(CC) -o $(BLD_DIR)static_test $(BLD_DIR)*.o -L$(BLD_DIR) -lTile2d -lglfw -lGL -lGLU -lpng -lGLEW
 	@echo "Adding execute permission."
@@ -141,7 +145,8 @@ TEST_STATIC: STATIC COMP_MAIN
 	@echo "Done creating test program. Run with command ./static_test from $(BLD_DIR)"
 	
 # Creates and runs the test program using the dynamic library.
-TEST_DYNAMIC: DYNAMIC COMP_MAIN
+TEST_DYNAMIC: COMP_MAIN
+	@echo "Have you run make DYNAMIC yet?"
 	@echo "Linking \"$(TST_DIR)main.cpp\" using the dynamic library."
 	@$(CC) -o $(BLD_DIR)dynamic_test $(BLD_DIR)*.o -L$(BLD_DIR) -lTile2d -lglfw -lGL -lGLU -lpng -lGLEW
 	@echo "Adding execute permission."
