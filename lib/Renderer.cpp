@@ -95,7 +95,7 @@ bool Renderer::init(GLuint width, GLuint height)
     
     // Oh go ahead and initialize the final pass Tile.
     this->finalPass = new SceneTile();
-    this->finalPass->init(0,0,PLANE_PLAYFIELD_B,2,2,false,"#doesn't_matter");
+    this->finalPass->init(0,0,PLANE_PLAYFIELD_B,2,2,false,(char*)"using our own");
     
     // Now that that's done, we load the stock shaders for the tiles
     // that use them.
@@ -337,6 +337,12 @@ BGTile * Renderer::makeBGTile(GLfloat x, GLfloat y, GLfloat width, GLfloat heigh
     return t;
 }
 
+BGTile * Renderer::makeBGTile(GLfloat x, GLfloat y, GLfloat width, GLfloat height, 
+                              bool normalize, const char* texture)
+{
+	return this->makeBGTile(x,y,width,height,normalize,(char*)texture);
+}
+
 SceneTile * Renderer::makeSceneTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
                                   GLfloat height, bool normalize, char* texture)
 {
@@ -356,9 +362,15 @@ SceneTile * Renderer::makeSceneTile(GLfloat x, GLfloat y, tile_plane plane, GLfl
     return t;
 }
 
+SceneTile * Renderer::makeSceneTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
+                                  GLfloat height, bool normalize, const char* texture)
+{
+	return this->makeSceneTile(x,y,plane,width,height,normalize,(char*)texture);
+}
+
 AnimTile * Renderer::makeAnimTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
                                 GLfloat height, bool normalize, char* texture, 
-                                unsigned int numFrames, unsigned int framewidth, 
+                                unsigned int numFrames, unsigned int frameWidth, 
                                 unsigned int frameHeight, float frameTime)
 {
     AnimTile * t = new AnimTile();
@@ -371,8 +383,17 @@ AnimTile * Renderer::makeAnimTile(GLfloat x, GLfloat y, tile_plane plane, GLfloa
     }
     t->init(x, y, plane, width, height, 
             ((Texture*)(this->getAssetManager()->get(texture)))->hasAlpha(),
-            texture, numFrames, framewidth, frameHeight, frameTime);
+            texture, numFrames, frameWidth, frameHeight, frameTime);
     return t;
+}
+
+AnimTile * Renderer::makeAnimTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
+                                GLfloat height, bool normalize, const char* texture, 
+                                unsigned int numFrames, unsigned int frameWidth, 
+                                unsigned int frameHeight, float frameTime)
+{
+	return this->makeAnimTile(x,y,plane,width,height,normalize,(char*)texture,numFrames,
+							  frameWidth,frameHeight,frameTime);
 }
 
 PostTile * Renderer::makePostTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
@@ -389,6 +410,15 @@ PostTile * Renderer::makePostTile(GLfloat x, GLfloat y, tile_plane plane, GLfloa
     }
     t->init(x, y, plane, width, height, texA, texB, texC, texD, shader);
     return t;
+}
+
+PostTile * Renderer::makePostTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
+								  GLfloat height, bool normalize, const char * texA, 
+								  const char * texB, const char * texC, const char * texD,
+								  const char * shader)
+{
+	return this->makePostTile(x,y,plane,width,height,normalize,(char*)texA,(char*)texB,
+							  (char*)texC, (char*)texD, (char*)shader);
 }
 
 GLfloat Renderer::getTilePxX(Tile * tile)

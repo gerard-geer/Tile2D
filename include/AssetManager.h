@@ -33,6 +33,7 @@ private:
      * @param key The key to associate this Asset with.
      */
     void add(char * key, Asset * asset);
+	void add(const char * key, Asset * asset);
     
 public:
     
@@ -88,6 +89,7 @@ public:
      * @return Whether or not the Asset exists in the Manager.
      */
     bool contains(char * key);
+	bool contains(const char * key);
     
     /**
      * @brief Retrieves an Asset from the Manager.
@@ -95,6 +97,7 @@ public:
      * @return A pointer to the Asset if it exists, NULL otherwise.
      */
     Asset * get(char * key);
+	Asset * get(const char * key);
     
     /**
      * @brief Removes and deletes an Asset from the Manager.
@@ -103,6 +106,7 @@ public:
      *         exist in the first place.
      */
     bool remove(char * key);
+	bool remove(const char * key);
     
     /**
      * @brief Clears out every entry in the Manager.

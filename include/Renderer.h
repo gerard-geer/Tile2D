@@ -325,6 +325,7 @@ public:
      * @return A pointer to a freshly created BGTile.
      */
     BGTile * makeBGTile(GLfloat x, GLfloat y, GLfloat width, GLfloat height, bool normalize, char * texture);
+    BGTile * makeBGTile(GLfloat x, GLfloat y, GLfloat width, GLfloat height, bool normalize, const char * texture);
     
     /**
      * @brief A factory method to be used to create and initialize a SceneTile. Make sure
@@ -344,6 +345,8 @@ public:
      */
     SceneTile * makeSceneTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
                               GLfloat height, bool normalize, char * texture);
+    SceneTile * makeSceneTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
+                              GLfloat height, bool normalize, const char * texture);
     /**
      * @brief A factory method used to create an AnimTile. Make sure that this Tile's
      *        texture asset is loaded first.
@@ -366,6 +369,10 @@ public:
      */
     AnimTile * makeAnimTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
                             GLfloat height, bool normalize, char * texture,
+                            unsigned int numFrames, unsigned int framewidth, unsigned int frameHeight,
+                            float frameTime);
+    AnimTile * makeAnimTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
+                            GLfloat height, bool normalize, const char * texture,
                             unsigned int numFrames, unsigned int framewidth, unsigned int frameHeight,
                             float frameTime);
     
@@ -403,6 +410,9 @@ public:
     PostTile * makePostTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
                             GLfloat height, bool normalize, char * texA, char * texB,
                             char * texC, char * texD, char * shader);
+    PostTile * makePostTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
+                            GLfloat height, bool normalize, const char * texA, const char * texB,
+                            const char * texC, const char * texD, const char * shader);
     
     /**
      * @brief Helper function.
