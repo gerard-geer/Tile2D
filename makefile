@@ -137,7 +137,7 @@ TEST: COMP_MAIN
 	
 # Creates and runs the test program using the static library.
 TEST_STATIC: COMP_MAIN
-	@test -s $(BLD_DIR)Asset.o || { echo "Static library not created! Run \"make STATIC\" first."; exit 1; }
+	@test -s $(BLD_DIR)$(ST_NAME) || { echo "Static library not created! Run \"make STATIC\" first."; exit 1; }
 	@echo "Linking \"$(TST_DIR)main.cpp\" using the static library."
 	@$(CC) -o $(BLD_DIR)static_test $(BLD_DIR)*.o -L$(BLD_DIR) -lTile2d -lglfw -lGL -lGLU -lpng -lGLEW
 	@echo "Adding execute permission."
@@ -146,7 +146,7 @@ TEST_STATIC: COMP_MAIN
 	
 # Creates and runs the test program using the dynamic library.
 TEST_DYNAMIC: COMP_MAIN
-	@echo "Have you run make DYNAMIC yet?"
+	@echo "Have you run make DYNAMIC yet, and made the library visible?"
 	@echo "Linking \"$(TST_DIR)main.cpp\" using the dynamic library."
 	@$(CC) -o $(BLD_DIR)dynamic_test $(BLD_DIR)*.o -L$(BLD_DIR) -lTile2d -lglfw -lGL -lGLU -lpng -lGLEW
 	@echo "Adding execute permission."
