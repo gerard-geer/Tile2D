@@ -94,7 +94,7 @@ STATIC: OBJ_FILES
 							  
 # Compiles Tile2D and links it up with its dependencies (you better have them)
 # into a dynamic library.
-DYNAMIC: OBJ_ONLY
+DYNAMIC: OBJ_FILES
 	@echo "Creating shared library \"$(DY_NAME)\" in \"$(BLD_DIR)\"."
 	@$(CC) -shared $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o \
 				$(BLD_DIR)Texture.o $(BLD_DIR)ShaderUniform.o \
