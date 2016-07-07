@@ -106,6 +106,16 @@ DYNAMIC: OBJ_FILES
 				$(BLD_DIR)PostTile.o \
 				$(LFLAGS) -o $(BLD_DIR)$(DY_NAME)
 	@echo "Done creating shared library."
+
+# Compiles the library and runs the test application. No libraries involved.
+TEST: OBJ_FILES
+	@echo "Compiling test program into PIC object file."
+	@$(CC) $(CFLAGS) $(TST_DIR)main.cpp -o $(BLD_DIR)main.o
+	@echo "Linking object files."
+	$(CC) -o $(BLD_DIR)test $(BLD_DIR)*.o -L. -lglfw -lGL -lGLU -lpng -lGLEW
+	@echo "Adding execute permission."
+	@chmod +x $(BLD_DIR)test
+	@echo "Done creating test program. Run with command ./test from $(BLD_DIR)"
 	
 # Creates and runs the test program using the static library.
 TEST_STATIC: STATIC
