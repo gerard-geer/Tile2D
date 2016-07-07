@@ -127,9 +127,7 @@ shader_error Shader::initShader(char* filename, GLenum type, GLuint* shaderID)
     
     // An array of strings to store the lines of the source code.
     char** source = NULL;
-    
-    std::cout << "Loading " << filename << "..." << std::endl;
-    
+        
     // Actually load the shader.
     shader_error e = Shader::loadSource(filename, &source, &numLines);
     
