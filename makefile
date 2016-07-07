@@ -139,3 +139,12 @@ TEST_STATIC: STATIC COMP_MAIN
 	@echo "Adding execute permission."
 	chmod +x $(BLD_DIR)static_test
 	@echo "Done creating test program. Run with command ./static_test from $(BLD_DIR)"
+	
+# Creates and runs the test program using the dynamic library.
+TEST_DYNAMIC: DYNAMIC COMP_MAIN
+	@echo "Linking \"$(TST_DIR)main.cpp\" using the dynamic library."
+	@$(CC) -o $(BLD_DIR)dynamic_test $(BLD_DIR)*.o -L$(BLD_DIR) -lTile2d -lglfw -lGL -lGLU -lpng -lGLEW
+	@echo "Adding execute permission."
+	chmod +x $(BLD_DIR)dynamic_test
+	@echo "Done creating test program. Run with command ./dynamic_test from $(BLD_DIR)"
+	@echo "NOTE: By default the OS will not see the .so file in \"$(BLD_DIR)\". You need to make it see it."
