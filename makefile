@@ -38,43 +38,43 @@ clean:
 # Creates the build directory if it doesn't exist, then navigates to
 # it.
 setup_dir:
-	@echo "Creating build directory \"$(BLD_DIR)\"..."
+	@echo "Creating build directory \"$(BLD_DIR)\"."
 	@mkdir -p $(BLD_DIR)
-	@echo "...Done."
+	@echo "Done."
 
 # Compiles all of Tile2D's source into .o files.
 OBJ_FILES: setup_dir 
 	
 	@echo "Compiling PIC object files and placing them in the $(BLD_DIR) directory."
-	@echo "Asset.cpp..."
+	@echo "	-Asset.cpp"
 	@$(CC) $(CFLAGS) $(SRC_DIR)Asset.cpp -o $(BLD_DIR)Asset.o
-	@echo "AssetManager.cpp..."
+	@echo "	-AssetManager.cpp..."
 	@$(CC) $(CFLAGS) $(SRC_DIR)AssetManager.cpp -o $(BLD_DIR)AssetManager.o
-	@echo "Texture.cpp..."
+	@echo "	-Texture.cpp..."
 	@$(CC) $(CFLAGS) $(SRC_DIR)Texture.cpp -o $(BLD_DIR)Texture.o
-	@echo "Camera.cpp..."
+	@echo "	-Camera.cpp..."
 	@$(CC) $(CFLAGS) $(SRC_DIR)Camera.cpp -o $(BLD_DIR)Camera.o
-	@echo "ShaderUniform.cpp..."
+	@echo "	-ShaderUniform.cpp..."
 	@$(CC) $(CFLAGS) $(SRC_DIR)ShaderUniform.cpp -o $(BLD_DIR)ShaderUniform.o
-	@echo "Shader.cpp..."
+	@echo "	-Shader.cpp..."
 	@$(CC) $(CFLAGS) $(SRC_DIR)Shader.cpp -o $(BLD_DIR)Shader.o
-	@echo "BasicMatrix.cpp..."
+	@echo "	-BasicMatrix.cpp..."
 	@$(CC) $(CFLAGS) $(SRC_DIR)BasicMatrix.cpp -o $(BLD_DIR)BasicMatrix.o
-	@echo "Tile.cpp..."
+	@echo "	-Tile.cpp..."
 	@$(CC) $(CFLAGS) $(SRC_DIR)Tile.cpp -o $(BLD_DIR)Tile.o
-	@echo "BGTile.cpp..."
+	@echo "	-BGTile.cpp..."
 	@$(CC) $(CFLAGS) $(SRC_DIR)BGTile.cpp -o $(BLD_DIR)BGTile.o
-	@echo "SceneTile.cpp..."
+	@echo "	-SceneTile.cpp..."
 	@$(CC) $(CFLAGS) $(SRC_DIR)SceneTile.cpp -o $(BLD_DIR)SceneTile.o
-	@echo "AnimTile.cpp..."
+	@echo "	-AnimTile.cpp..."
 	@$(CC) $(CFLAGS) $(SRC_DIR)AnimTile.cpp -o $(BLD_DIR)AnimTile.o
-	@echo "PostTile.cpp..."
+	@echo "	-PostTile.cpp..."
 	@$(CC) $(CFLAGS) $(SRC_DIR)PostTile.cpp -o $(BLD_DIR)PostTile.o
-	@echo "Framebuffer.cpp..."
+	@echo "	-Framebuffer.cpp..."
 	@$(CC) $(CFLAGS) $(SRC_DIR)Framebuffer.cpp -o $(BLD_DIR)Framebuffer.o
-	@echo "Renderer.cpp..."
+	@echo "	-Renderer.cpp..."
 	@$(CC) $(CFLAGS) $(SRC_DIR)Renderer.cpp -o $(BLD_DIR)Renderer.o
-	@echo "Window.cpp..."
+	@echo "	-Window.cpp..."
 	@$(CC) $(CFLAGS) $(SRC_DIR)Window.cpp -o $(BLD_DIR)Window.o
 	@echo "Done creating object files."
 	
