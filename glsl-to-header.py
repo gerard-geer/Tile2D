@@ -60,7 +60,7 @@ def main():
         print("It seems you've either not specified even one GLSL file, or a single GLSL file and no output file. See -h or --help for usage.")
         
     # Provide the user with help if requested.
-    if("-h" in sys.argv or "--help" in sys.argv)
+    if("-h" in sys.argv or "--help" in sys.argv):
         printUsage()
         return
     
