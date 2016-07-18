@@ -111,6 +111,7 @@ def main():
     for filename in sys.argv[2:]:
         print('Currently converting "'+str(filename)+'"')
         output += createDefineDirective(filenameToMacroName(filename),filename)
+        output += '\n'
     
     # Now that the header file is made, we need to write it to a file.
     print('Writing to file "'+sys.argv[1]+'"')
