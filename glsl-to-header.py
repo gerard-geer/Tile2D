@@ -22,6 +22,9 @@ within a returned String.
 Parameters:
     name (String): The name of the directive.
     file (String): The filepath of the file to #define-ify.
+    
+Returns:
+    The directive as a Python String.
 """
 def createDefineDirective(name, file):
 
@@ -37,6 +40,35 @@ def createDefineDirective(name, file):
      
     # Finally we return the resultant macro.
     return result
+    
+"""
+Filenames normally can't be used as variable or macro names, because they
+can have spaces or other barred characters, not to mention extensions.
+This clears all that up.
+
+Parameters:
+    filename (String): The filename to convert to a macro name.
+
+Returns:
+    The macro name.
+"""
+def filenameToMacroName(filename):
+
+    # Get the name of the file from the path.
+    base = os.path.basename(filename)
+    
+    # Chop off the file extension.
+    name = os.path.splitext(base)[0]
+    
+    # Replace spaces with underscores.
+    name = name.replace(' ', '_')
+    
+    # Remove invalid characters.
+    name = name.translate(None, "!@#$%^&*()_+-=,.<>/?;:'[{]}|`~\n\t\\\0\"\b\a\f\v");
+    
+    # Remove leading numbers.
+    while(name[0].isDigit()):
+        name = name[1:]
         
 """
 Simply prints usage methodology.
