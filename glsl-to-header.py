@@ -36,10 +36,13 @@ def createDefineDirective(name, file):
     
     # Go through the file appending each line to the macro.
     for line in f:
-        result += '"' + str(line) + '"  \\\n'
+        # We need to strip the newline out of the original line so we can place a " before
+        # the carriage return.
+        line = line.translate(None, "\n")
+        result += '"' + str(line) + '"\t\\\n'
      
-    # Finally we return the resultant macro.
-    return result
+    # Finally we return the resultant macro, without the last continutation character or newline.
+    return result[:-2] if ( len(result)>2 ) else result
     
 """
 Filenames normally can't be used as variable or macro names, because they
@@ -64,7 +67,7 @@ def filenameToMacroName(filename):
     name = name.replace(' ', '_')
     
     # Remove invalid characters.
-    name = name.translate(None, "!@#$%^&*()_+-=,.<>/?;:'[{]}|`~\n\t\\\0\"\b\a\f\v");
+    name = name.translate(None, "!@#$%^&*()+-=,.<>/?;:'[{]}|`~\n\t\\\0\"\b\a\f\v");
     
     # Remove leading numbers.
     while(name[0].isdigit()):
@@ -100,6 +103,13 @@ def main():
     if(len(sys.argv) == 2):
         print("It seems you've either not specified even one GLSL file, or a single GLSL file and no output file. See -h or --help for usage.")
         
+    # Now we go ahead and make the header file.
+    output = ''
+    for filename in sys.argv[2:]:
+        print(filename)
+        output += createDefineDirective(filenameToMacroName(filename),filename)
+    print(output)
+    
 """
 If we've been called directly, we need to execute.
 """
