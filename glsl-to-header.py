@@ -9,7 +9,9 @@ Author: Gerard Geer (gerarddgeer@gmail.com)
 
 This script simply takes the filenames passed to it as arguments, and
 spits out their contents into several #define directives in a single
-file.
+file. This allows the binary to not require a specific directory containing
+the stock shaders for the BGTile, SceneTile, and AnimTile to be distributed
+alongside it.
 
 usage:
     glsl-to-header <output filepath> <filepath A> <filepath B> ...
@@ -36,12 +38,13 @@ def createDefineDirective(name, file):
     
     # Go through the file appending each line to the macro.
     for line in f:
-        # We need to strip the newline out of the original line so we can place a " before
-        # the carriage return.
+        # We need to strip the newline out of the original line so we can
+        # place a closing " and tab before the carriage return.
         line = line.translate(None, "\n")
         result += '"' + str(line) + '"\t\\\n'
      
-    # Finally we return the resultant macro, without the last continutation character or newline.
+    # Finally we return the resultant macro, without the last continutation
+    # character or newline.
     return result[:-2] if ( len(result)>2 ) else result
     
 """
@@ -106,9 +109,14 @@ def main():
     # Now we go ahead and make the header file.
     output = ''
     for filename in sys.argv[2:]:
-        print(filename)
+        print("Currently converting "+str(filename))
         output += createDefineDirective(filenameToMacroName(filename),filename)
-    print(output)
+    
+    # Now that the header file is made, we need to write it to a file.
+    print("Writing to file \""+sys.argv[1]+"\"")
+    file = open(sys.argv[1], 'w')
+    file.write(output)
+    print("Done creating shader header file. "+str(len(sys.argv[2:]))+" files were consolidated.")
     
 """
 If we've been called directly, we need to execute.
