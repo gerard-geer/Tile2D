@@ -56,8 +56,10 @@ def createDefineDirective(name, file):
         
         # Next we check to see if we're beginning or end of a multiline
         # comment.
-        if( line.startswith('/*') ):
+        if( '/*' in line and '*/' not in line ):
+            line = line[line.index('/*'):]
             multiline = True;
+            
         # If we're in a multiline comment and this line contains the 
         # end token, we need to delete everything up to and including
         # the end token.
@@ -72,16 +74,13 @@ def createDefineDirective(name, file):
         # If we're not we need to remove any segment comments.
         # The ones that are like this /* stuff commented out */
         if( not multiline ):
+            # Get the start of the comment and end of the comment
+            # and cut out what's in between (including the comment
+            # tokens.
             if( '/*' in line and '*/' in line ):
-                startIndex = line.index('/*');
-                endIndex = line.index('*/');
-                line = line[:startIndex].join(line[endIndex+2:])
+                line = line[:line.index('/*')] + line[line.index('*/')+2:]
         
-        # Finally we check for single line comments.
-        if( line.startswith('//') ):
-            continue
-        
-        # Those comments can end lines too.
+        # Check for single line comments.
         if( '//' in line ):
             line = line[:line.index('//')]
                 
