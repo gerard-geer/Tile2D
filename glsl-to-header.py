@@ -13,13 +13,22 @@ file. This allows the binary to not require a specific directory containing
 the stock shaders for the BGTile, SceneTile, and AnimTile to be distributed
 alongside it.
 
+Since the generated header file is not meant to be human readable (If you
+want to read the shader source, go read the shader source) this removes
+all trailing and leading whitespace as well as documentation.
+
 usage:
     glsl-to-header <output filepath> <filepath A> <filepath B> ...
+    
+Note: It is highly recommended that you differ your vertex and fragment
+shaders by file extension alone, e.g., use .frag and .vert.
 """
 
 """
 Opens a given filename, and stores its contents as a #define macro
-within a returned String.
+within a returned String. This also gets rid of whitespace and
+documentation. If you're looking at this as the shader source instead
+of the shader source itself, you deserve to have a bad time.
 
 Parameters:
     name (String): The name of the directive.
@@ -36,11 +45,52 @@ def createDefineDirective(name, file):
     # Open the file.
     f = open(file)
     
+    # Whether or not we're within a multiline comment.
+    multiline = False
+    
     # Go through the file appending each line to the macro.
     for line in f:
+        
+        # First we strip beginning and trailing whitespace.
+        line = line.strip()
+        
+        # Next we check to see if we're beginning or end of a multiline
+        # comment.
+        if( line.startswith('/*') ):
+            multiline = True;
+        # If we're in a multiline comment and this line contains the 
+        # end token, we need to delete everything up to and including
+        # the end token.
+        if( '*/' in line and multiline ):
+            line = line[line.index('*/')+2:]
+            multiline = False;
+            
+        # If we're in a multiline comment we don't need to do anything.
+        if( multiline ):
+            continue
+        
+        # If we're not we need to remove any segment comments.
+        # The ones that are like this /* stuff commented out */
+        if( not multiline ):
+            if( '/*' in line and '*/' in line ):
+                startIndex = line.index('/*');
+                endIndex = line.index('*/');
+                line = line[:startIndex].join(line[endIndex+2:])
+        
+        # Finally we check for single line comments.
+        if( line.startswith('//') ):
+            continue
+        
+        # Those comments can end lines too.
+        if( '//' in line ):
+            line = line[:line.index('//')]
+                
+        
         # We need to strip the newline out of the original line so we can
         # place a closing " and tab before the carriage return.
         line = line.translate(None, "\n")
+        if( len(line) == 0 ):
+            continue
         result += '"' + str(line) + '"\t\\\n'
      
     # Finally we return the resultant macro, without the last continutation
@@ -63,8 +113,19 @@ def filenameToMacroName(filename):
     # Get the name of the file from the path.
     name = os.path.basename(filename)
     
-    # Chop off the file extension.
-    name = os.path.splitext(name)[0]
+    # Split the name and extension.
+    split = os.path.splitext(name)
+    
+    # Since shader type is often only differed by extension,
+    # we need to append the extension to the name if it's
+    # .frag or .glsl
+    if(len(split) > 1): # If we even had an extension.
+        # If the filename was frag or vert
+        if(split[1] == '.vert' or split[1] == '.frag'):
+            # Replaces the . with an underscore.
+            name = split[0] + '_' + split[1][1:]
+        else:
+            name = split[0]
     
     # Replace spaces with underscores.
     name = name.replace(' ', '_')
