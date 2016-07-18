@@ -109,12 +109,21 @@ def main():
     # Now we go ahead and make the header file.
     output = ''
     for filename in sys.argv[2:]:
-        print("Currently converting "+str(filename))
+        print('Currently converting "'+str(filename)+'"')
         output += createDefineDirective(filenameToMacroName(filename),filename)
     
     # Now that the header file is made, we need to write it to a file.
-    print("Writing to file \""+sys.argv[1]+"\"")
-    file = open(sys.argv[1], 'w')
+    print('Writing to file "'+sys.argv[1]+'"')
+    
+    # If you try to write to a directory that doesn't exist, things tend to
+    # blow up. Let's stop that before such happens.
+    try:
+        file = open(sys.argv[1], 'w')
+    except IOError:
+        print("Error: Could not create output file. Tip: If writing to a directory, it must exist first.")
+        return
+        
+    # Write the header to the output file.
     file.write(output)
     print("Done creating shader header file. "+str(len(sys.argv[2:]))+" files were consolidated.")
     
