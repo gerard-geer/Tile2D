@@ -67,8 +67,11 @@ def filenameToMacroName(filename):
     name = name.translate(None, "!@#$%^&*()_+-=,.<>/?;:'[{]}|`~\n\t\\\0\"\b\a\f\v");
     
     # Remove leading numbers.
-    while(name[0].isDigit()):
+    while(name[0].isdigit()):
         name = name[1:]
+    
+    # Finally we return the results of our labor.
+    return name
         
 """
 Simply prints usage methodology.
@@ -85,6 +88,7 @@ def printUsage():
 Main function of the script.
 """
 def main():
+
     # Provide the user with help if requested.
     if("-h" in sys.argv or "--help" in sys.argv):
         printUsage()
