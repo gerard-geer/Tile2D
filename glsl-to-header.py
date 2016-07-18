@@ -54,13 +54,16 @@ Main function of the script.
 def main():
     
     # Check to make sure we've got the correct number of arguments.
-    if(len(sys.argv) == 0):
-        printUsage()
     if(len(sys.argv) == 1):
+        printUsage()
+    if(len(sys.argv) == 2):
         print("It seems you've either not specified even one GLSL file, or a single GLSL file and no output file. See -h or --help for usage.")
         
     # Provide the user with help if requested.
     if("-h" in sys.argv or "--help" in sys.argv):
         printUsage()
         return
+        
+if( __name__ == "__main__"):
+    main()
     
