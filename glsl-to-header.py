@@ -1,6 +1,7 @@
 #!/usr/local/bin/python
 
 import sys
+import os
 
 """
 File: glsl-to-header.py
@@ -63,6 +64,9 @@ def main():
     if(len(sys.argv) == 2):
         print("It seems you've either not specified even one GLSL file, or a single GLSL file and no output file. See -h or --help for usage.")
         
+"""
+If we've been called directly, we need to execute.
+"""
 if( __name__ == "__main__"):
     main()
     
