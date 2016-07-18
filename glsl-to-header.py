@@ -36,7 +36,7 @@ def createDefineDirective(name, file):
      
     # Finally we return the resultant macro.
     return result
-
+        
 """
 Simply prints usage methodology.
 
@@ -47,4 +47,20 @@ Returns: None.
 def printUsage():
     print("usage:")
     print("\tglsl-to-header <output filepath> <filepath A> <filepath B> ...")
+    
+"""
+Main function of the script.
+"""
+def main():
+    
+    # Check to make sure we've got the correct number of arguments.
+    if(len(sys.argv) == 0):
+        printUsage()
+    if(len(sys.argv) == 1):
+        print("It seems you've either not specified even one GLSL file, or a single GLSL file and no output file. See -h or --help for usage.")
         
+    # Provide the user with help if requested.
+    if("-h" in sys.argv or "--help" in sys.argv)
+        printUsage()
+        return
+    
