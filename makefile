@@ -16,6 +16,9 @@ SRC_DIR=lib/
 # The header directory.
 HDR_DIR=include/
 
+# The shader source directory.
+SDR_DIR=shaders/
+
 # The build directory.
 BLD_DIR=bin/
 
