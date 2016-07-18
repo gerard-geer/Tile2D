@@ -55,10 +55,10 @@ Returns:
 def filenameToMacroName(filename):
 
     # Get the name of the file from the path.
-    base = os.path.basename(filename)
+    name = os.path.basename(filename)
     
     # Chop off the file extension.
-    name = os.path.splitext(base)[0]
+    name = os.path.splitext(name)[0]
     
     # Replace spaces with underscores.
     name = name.replace(' ', '_')
