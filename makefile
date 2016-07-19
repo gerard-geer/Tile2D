@@ -55,10 +55,18 @@ setup_dir:
 	@echo "Creating build directory \"$(BLD_DIR)\"."
 	@mkdir -p $(BLD_DIR)
 	@echo "Done creating build directory."
+	
+# Compiles the shader source code files.
+SHADERS:
+	@echo "Consolidating shaders into header file named \"shader_source.h\""
+	@python glsl-to-header.py $(HDR_DIR)shader_source.h \
+							  $(SDR_DIR)/bg_tile_shader.vert $(SDR_DIR)/bg_tile_shader.frag       \
+							  $(SDR_DIR)/scene_tile_shader.vert $(SDR_DIR)/scene_tile_shader.frag \
+							  $(SDR_DIR)/anim_tile_shader.vert $(SDR_DIR)/anim_tile_shader.frag   \
+							  $(SDR_DIR)/final_pass_shader.vert $(SDR_DIR)/final_pass_shader.frag
 
 # Compiles all of Tile2D's source into .o files.
 OBJ_FILES: setup_dir 
-	
 	@echo "Compiling PIC object files and placing them in the $(BLD_DIR) directory."
 	@echo "  -Asset.cpp"
 	@$(CC) $(CFLAGS) $(SRC_DIR)Asset.cpp -o $(BLD_DIR)Asset.o -fPIC
