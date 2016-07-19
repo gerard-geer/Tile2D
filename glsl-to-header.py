@@ -90,7 +90,7 @@ def createDefineDirective(name, file):
         line = line.translate(None, "\n")
         if( len(line) == 0 ):
             continue
-        result += '"' + str(line) + '"\t\\\n'
+        result += '"' + str(line) + '\\n"\t\\\n'
      
     # Finally we return the resultant macro, without the last continutation
     # character or newline.
