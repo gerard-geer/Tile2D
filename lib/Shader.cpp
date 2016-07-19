@@ -21,6 +21,49 @@ const char * Shader::getShaderType(GLenum type)
     }
 }
 
+void Shader::splitOnNewlines(char * src, char *** dst)
+{
+	// The current number of lines that we've split.
+	int numLines = 0;
+	
+	// The starting point and ending point of the current line.
+	int lineStart = 0, lineEnd = 0;
+	
+	// Initialize the array of lines.
+	(*dst) = (char**)malloc( sizeof(char*) * (numLines+1) );
+	
+	// While the substring end marker hasn't reached the null terminator.'
+	while( src[lineEnd] != '\0' )
+	{
+		// If it has reached a newline, then we go ahead and separate
+		// out the current line.
+		if( src[lineEnd] == '\n' )
+		{
+			// Malloc enough space for the string.
+			(*dst)[numLines] = (char*) malloc( sizeof(char) * ( (lineEnd-lineStart) + 2 ) );
+			// Copy the substring into it.
+			strncpy((*dst)[numLines], &src[lineStart], lineEnd-lineStart);
+			// Increment the number of lines we've come across.'
+			numLines ++;
+			// Bump up the start of the current line to the end of the
+			// previous.
+			lineStart = lineEnd;
+			// Expand the string array.
+			(*dst) = (char**)realloc(*dst, numLines);
+		}
+		lineEnd++;
+	}
+	// Now if we've never come across a newline before reaching the null
+	// terminator, then we've still come across one line. If we have, then
+	// we still have the final line.
+	(*dst)[numLines] = (char*) malloc(sizeof(char) * ( (lineEnd-lineStart) + 2 ) );
+	// Copy the substring into it.
+	strncpy((*dst)[numLines], &src[lineStart], lineEnd-lineStart);
+	// Increment the number of lines we've come across.'
+	numLines ++;
+	
+}
+
 void Shader::scanLineForUniforms(char* line)
 {
     // Number of tokens found in the line.

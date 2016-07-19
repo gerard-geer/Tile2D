@@ -57,6 +57,14 @@ private:
     static const char * getShaderType(GLenum type);
     
     /**
+     * @brief Splits the string <src> on newlines, and stores the resultant array
+     * 		  of strings in <dst> Note, dst will be malloc'd by th is call.
+     * @param src The string to split.
+     * @param dst The destination array, to be allocated by function.
+     */
+    void splitOnNewlines(char * src, char *** dst);
+    
+    /**
      * @brief Scans a single line of source for "uniform <type> <identifier>;"
      * @param line The line to scan.
      */
