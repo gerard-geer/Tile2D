@@ -120,19 +120,8 @@ shader_error Shader::loadSource(char* filename, char*** source, int* numLines)
     }
 }
 
-shader_error Shader::initShader(char* filename, GLenum type, GLuint* shaderID)
+shader_error Shader::initShader(char** source, int numLines, GLenum type, GLuint* shaderID)
 {
-    // An unsigned int to store the number of lines loaded.
-    int numLines;
-    
-    // An array of strings to store the lines of the source code.
-    char** source = NULL;
-        
-    // Actually load the shader.
-    shader_error e = Shader::loadSource(filename, &source, &numLines);
-    
-    if(e) return e; // Return if there was an error. The pointers were cleaned
-                    // up by loadSource, since it was where things went sideways.
     
     // Create a shader and store it in the given ID pointer.
     *shaderID = glCreateShader(type);
@@ -269,31 +258,34 @@ shader_error Shader::load(char* vertFile, char* fragFile)
     // Create individual IDs for each shader stage.
     GLuint vertID = 0, fragID = 0;
     
-    // Load and compile those shader stages.
+    // Load and compile the vertex shader.
     shader_error e = SHADER_NO_ERROR;
-    e = Shader::initShader(vertFile, GL_VERTEX_SHADER, &vertID);
+    char ** vertSourceLines = NULL; int numVertLines = 0;
+    e = loadSource(vertFile, &vertSourceLines, &numVertLines);
     if(e) return e;
-    e = Shader::initShader(fragFile, GL_FRAGMENT_SHADER, &fragID);
+    e = Shader::initShader(vertSourceLines, numVertLines, GL_VERTEX_SHADER, &vertID);
     if(e) return e;
+    
+    // Load and compile the fragment shader.
+    char ** fragSourceLines = NULL; int numFragLines = 0;
+    e = loadSource(fragFile, &fragSourceLines, &numFragLines);
+    if(e) return e;
+    e = Shader::initShader(fragSourceLines, numFragLines, GL_FRAGMENT_SHADER, &fragID);
+    if(e) return e;
+    
     // Now that we've compiled the shaders, we can link them.
     e = linkShaders(vertID, fragID);
     if(e) return e;
     
     // Now we need to parse for uniforms. Let's just reload the source.
-    char ** vertSource = NULL;
-    char ** fragSource = NULL;
-    int vertLines = 0;
-    int fragLines = 0;
-    this->loadSource(vertFile, &vertSource, &vertLines);
-    this->scanSourceForUniforms(vertSource, vertLines);
-    this->loadSource(fragFile, &fragSource, &fragLines);
-    this->scanSourceForUniforms(fragSource, fragLines);
+    this->scanSourceForUniforms(vertSourceLines, numVertLines);
+    this->scanSourceForUniforms(fragSourceLines, numFragLines);
     
     // Now that we're done with it (again) we need to free it (again).
-    for(unsigned int i = 0; i < vertLines; ++i) free(vertSource[i]);
-    for(unsigned int i = 0; i < fragLines; ++i) free(fragSource[i]);
-    free(vertSource);
-    free(fragSource);
+    for(unsigned int i = 0; i < numVertLines; ++i) free(vertSourceLines[i]);
+    for(unsigned int i = 0; i < numFragLines; ++i) free(fragSourceLines[i]);
+    free(vertSourceLines);
+    free(fragSourceLines);
 
     // Return the no_error that was returned last.
     return e;
