@@ -131,6 +131,16 @@ public:
     shader_error load(char* vertFile, char* fragFile);
     
     /**
+     * @brief Creates shaders from source strings. This is to be used mainly by
+     * 		  the base Tile classes whose shaders' source is stored in the shader
+     *		  header file.
+     * @param vertSource The string containing the source code for the vertex shader.
+     * @param fragSource The string containing the source code of the fragment shader.
+     * @return A shader_error, if any. SHADER_NO_ERROR if none.
+     */
+    shader_error loadFromStrings(const char* vertSoure, const char* fragSource);
+    
+    /**
      * @brief Creates a new ShaderUniform instance and adds it to this shader
      *        for later use. Any errors this function may generate will be
      *        caught by glGetError().

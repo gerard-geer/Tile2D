@@ -320,11 +320,11 @@ shader_error Shader::load(char* vertFile, char* fragFile)
     e = linkShaders(vertID, fragID);
     if(e) return e;
     
-    // Now we need to parse for uniforms. Let's just reload the source.
+    // Now we need to parse for uniforms.
     this->scanSourceForUniforms(vertSourceLines, numVertLines);
     this->scanSourceForUniforms(fragSourceLines, numFragLines);
     
-    // Now that we're done with it (again) we need to free it (again).
+	// All that's left to do is clean up.
     for(unsigned int i = 0; i < numVertLines; ++i) free(vertSourceLines[i]);
     for(unsigned int i = 0; i < numFragLines; ++i) free(fragSourceLines[i]);
     free(vertSourceLines);
@@ -339,12 +339,40 @@ shader_error Shader::loadFromStrings(const char* vertSource, const char* fragSou
     // Create individual IDs for each shader stage.
     GLuint vertID = 0, fragID = 0;
     
+    // An error just in case.
+    shader_error e = SHADER_NO_ERROR;
+    
     // We need to split the source code on newlines since much of
     // the loading process laid out by this class operates on arrays
     // of lines.
     char ** vertSourceLines = NULL; int numVertLines = 0;
     char ** fragSourceLines = NULL; int numFragLines = 0;
-	
+    
+    // Do the actual splitting.
+    numVertLines = splitOnNewlines((char*)vertSource, &vertSourceLines);
+    numFragLines = splitOnNewlines((char*)fragSource, &fragSourceLines);
+    
+    // Try to initialize the shaders. Oooooooh boy
+    e = Shader::initShader(vertSourceLines, numVertLines, GL_VERTEX_SHADER, &vertID);
+    if(e) return e;
+    e = Shader::initShader(fragSourceLines, numFragLines, GL_FRAGMENT_SHADER, &vertID);
+    if(e) return e;
+    
+    // Now that the shader stages are compiled, we can link them.
+    e = linkShaders(vertID, fragID);
+    
+    // Now we need to parse for uniforms.
+    this->scanSourceForUniforms(vertSourceLines, numVertLines);
+    this->scanSourceForUniforms(fragSourceLines, numFragLines);
+    
+	// All that's left to do is clean up.
+    for(unsigned int i = 0; i < numVertLines; ++i) free(vertSourceLines[i]);
+    for(unsigned int i = 0; i < numFragLines; ++i) free(fragSourceLines[i]);
+    free(vertSourceLines);
+    free(fragSourceLines);
+    
+    // Return the most recent error result. (Which should be SHADER_NO_ERROR at this point.)
+    return e;
 }
 
 void Shader::addUniform(char * name, uniform_type type)
