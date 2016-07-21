@@ -471,15 +471,18 @@ void Renderer::destroyFBOs()
     delete this->defFB;
 }
 
-void Renderer::destroyAssetManager()
+void Renderer::destroyAssetManagers()
 {
     this->assets->clear();
+    this->vitalAssets->clear();
+   
     delete this->assets;
+    delete this->vitalAssets;
 }
 
 void Renderer::destroy()
 {
-    this->destroyAssetManager();
+    this->destroyAssetManagers();
     this->destroyTileVAO();
     this->destroyFBOs();
 }

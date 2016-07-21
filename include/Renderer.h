@@ -210,9 +210,9 @@ private:
     void destroyFBOs();
     
     /**
-     * @brief Destroys the AssetManager.
+     * @brief Destroys the AssetManagers.
      */
-    void destroyAssetManager();
+    void destroyAssetManagers();
     
 public:
 
