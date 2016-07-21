@@ -334,6 +334,19 @@ shader_error Shader::load(char* vertFile, char* fragFile)
     return e;
 }
 
+shader_error Shader::loadFromStrings(const char* vertSource, const char* fragSource)
+{
+    // Create individual IDs for each shader stage.
+    GLuint vertID = 0, fragID = 0;
+    
+    // We need to split the source code on newlines since much of
+    // the loading process laid out by this class operates on arrays
+    // of lines.
+    char ** vertSourceLines = NULL; int numVertLines = 0;
+    char ** fragSourceLines = NULL; int numFragLines = 0;
+	
+}
+
 void Shader::addUniform(char * name, uniform_type type)
 {
     // Create a new ShaderUniform.
