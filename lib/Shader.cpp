@@ -21,7 +21,7 @@ const char * Shader::getShaderType(GLenum type)
     }
 }
 
-void Shader::splitOnNewlines(char * src, char *** dst)
+int Shader::splitOnNewlines(char * src, char *** dst)
 {
 	// The current number of lines that we've split.
 	int numLines = 0;
@@ -59,8 +59,8 @@ void Shader::splitOnNewlines(char * src, char *** dst)
 	(*dst)[numLines] = (char*) malloc(sizeof(char) * ( (lineEnd-lineStart) + 2 ) );
 	// Copy the substring into it.
 	strncpy((*dst)[numLines], &src[lineStart], lineEnd-lineStart);
-	// Increment the number of lines we've come across.'
-	numLines ++;
+	// Increment the number of lines we've come across and return it.
+	return ++numLines;
 	
 }
 
