@@ -5,6 +5,7 @@
 #include <vector>
 #include <valarray>
 #include <map>
+#include "shader_source.h"
 #include "AssetManager.h"
 #include "Shader.h"
 #include "Texture.h"
