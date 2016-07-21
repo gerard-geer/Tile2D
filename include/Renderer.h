@@ -86,6 +86,9 @@ typedef std::pair<unsigned long, unsigned int> IdAndIndex;
 class Renderer
 {
 friend class Window;
+friend class AnimTile;
+friend class BGTile;
+friend class SceneTile;
 
 private:
 
@@ -93,10 +96,17 @@ private:
      * This Asset Manager is used for keeping the things Tiles
      * need to be drawn. This Renderer is passed to the Tiles'
      * render() function, and from there they will have access
-     * to everything they need. Including the shared and only
-     * transformed for each Tile geometry.
+     * to everything they need.
      */
     AssetManager * assets;
+    
+    /*
+     * Since users of this library can voluntarily clear the asset
+     * manager, we need a private AssetManager for the shaders
+     * vital to rendering.
+     */
+    AssetManager * vitalAssets;
+    
     
     /*
      * The handle to the vertex buffer object that stores the
