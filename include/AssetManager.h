@@ -75,6 +75,16 @@ public:
     shader_error addNewShader(char * key, char * vertPath, char * fragPath);
     
     /**
+     * @brief Loads a Shader from strings containing its source, and adds it to
+     * 		  the AssetManager under the given key. This is only used by the Renderer.
+     * @param key The key to associate this Shader with.
+     * @param vertSource The vertex shader source.
+     * @param fragSource The fragment shader source.
+     * @return A shader_error. If no error occurred, SHADER_NO_ERROR is returned.
+     */
+     shader_error addNewShaderFromStrings(const char * key, const char * vertSource, const char * fragSource);
+    
+    /**
      * @brief An error-suppressing overload of addNewShader().
      * @param key The key to associate this Shader with.
      * @param vertPath The filepath to the vertex shader source.
