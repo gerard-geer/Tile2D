@@ -61,8 +61,9 @@ private:
      * 		  of strings in <dst> Note, dst will be malloc'd by th is call.
      * @param src The string to split.
      * @param dst The destination array, to be allocated by function.
+     * @return How many lines were created.
      */
-    void splitOnNewlines(char * src, char *** dst);
+    int splitOnNewlines(char * src, char *** dst);
     
     /**
      * @brief Scans a single line of source for "uniform <type> <identifier>;"
