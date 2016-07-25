@@ -17,7 +17,7 @@ void SceneTile::init(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, GLfl
 
 void SceneTile::render(Renderer * r)
 {
-    Shader * program = (Shader*) r->getAssetManager()->get((char*)"scene_tile_shader");
+    Shader * program = (Shader*) r->vitalAssets->get("scene_tile_shader");
 
     Texture * tex = (Texture*) r->getAssetManager()->get(this->texture);
     

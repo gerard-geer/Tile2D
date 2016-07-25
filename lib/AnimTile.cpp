@@ -37,7 +37,7 @@ void AnimTile::render(Renderer* r)
     }
     
     // Now let's get some stuff from the asset Manager.
-    Shader * program = (Shader*)r->getAssetManager()->get("anim_tile_shader");
+    Shader * program = (Shader*)r->vitalAssets->get("anim_tile_shader");
     Texture * frames = (Texture*)r->getAssetManager()->get(texture);
     
     // Start using the program.

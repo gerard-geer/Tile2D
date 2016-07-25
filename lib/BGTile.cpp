@@ -23,7 +23,7 @@ void BGTile::setPlane(tile_plane plane)
 void BGTile::render(Renderer * r)
 {
     // Pull the BGTile's shader program out of retirement.
-    Shader * program = (Shader*) r->getAssetManager()->get((char*)"bg_tile_shader");
+    Shader * program = (Shader*) r->vitalAssets->get("bg_tile_shader");
     
     // Oh also get its texture.
     Texture * tex = (Texture*) r->getAssetManager()->get(this->texture);
