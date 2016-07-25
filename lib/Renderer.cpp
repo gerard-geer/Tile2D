@@ -22,6 +22,7 @@ void Renderer::initPlaceholderTexture()
 
 void Renderer::initStockShaders()
 {
+	std::cout << "INITIALIZING SHADERS" << std::endl;
     this->vitalAssets->addNewShaderFromStrings("bg_tile_shader", 
                                bg_tile_shader_vert,
                                bg_tile_shader_frag);
@@ -33,7 +34,8 @@ void Renderer::initStockShaders()
     						   anim_tile_shader_frag);
     this->vitalAssets->addNewShaderFromStrings("final_pass_shader",
                                final_pass_shader_vert,
-                               final_pass_shader_frag);    
+                               final_pass_shader_frag);
+	std::cout << "DONE INITIALIZING SHADERS" << std::endl;
 }
 
 void Renderer::initTileVAO()
