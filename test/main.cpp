@@ -10,16 +10,16 @@ int main(int argc, char **argv)
     window.create(1000, 700, 256, 224, (char*)"WOO");
     Renderer * r = window.getRenderer();
     AssetManager * a = r->getAssetManager();
-    a->addNewTexture("puppy", "../Assets/Rendering Assets/Textures/puppy.png");
+    a->addNewTexture("puppy", "../ExampleAssets/puppy.png");
     
-    a->addNewTexture("kitten", "../Assets/Rendering Assets/Textures/kitten.png");
+    a->addNewTexture("kitten", "../ExampleAssets/kitten.png");
     
-    a->addNewTexture("fish", "../Assets/Rendering Assets/Textures/fish.png");
+    a->addNewTexture("fish", "../ExampleAssets/fasdfish.png");
     
-    a->addNewTexture("yumetarou", "../Assets/Rendering Assets/Textures/yumetarou_frame16x20.png");
+    a->addNewTexture("yumetarou", "../ExampleAssets/yumetarou_frame16x20.png");
     
-    a->addNewShader("example_post_shader", "../Assets/Rendering Assets/Shaders/ex_post_tile_shader.vert",
-                                                           "../Assets/Rendering Assets/Shaders/ex_post_tile_shader.frag");
+    a->addNewShader("example_post_shader", "../ExampleAssets/ex_post_tile_shader.vert",
+                                                           "../ExampleAssets/ex_post_tile_shader.frag");
     BGTile * bg = r->makeBGTile(0.0, 0.0, 1.5, 1.5, false, "puppy");
     r->addToRenderQueue(BG_TILE, bg);
     
