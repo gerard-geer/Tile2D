@@ -66,7 +66,7 @@ SHADERS:
 							  $(SDR_DIR)/final_pass_shader.vert $(SDR_DIR)/final_pass_shader.frag
 
 # Compiles all of Tile2D's source into .o files.
-OBJ_FILES: setup_dir 
+OBJ_FILES: SHADERS setup_dir 
 	@echo "Compiling PIC object files and placing them in the $(BLD_DIR) directory."
 	@echo "  -Asset.cpp"
 	@$(CC) $(CFLAGS) $(SRC_DIR)Asset.cpp -o $(BLD_DIR)Asset.o -fPIC
@@ -135,7 +135,12 @@ COMP_MAIN:
 	@test -s $(BLD_DIR)Asset.o || { echo "Object files not created! Run \"make OBJ_FILES\" first."; exit 1; }
 	@echo "Compiling test program into PIC object file."
 	@$(CC) $(CFLAGS) $(TST_DIR)main.cpp -o $(BLD_DIR)main.o
-	
+
+COMP_TEST_SHADER_TOOLCHAIN:
+	# Asset.o had to have been created if OBJ_FILES was run.
+	@test -s $(BLD_DIR)Asset.o || { echo "Object files not created! Run \"make OBJ_FILES\" first."; exit 1; }
+	@echo "Compiling test program into PIC object file."
+	@$(CC) $(CFLAGS) $(TST_DIR)test_shader_toolchain.cpp -o $(BLD_DIR)test_shader_toolchain.o
 
 # Compiles the library and runs the test application. No libraries involved.
 TEST: COMP_MAIN
@@ -164,3 +169,12 @@ TEST_DYNAMIC: COMP_MAIN
 	chmod +x $(BLD_DIR)dynamic_test
 	@echo "Done creating test program. Run with command ./dynamic_test from $(BLD_DIR)"
 	@echo "NOTE: By default the OS will not see the .so file in \"$(BLD_DIR)\". You need to make it see it."
+	
+TEST_SHADER_TOOLCHAIN: COMP_TEST_SHADER_TOOLCHAIN
+	@test -s $(BLD_DIR)Asset.o || { echo "Object files not created! Run \"make OBJ_FILES\" first."; exit 1; }
+	@echo "Linking object files."
+	$(CC) -o $(BLD_DIR)test_shader_toolchain $(BLD_DIR)*.o -lglfw -lGL -lGLU -lpng -lGLEW
+	@echo "Adding execute permission."
+	@chmod +x $(BLD_DIR)test_shader_toolchain
+	@echo "Done creating test program. Run with command ./test_shader_toolchain from $(BLD_DIR)"
+	
