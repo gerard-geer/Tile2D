@@ -25,42 +25,35 @@ int Shader::splitOnNewlines(char * src, char *** dst)
 {
 	// The current number of lines.
 	int numLines = 0;
-	std::cout << "SOURCE: \n" << src << std::endl;
-	// The pointer to the most recently cleaved token.
+	
+	// A pointer to the most recently cleaved token.
 	char *curLine;
 	
-	curLine = strtok(src, "\n");
-	std::cout << "Made first strtok call" << std::endl;
+	// It's possible that the src string is constant, which would
+	// cause strtok to fail. Therefore we need to make our own
+	// copy.
+	char * data = strdup(src);
 	
-	// First we need to initialize dst, and create a swap variable.
-	char *** swap;
-	(*dst) = (char**) malloc(sizeof(char*) * (numLines+1));
+	std::cout << "SOURCE: \n"<< data << std::endl;
 
-	// Loop while there are still tokens to be had.
-	while( curLine != NULL )
+	// Loop while there are tokens to be had...
+	do
 	{
-		std::cout << numLines << ": " << curLine << std::endl;
-		// Allocate the current string in the dst array to the length of the string.
-		(*dst)[numLines] = (char*) malloc( sizeof(char) * (strlen(curLine)+1) );
 		
-		// Copy the current line into that string.
-		strcpy( (*dst)[numLines], curLine );
+		// Expand the destination array.
+		(*dst) = (char**) realloc((*dst), sizeof(char*) * (numLines+1) );
+		std::cout << "Made it to realloc" << std::endl;
 		
+		// Duplicate the current line into the current slot in the destination array.
+		(*dst)[numLines] = strdup(strtok(data, "\n"));
+		
+		std::cout << numLines + 1 << ": " << (*dst)[numLines] << std::endl;
+
+		// Increment the number of lines stored. 
 		numLines++;
 		
-		// Since we can't so egregriously use realloc(), we need to do some swapping.
-		(*swap) = (char**) malloc( sizeof(char*) * (numLines+1) );
-		for( int i = 0; i < numLines; ++i )
-		{
-			strcpy((*swap)[i],(*dst)[i]);
-		}
-		
-		// XOR swap time!
-		*dst  = (char**) ( (long)*dst ^ (long)*swap );
-		*swap = (char**) ( (long)*dst ^ (long)*swap );
-		*dst  = (char**) ( (long)*dst ^ (long)*swap );
-		
-	}
+	}while( (*dst)[numLines-1] != NULL );
+	
 	std::cout << "Done splitting" << std::endl;
 	
 	// Finally we return the number of lines parsed.
