@@ -23,44 +23,51 @@ const char * Shader::getShaderType(GLenum type)
 
 int Shader::splitOnNewlines(char * src, char *** dst)
 {
-	// The current number of lines that we've split.
+	// The current number of lines.
 	int numLines = 0;
+	std::cout << "SOURCE: \n" << src << std::endl;
+	// The pointer to the most recently cleaved token.
+	char *curLine;
 	
-	// The starting point and ending point of the current line.
-	int lineStart = 0, lineEnd = 0;
+	curLine = strtok(src, "\n");
+	std::cout << "Made first strtok call" << std::endl;
 	
-	// Initialize the array of lines.
-	(*dst) = (char**)malloc( sizeof(char*) * (numLines+1) );
-	
-	// While the substring end marker hasn't reached the null terminator.'
-	while( src[lineEnd] != '\0' )
+	// First we need to initialize dst, and create a swap variable.
+	char *** swap;
+	(*dst) = (char**) malloc(sizeof(char*) * (numLines+1));
+
+	// Loop while there are still tokens to be had.
+	while( curLine != NULL )
 	{
-		// If it has reached a newline, then we go ahead and separate
-		// out the current line.
-		if( src[lineEnd] == '\n' )
+		std::cout << numLines << ": " << curLine << std::endl;
+		// Allocate the current string in the dst array to the length of the string.
+		(*dst)[numLines] = (char*) malloc( sizeof(char) * (strlen(curLine)+1) );
+		
+		// Copy the current line into that string.
+		strcpy( (*dst)[numLines], curLine );
+		
+		numLines++;
+		
+		// Since we can't so egregriously use realloc(), we need to do some swapping.
+		(*swap) = (char**) malloc( sizeof(char*) * (numLines+1) );
+		for( int i = 0; i < numLines; ++i )
 		{
-			// Malloc enough space for the string.
-			(*dst)[numLines] = (char*) malloc( sizeof(char) * ( (lineEnd-lineStart) + 2 ) );
-			// Copy the substring into it.
-			strncpy((*dst)[numLines], &src[lineStart], lineEnd-lineStart);
-			// Increment the number of lines we've come across.'
-			numLines ++;
-			// Bump up the start of the current line to the end of the
-			// previous.
-			lineStart = lineEnd;
-			// Expand the string array.
-			(*dst) = (char**)realloc(*dst, numLines);
+			strcpy((*swap)[i],(*dst)[i]);
 		}
-		lineEnd++;
+		
+		// XOR swap time!
+		*dst  = (char**) ( (long)*dst ^ (long)*swap );
+		*swap = (char**) ( (long)*dst ^ (long)*swap );
+		*dst  = (char**) ( (long)*dst ^ (long)*swap );
+		
 	}
-	// Now if we've never come across a newline before reaching the null
-	// terminator, then we've still come across one line. If we have, then
-	// we still have the final line.
-	(*dst)[numLines] = (char*) malloc(sizeof(char) * ( (lineEnd-lineStart) + 2 ) );
-	// Copy the substring into it.
-	strncpy((*dst)[numLines], &src[lineStart], lineEnd-lineStart);
-	// Increment the number of lines we've come across and return it.
-	return ++numLines;
+	std::cout << "Done splitting" << std::endl;
+	
+	// Finally we return the number of lines parsed.
+	return numLines;
+		
+		
+		
 	
 }
 
@@ -336,6 +343,7 @@ shader_error Shader::load(char* vertFile, char* fragFile)
 
 shader_error Shader::loadFromStrings(const char* vertSource, const char* fragSource)
 {
+	std::cout << "Loading shader from strings" << std::endl;
     // Create individual IDs for each shader stage.
     GLuint vertID = 0, fragID = 0;
     
@@ -350,6 +358,7 @@ shader_error Shader::loadFromStrings(const char* vertSource, const char* fragSou
     
     // Do the actual splitting.
     numVertLines = splitOnNewlines((char*)vertSource, &vertSourceLines);
+    std::cout << "Done splitting lines." << std::endl;
     numFragLines = splitOnNewlines((char*)fragSource, &fragSourceLines);
     
     // Try to initialize the shaders. Oooooooh boy
@@ -371,6 +380,7 @@ shader_error Shader::loadFromStrings(const char* vertSource, const char* fragSou
     free(vertSourceLines);
     free(fragSourceLines);
     
+	std::cout << "Done loading shader from strings" << std::endl;
     // Return the most recent error result. (Which should be SHADER_NO_ERROR at this point.)
     return e;
 }
