@@ -6,7 +6,7 @@
 #include <string>
 #include <cstring>
 #include <map>
-#include <stdlib.h>
+#include <cstdlib>
 #include "Asset.h"
 #include "ShaderUniform.h"
 

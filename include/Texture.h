@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <stdlib.h>
+#include <cstdlib>
 #include <png.h>
 #include <GLFW/glfw3.h>
 #include "Asset.h"
