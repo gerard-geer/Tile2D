@@ -50,9 +50,11 @@ shader_error AssetManager::addNewShader(char * key, char * vertPath, char * frag
 
 shader_error AssetManager::addNewShaderFromStrings(const char * key, const char * vertSource, const char * fragSource)
 {
+	std::cout << "Adding shader!" << std::endl;
 	Shader * s = new Shader();
 	shader_error e = s->loadFromStrings(vertSource, fragSource);
 	if( e == SHADER_NO_ERROR ) this->add(key,(Asset*)s);
+	std::cout << "Done addding shader!" << std::endl;
 	return e;
 }
 
