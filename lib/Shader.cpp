@@ -27,7 +27,7 @@ int Shader::splitOnNewlines(char * src, char *** dst)
 	int numLines = 0;
 	
 	// A pointer to the most recently cleaved token.
-	char *curLine;
+	char *curLine = NULL;//(char*) malloc( sizeof(char) * 1000 );
 	
 	// It's possible that the src string is constant, which would
 	// cause strtok to fail. Therefore we need to make our own
@@ -36,26 +36,29 @@ int Shader::splitOnNewlines(char * src, char *** dst)
 	
 	std::cout << "SOURCE: \n"<< data << std::endl;
 
+	// Initialize the destination array.
+	(*dst) = (char**) malloc( sizeof(char*) * (numLines+1) );
+	
+	curLine = strtok(data, "\n");
+	
 	// Loop while there are tokens to be had...
-	do
+	while( curLine != NULL )
 	{
+		// Copy the current line into the destination array.
+		(*dst)[numLines] = strdup(curLine);
+		std::cout << numLines+1 << ": " << (*dst)[numLines] << std::endl;
 		
-		// Expand the destination array.
-		(*dst) = (char**) realloc((*dst), sizeof(char*) * (numLines+1) );
-		std::cout << "Made it to realloc" << std::endl;
-		
-		// Duplicate the current line into the current slot in the destination array.
-		(*dst)[numLines] = strdup(strtok(data, "\n"));
-		
-		std::cout << numLines + 1 << ": " << (*dst)[numLines] << std::endl;
-
 		// Increment the number of lines stored. 
 		numLines++;
 		
-	}while( (*dst)[numLines-1] != NULL );
-	
-	std::cout << "Done splitting" << std::endl;
-	
+		// Expand the destination array.
+		(*dst) = (char**) realloc((*dst), sizeof(char*) * (numLines+1) );
+		
+		// Get the next token.
+		curLine = strtok(NULL, "\n");
+		
+	}
+		
 	// Finally we return the number of lines parsed.
 	return numLines;
 		
