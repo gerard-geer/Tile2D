@@ -31,7 +31,7 @@ tex_error AssetManager::addNewTexture(char * key, char * filepath)
     if(filepath == NULL) e = t->createEmpty();
     else e = t->load(filepath);
     if( e == TEX_NO_ERROR ) this->add(key,(Asset*)t);
-    else std::cout << key << " Texture loading error: " << Texture::getErrorDesc(e) << std::endl;
+    else std::cout << key << ": Texture loading error: " << Texture::getErrorDesc(e) << std::endl;
     return e;
 }
 
@@ -45,17 +45,16 @@ shader_error AssetManager::addNewShader(char * key, char * vertPath, char * frag
     Shader * s = new Shader();
     shader_error e = s->load(vertPath, fragPath);
     if( e == SHADER_NO_ERROR ) this->add(key,(Asset*)s);
+	else std::cout << key << ": Shader Loading Error: " << Shader::getErrorDesc(e) << std::endl;
     return e;
 }
 
 shader_error AssetManager::addNewShaderFromStrings(const char * key, const char * vertSource, const char * fragSource)
 {
-	std::cout << "Adding shader!" << std::endl;
 	Shader * s = new Shader();
 	shader_error e = s->loadFromStrings(vertSource, fragSource);
-	std::cout << "ARE WE HERE YET?" << std::endl;
 	if( e == SHADER_NO_ERROR ) this->add(key,(Asset*)s);
-	std::cout << "Done addding shader!" << std::endl;
+	else std::cout << key << ": Shader Loading Error: " << Shader::getErrorDesc(e) << std::endl;
 	return e;
 }
 
