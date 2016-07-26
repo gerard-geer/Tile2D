@@ -10,14 +10,13 @@ AssetManager::~AssetManager()
 
 void AssetManager::add(char * key, Asset * asset)
 {
+        std::cout << "tryna " << key << " to AssetManager." << std::endl;
     if( !this->contains(key) )
-        #ifdef TILE2D_VERBOSE_OUTPUT
+    {
         std::cout << "Adding " << key << " to AssetManager." << std::endl;
-        #endif
         this->assetHash.insert(std::pair<std::string,Asset*>(key,asset));
-    #ifdef TILE2D_VERBOSE_OUTPUT
-    else std::cout << "Adding " << key << " to AssetManager." << std::endl;
-    #endif
+    }
+    else std::cout << "Not adding " << key << " to AssetManager." << std::endl;
 }
 
 void AssetManager::add(const char* key, Asset * asset)
@@ -32,6 +31,7 @@ tex_error AssetManager::addNewTexture(char * key, char * filepath)
     if(filepath == NULL) e = t->createEmpty();
     else e = t->load(filepath);
     if( e == TEX_NO_ERROR ) this->add(key,(Asset*)t);
+    else std::cout << key << " Texture loading error: " << Texture::getErrorDesc(e) << std::endl;
     return e;
 }
 
@@ -53,6 +53,7 @@ shader_error AssetManager::addNewShaderFromStrings(const char * key, const char 
 	std::cout << "Adding shader!" << std::endl;
 	Shader * s = new Shader();
 	shader_error e = s->loadFromStrings(vertSource, fragSource);
+	std::cout << "ARE WE HERE YET?" << std::endl;
 	if( e == SHADER_NO_ERROR ) this->add(key,(Asset*)s);
 	std::cout << "Done addding shader!" << std::endl;
 	return e;
