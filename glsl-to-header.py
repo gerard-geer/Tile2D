@@ -174,7 +174,7 @@ def main():
     output += '#ifndef '+guard+'\n'
     output += '#define '+guard+'\n\n'
     for filename in sys.argv[2:]:
-        print('Currently converting "'+str(filename)+'"')
+        print('  -'+str(filename))
         output += createDefineDirective(filenameToMacroName(filename),filename)
         output += '\n\n'
     
