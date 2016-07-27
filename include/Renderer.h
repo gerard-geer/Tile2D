@@ -86,6 +86,9 @@ typedef std::pair<unsigned long, unsigned int> IdAndIndex;
 class Renderer
 {
 friend class Window;
+friend class BGTile;
+friend class SceneTile;
+friend class AnimTile;
 
 private:
 
