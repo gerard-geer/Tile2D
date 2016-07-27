@@ -16,6 +16,9 @@ SRC_DIR=lib/
 # The header directory.
 HDR_DIR=include/
 
+# The shader source directory.
+SDR_DIR=shaders/
+
 # The build directory.
 BLD_DIR=bin/
 
@@ -54,40 +57,23 @@ setup_dir:
 	@echo "Done creating build directory."
 
 # Compiles all of Tile2D's source into .o files.
-OBJ_FILES: setup_dir 
-	
+OBJ_FILES_MESSAGE: setup_dir 
 	@echo "Compiling PIC object files and placing them in the $(BLD_DIR) directory."
-	@echo "  -Asset.cpp"
-	@$(CC) $(CFLAGS) $(SRC_DIR)Asset.cpp -o $(BLD_DIR)Asset.o -fPIC
-	@echo "  -AssetManager.cpp"
-	@$(CC) $(CFLAGS) $(SRC_DIR)AssetManager.cpp -o $(BLD_DIR)AssetManager.o -fPIC
-	@echo "  -Texture.cpp"
-	@$(CC) $(CFLAGS) $(SRC_DIR)Texture.cpp -o $(BLD_DIR)Texture.o -fPIC
-	@echo "  -Camera.cpp"
-	@$(CC) $(CFLAGS) $(SRC_DIR)Camera.cpp -o $(BLD_DIR)Camera.o -fPIC
-	@echo "  -ShaderUniform.cpp"
-	@$(CC) $(CFLAGS) $(SRC_DIR)ShaderUniform.cpp -o $(BLD_DIR)ShaderUniform.o -fPIC
-	@echo "  -Shader.cpp"
-	@$(CC) $(CFLAGS) $(SRC_DIR)Shader.cpp -o $(BLD_DIR)Shader.o -fPIC
-	@echo "  -BasicMatrix.cpp"
-	@$(CC) $(CFLAGS) $(SRC_DIR)BasicMatrix.cpp -o $(BLD_DIR)BasicMatrix.o -fPIC
-	@echo "  -Tile.cpp"
-	@$(CC) $(CFLAGS) $(SRC_DIR)Tile.cpp -o $(BLD_DIR)Tile.o -fPIC
-	@echo "  -BGTile.cpp"
-	@$(CC) $(CFLAGS) $(SRC_DIR)BGTile.cpp -o $(BLD_DIR)BGTile.o -fPIC
-	@echo "  -SceneTile.cpp"
-	@$(CC) $(CFLAGS) $(SRC_DIR)SceneTile.cpp -o $(BLD_DIR)SceneTile.o -fPIC
-	@echo "  -AnimTile.cpp"
-	@$(CC) $(CFLAGS) $(SRC_DIR)AnimTile.cpp -o $(BLD_DIR)AnimTile.o -fPIC
-	@echo "  -PostTile.cpp"
-	@$(CC) $(CFLAGS) $(SRC_DIR)PostTile.cpp -o $(BLD_DIR)PostTile.o -fPIC
-	@echo "  -Framebuffer.cpp"
-	@$(CC) $(CFLAGS) $(SRC_DIR)Framebuffer.cpp -o $(BLD_DIR)Framebuffer.o -fPIC
-	@echo "  -Renderer.cpp"
-	@$(CC) $(CFLAGS) $(SRC_DIR)Renderer.cpp -o $(BLD_DIR)Renderer.o -fPIC
-	@echo "  -Window.cpp"
-	@$(CC) $(CFLAGS) $(SRC_DIR)Window.cpp -o $(BLD_DIR)Window.o -fPIC
-	@echo "Done creating object files."
+	
+# An implicit (suffix) rule to build any file in the SRC and HDR directories, into the BLD directory.
+$(BLD_DIR)%.o: $(SRC_DIR)%.cpp $(HDR_DIR)%.h
+	@echo "  -$<"
+	@$(CC) $(CFLAGS) $< -o $@ -fPIC
+	
+# A shortcut rule for the above.
+%.o: $(BLD_DIR)%.o
+
+	
+OBJ_FILES: OBJ_FILES_MESSAGE $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o $(BLD_DIR)Texture.o	\
+		   $(BLD_DIR)Camera.o $(BLD_DIR)ShaderUniform.o $(BLD_DIR)Shader.o $(BLD_DIR)BasicMatrix.o	\
+		   $(BLD_DIR)Tile.o $(BLD_DIR)BGTile.o $(BLD_DIR)SceneTile.o $(BLD_DIR)AnimTile.o	\
+		   $(BLD_DIR)PostTile.o $(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o $(BLD_DIR)Window.o
+	@echo "Done creating object files. Note: some may not have been recompiled."
 	
 # Compiles all of Tile2D into object files then archives them into a
 # static library.
@@ -124,11 +110,15 @@ COMP_MAIN:
 	@test -s $(BLD_DIR)Asset.o || { echo "Object files not created! Run \"make OBJ_FILES\" first."; exit 1; }
 	@echo "Compiling test program into PIC object file."
 	@$(CC) $(CFLAGS) $(TST_DIR)main.cpp -o $(BLD_DIR)main.o
-	
+
+COMP_TEST_SHADER_TOOLCHAIN:
+	# Asset.o had to have been created if OBJ_FILES was run.
+	@test -s $(BLD_DIR)Asset.o || { echo "Object files not created! Run \"make OBJ_FILES\" first."; exit 1; }
+	@echo "Compiling test program into PIC object file."
+	@$(CC) $(CFLAGS) $(TST_DIR)test_shader_toolchain.cpp -o $(BLD_DIR)test_shader_toolchain.o
 
 # Compiles the library and runs the test application. No libraries involved.
-TEST: COMP_MAIN
-	@test -s $(BLD_DIR)Asset.o || { echo "Object files not created! Run \"make OBJ_FILES\" first."; exit 1; }
+TEST: OBJ_FILES COMP_MAIN
 	@echo "Linking object files."
 	$(CC) -o $(BLD_DIR)test $(BLD_DIR)*.o -lglfw -lGL -lGLU -lpng -lGLEW
 	@echo "Adding execute permission."
@@ -153,3 +143,12 @@ TEST_DYNAMIC: COMP_MAIN
 	chmod +x $(BLD_DIR)dynamic_test
 	@echo "Done creating test program. Run with command ./dynamic_test from $(BLD_DIR)"
 	@echo "NOTE: By default the OS will not see the .so file in \"$(BLD_DIR)\". You need to make it see it."
+	
+TEST_SHADER_TOOLCHAIN: COMP_TEST_SHADER_TOOLCHAIN
+	@test -s $(BLD_DIR)Asset.o || { echo "Object files not created! Run \"make OBJ_FILES\" first."; exit 1; }
+	@echo "Linking object files."
+	$(CC) -o $(BLD_DIR)test_shader_toolchain $(BLD_DIR)*.o -lglfw -lGL -lGLU -lpng -lGLEW
+	@echo "Adding execute permission."
+	@chmod +x $(BLD_DIR)test_shader_toolchain
+	@echo "Done creating test program. Run with command ./test_shader_toolchain from $(BLD_DIR)"
+	
