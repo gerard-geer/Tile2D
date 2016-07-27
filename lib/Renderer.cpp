@@ -22,13 +22,13 @@ void Renderer::initPlaceholderTexture()
 
 void Renderer::initStockShaders()
 {
-    this->assets->addNewShader("bg_tile_shader", 
+    this->vitalAssets->addNewShader("bg_tile_shader", 
                                "../Assets/Rendering Assets/Shaders/bg_tile_shader.vert",
                                "../Assets/Rendering Assets/Shaders/bg_tile_shader.frag");
-    this->assets->addNewShader("scene_tile_shader",
+    this->vitalAssets->addNewShader("scene_tile_shader",
                                "../Assets/Rendering Assets/Shaders/scene_tile_shader.vert",
                                "../Assets/Rendering Assets/Shaders/scene_tile_shader.frag");
-    this->assets->addNewShader("anim_tile_shader", 
+    this->vitalAssets->addNewShader("anim_tile_shader", 
                                "../Assets/Rendering Assets/Shaders/anim_tile_shader.vert",
                                "../Assets/Rendering Assets/Shaders/anim_tile_shader.frag");
     this->vitalAssets->addNewShader("final_pass_shader",
