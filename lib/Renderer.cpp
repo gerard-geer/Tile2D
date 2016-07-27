@@ -84,8 +84,9 @@ void Renderer::initTileVAO()
 
 bool Renderer::init(GLuint width, GLuint height)
 {
-    // First initialize the Asset Manager.
+    // First initialize the AssetManagers.
     this->assets = new AssetManager();
+    this->vitalAssets = new AssetManager();
     
     // Next initialize the Camera.
     this->camera = new Camera(0.0, 0.0);
@@ -471,15 +472,18 @@ void Renderer::destroyFBOs()
     delete this->defFB;
 }
 
-void Renderer::destroyAssetManager()
+void Renderer::destroyAssetManagers()
 {
     this->assets->clear();
+    this->vitalAssets->clear();
     delete this->assets;
+    delete this->vitalAssets;
 }
 
 void Renderer::destroy()
 {
-    this->destroyAssetManager();
+    this->destroyAssetManagers();
     this->destroyTileVAO();
     this->destroyFBOs();
 }
+
