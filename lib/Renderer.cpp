@@ -31,7 +31,7 @@ void Renderer::initStockShaders()
     this->assets->addNewShader("anim_tile_shader", 
                                "../Assets/Rendering Assets/Shaders/anim_tile_shader.vert",
                                "../Assets/Rendering Assets/Shaders/anim_tile_shader.frag");
-    this->assets->addNewShader("final_pass_shader",
+    this->vitalAssets->addNewShader("final_pass_shader",
                                "../Assets/Rendering Assets/Shaders/final_pass_shader.vert",
                                "../Assets/Rendering Assets/Shaders/final_pass_shader.frag");    
 }
@@ -252,7 +252,7 @@ bool Renderer::onScreenTest(Tile * t)
 void Renderer::renderFinalPass()
 {
     // Get the shader that we need for the final pass' screen quad.
-    Shader * program = (Shader*) this->assets->get("final_pass_shader");
+    Shader * program = (Shader*) this->vitalAssets->get("final_pass_shader");
     
     // Tell OpenGL to use that program.
     program->use();
