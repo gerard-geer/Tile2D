@@ -22,16 +22,16 @@ void Renderer::initPlaceholderTexture()
 
 void Renderer::initStockShaders()
 {
-    this->assets->addNewShader("bg_tile_shader", 
+    this->vitalAssets->addNewShader("bg_tile_shader", 
                                "../Assets/Rendering Assets/Shaders/bg_tile_shader.vert",
                                "../Assets/Rendering Assets/Shaders/bg_tile_shader.frag");
-    this->assets->addNewShader("scene_tile_shader",
+    this->vitalAssets->addNewShader("scene_tile_shader",
                                "../Assets/Rendering Assets/Shaders/scene_tile_shader.vert",
                                "../Assets/Rendering Assets/Shaders/scene_tile_shader.frag");
-    this->assets->addNewShader("anim_tile_shader", 
+    this->vitalAssets->addNewShader("anim_tile_shader", 
                                "../Assets/Rendering Assets/Shaders/anim_tile_shader.vert",
                                "../Assets/Rendering Assets/Shaders/anim_tile_shader.frag");
-    this->assets->addNewShader("final_pass_shader",
+    this->vitalAssets->addNewShader("final_pass_shader",
                                "../Assets/Rendering Assets/Shaders/final_pass_shader.vert",
                                "../Assets/Rendering Assets/Shaders/final_pass_shader.frag");    
 }
@@ -84,8 +84,9 @@ void Renderer::initTileVAO()
 
 bool Renderer::init(GLuint width, GLuint height)
 {
-    // First initialize the Asset Manager.
+    // First initialize the AssetManagers.
     this->assets = new AssetManager();
+    this->vitalAssets = new AssetManager();
     
     // Next initialize the Camera.
     this->camera = new Camera(0.0, 0.0);
@@ -251,7 +252,7 @@ bool Renderer::onScreenTest(Tile * t)
 void Renderer::renderFinalPass()
 {
     // Get the shader that we need for the final pass' screen quad.
-    Shader * program = (Shader*) this->assets->get("final_pass_shader");
+    Shader * program = (Shader*) this->vitalAssets->get("final_pass_shader");
     
     // Tell OpenGL to use that program.
     program->use();
@@ -471,15 +472,18 @@ void Renderer::destroyFBOs()
     delete this->defFB;
 }
 
-void Renderer::destroyAssetManager()
+void Renderer::destroyAssetManagers()
 {
     this->assets->clear();
+    this->vitalAssets->clear();
     delete this->assets;
+    delete this->vitalAssets;
 }
 
 void Renderer::destroy()
 {
-    this->destroyAssetManager();
+    this->destroyAssetManagers();
     this->destroyTileVAO();
     this->destroyFBOs();
 }
+
