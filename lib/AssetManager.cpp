@@ -11,13 +11,8 @@ AssetManager::~AssetManager()
 void AssetManager::add(char * key, Asset * asset)
 {
     if( !this->contains(key) )
-        #ifdef TILE2D_VERBOSE_OUTPUT
-        std::cout << "Adding " << key << " to AssetManager." << std::endl;
-        #endif
         this->assetHash.insert(std::pair<std::string,Asset*>(key,asset));
-    #ifdef TILE2D_VERBOSE_OUTPUT
-    else std::cout << "Adding " << key << " to AssetManager." << std::endl;
-    #endif
+    else std::cout << "Warning: " << key << " already exists and was not re-added." << std::endl;
 }
 
 void AssetManager::add(const char* key, Asset * asset)
