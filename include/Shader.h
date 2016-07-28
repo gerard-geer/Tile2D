@@ -82,13 +82,14 @@ private:
     static shader_error loadSource(char* filename, char*** source, int* numLines);
     
     /**
-     * @brief Loads and compiles a shader object. Any compilation errors are directed to stderr.
-     * @param filename The filename of the shader source code.
+     * @brief Instantiates a shader object on the GPU. Any compilation errors are
+     * directed to stderr.
+     * @param source A pointer to an array of strings that is the source code.
      * @param type The type of shader.
      * @param shaderID A pointer to a GLuint where the new shader ID will be placed.
      * @return A shader_error, if any.
      */
-    static shader_error initShader(char *filename, GLenum type, GLuint *shaderID);
+    static shader_error initShader(char *** source, int numLines, GLenum type, GLuint *shaderID);
     
     /**
      * @brief Takes the IDs of two compiled shader stages and links them into the shader

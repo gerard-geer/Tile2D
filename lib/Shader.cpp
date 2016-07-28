@@ -120,31 +120,21 @@ shader_error Shader::loadSource(char* filename, char*** source, int* numLines)
     }
 }
 
-shader_error Shader::initShader(char* filename, GLenum type, GLuint* shaderID)
+shader_error Shader::initShader(char*** source, int numLines, GLenum type, GLuint* shaderID)
 {
-    // An unsigned int to store the number of lines loaded.
-    int numLines;
-    
-    // An array of strings to store the lines of the source code.
-    char** source = NULL;
-        
-    // Actually load the shader.
-    shader_error e = Shader::loadSource(filename, &source, &numLines);
-    
-    if(e) return e; // Return if there was an error. The pointers were cleaned
-                    // up by loadSource, since it was where things went sideways.
     
     // Create a shader and store it in the given ID pointer.
     *shaderID = glCreateShader(type);
     
     // Send the source code to the GPU for compilation.
-    glShaderSource(*shaderID, numLines, source, NULL);
+    glShaderSource(*shaderID, numLines, *source, NULL);
     
     // Actually do that compilation.
     glCompileShader(*shaderID);
     
     // IT'S TESTING TIME. Did it actually compile?
     GLint compiled = 0;
+    
     // Get whether or not the shader compiled.
     glGetShaderiv(*shaderID, GL_COMPILE_STATUS, &compiled);
     if( compiled == GL_FALSE ) // If it didn't...
@@ -178,16 +168,8 @@ shader_error Shader::initShader(char* filename, GLenum type, GLuint* shaderID)
         // Delete the shader and source from the GPU.
         glDeleteShader(*shaderID);
         
-        // Free the source and line length arrays.
-        for( int i = 0; i < numLines; ++i ) free(source[i]);
-        free(source);
-        
         return SHADER_COULD_NOT_COMP;
     }
-        
-    // Free the source and line length arrays.
-    for( int i = 0; i < numLines; ++i ) free(source[i]);
-    free(source);
     
     // If nothing went wrong we return no error.
     return SHADER_NO_ERROR;
@@ -267,7 +249,7 @@ shader_error Shader::linkShaders(GLuint vertID, GLuint fragID)
 shader_error Shader::load(char* vertFile, char* fragFile)
 {
 	// A shader_error in case we need it.
-	shader_error e = SHADER_NO_ERROR;
+	shader_error e = SHADER_NO_ERROR; // = 0, by the way.
 	
     // Create individual IDs for each shader stage.
     GLuint vertID = 0, fragID = 0;
@@ -279,20 +261,15 @@ shader_error Shader::load(char* vertFile, char* fragFile)
     int vertLines = 0, fragLines = 0;
     
     // Load the source of each shader.
-    e = loadSource(vertFile, &vertSource, &vertLines);
-    if(e) return e;
-    e = loadSource(fragFile, &fragSource, &fragLines);
-    if(e) return e;
+    if(!e) e = loadSource(vertFile, &vertSource, &vertLines);
+    if(!e) e = loadSource(fragFile, &fragSource, &fragLines);
     
     // Load and compile those shader stages.
-    e = Shader::initShader(vertFile, GL_VERTEX_SHADER, &vertID);
-    if(e) return e;
-    e = Shader::initShader(fragFile, GL_FRAGMENT_SHADER, &fragID);
-    if(e) return e;
+    if(!e) e = Shader::initShader(&vertSource, vertLines, GL_VERTEX_SHADER, &vertID);
+    if(!e) e = Shader::initShader(&fragSource, fragLines, GL_FRAGMENT_SHADER, &fragID);
     
     // Now that we've compiled the shaders, we can link them.
-    e = linkShaders(vertID, fragID);
-    if(e) return e;
+    if(!e) e = linkShaders(vertID, fragID);
     
     // Now we need to parse for uniforms.
     this->scanSourceForUniforms(vertSource, vertLines);
