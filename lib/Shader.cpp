@@ -21,6 +21,57 @@ const char * Shader::getShaderType(GLenum type)
     }
 }
 
+void Shader::replaceChar(char * src, char old, char replacement)
+{
+	for( int i = strlen(src)-1; i >= 0; --i )
+	{
+		if( src[i] == old ) src[i] = replacement;
+	}
+}
+
+int Shader::parseSourceString(char * src, char *** dst)
+{
+	// How many lines we've encountered so far.
+	int lines = 0;
+	
+	// The current line. I really hope there's not a single line longer than 2000 chars.
+	char * curLine = (char*) malloc( sizeof(char) * 2000 );
+	
+	// Initialize the destination array meant to hold all the lines we cut out.
+	(*dst) = (char**) malloc( sizeof(char*) * (lines+1) );
+	
+	// Go ahead and get the first line.
+	curLine = strtok(src, "\n");
+	
+	// While we still have tokens to get.
+	while( curLine != NULL )
+	{
+		// Duplicate the current line into the current array index.
+		(*dst)[lines] = strdup(curLine);
+		
+		// Now that we've gotten a line, we can increment how many we have.
+		++lines;
+		
+		// Extend the array.
+		(*dst) = (char**) realloc( (*dst), sizeof(char*) * (lines+1) );
+		
+		// Get the next line. WE MIGHT NEED TO CLEAR IT FIRST.
+		curLine = strtok(NULL, "\n");
+	}
+	
+	// Let's get rid of that giant string real quick.
+	free(curLine);
+	
+	// Now we can go through and replace the $ tokens with newlines.
+	for( int i = 0; i < lines; ++i )
+	{
+		Shader::replaceChar((*dst)[i], '$', '\n');
+	}	
+	
+	// Finally we return the number of lines that we've loaded.
+	return lines;	
+}
+
 void Shader::scanLineForUniforms(char* line)
 {
     // Number of tokens found in the line.

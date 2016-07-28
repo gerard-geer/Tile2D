@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include "Asset.h"
 #include "ShaderUniform.h"
+#include "shader_source.h"
 
 /*
  * Error codes:
@@ -55,6 +56,23 @@ private:
      * @return A string telling us in plain English what stage we're working with.
      */
     static const char * getShaderType(GLenum type);
+    
+    /**
+     * @brief Traverses a string (in reverse, since we'll be looking for trailing chars)
+     * 	  	  and replaces any occurences of old with replacement.
+     * @param src The string to operate on.
+     * @param old The character to look out for and replace.
+     * @param replacement The character to replace occurences of old with.
+     */
+    static void replaceChar(char* src, char old, char replacement);
+    
+    /**
+     * @brief Parses a source string, splitting it into the required string array.
+     * @param src The source string.
+     * @param dst A pointer to the array of strings, which will be set up by this function.
+     * @return The number of lines in the array.
+     */
+    int parseSourceString(char * source, char *** dst);
     
     /**
      * @brief Scans a single line of source for "uniform <type> <identifier>;"
