@@ -266,30 +266,39 @@ shader_error Shader::linkShaders(GLuint vertID, GLuint fragID)
 
 shader_error Shader::load(char* vertFile, char* fragFile)
 {
+	// A shader_error in case we need it.
+	shader_error e = SHADER_NO_ERROR;
+	
     // Create individual IDs for each shader stage.
     GLuint vertID = 0, fragID = 0;
     
+    // String arrays for each loaded source.
+    char ** vertSource = NULL; char ** fragSource = NULL;
+    
+    // Line counts for each shader as well.
+    int vertLines = 0, fragLines = 0;
+    
+    // Load the source of each shader.
+    e = loadSource(vertFile, &vertSource, &vertLines);
+    if(e) return e;
+    e = loadSource(fragFile, &fragSource, &fragLines);
+    if(e) return e;
+    
     // Load and compile those shader stages.
-    shader_error e = SHADER_NO_ERROR;
     e = Shader::initShader(vertFile, GL_VERTEX_SHADER, &vertID);
     if(e) return e;
     e = Shader::initShader(fragFile, GL_FRAGMENT_SHADER, &fragID);
     if(e) return e;
+    
     // Now that we've compiled the shaders, we can link them.
     e = linkShaders(vertID, fragID);
     if(e) return e;
     
-    // Now we need to parse for uniforms. Let's just reload the source.
-    char ** vertSource = NULL;
-    char ** fragSource = NULL;
-    int vertLines = 0;
-    int fragLines = 0;
-    this->loadSource(vertFile, &vertSource, &vertLines);
+    // Now we need to parse for uniforms.
     this->scanSourceForUniforms(vertSource, vertLines);
-    this->loadSource(fragFile, &fragSource, &fragLines);
     this->scanSourceForUniforms(fragSource, fragLines);
     
-    // Now that we're done with it (again) we need to free it (again).
+    // Now that we're done with the source code we need to get rid of it.
     for(unsigned int i = 0; i < vertLines; ++i) free(vertSource[i]);
     for(unsigned int i = 0; i < fragLines; ++i) free(fragSource[i]);
     free(vertSource);
