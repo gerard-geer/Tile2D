@@ -22,6 +22,9 @@ SDR_DIR=shaders/
 # The build directory.
 BLD_DIR=bin/
 
+# The library file output directory.
+LIB_DIR=lib/
+
 # The test code directory.
 TST_DIR=test/
 
