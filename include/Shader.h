@@ -147,7 +147,7 @@ public:
      * @param fragString The source code string of the fragment shader.
      * @return A shader_error, if any.
      */
-    shader_error loadStrings(char* vertString, char* fragString);
+    shader_error loadStrings(const char* vertString, const char* fragString);
     
     /**
      * @brief Creates a new ShaderUniform instance and adds it to this shader

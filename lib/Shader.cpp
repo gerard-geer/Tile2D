@@ -336,10 +336,13 @@ shader_error Shader::load(char* vertFile, char* fragFile)
     return e;
 }
 
-shader_error Shader::loadStrings(char* vertString, char* fragString)
+shader_error Shader::loadStrings(const char* vertString, const char* fragString)
 {
 	// A shader_error in case we need it.
 	shader_error e = SHADER_NO_ERROR; // = 0, by the way.
+	
+	// Create modifiable versions of the given strings.
+	char * vs = strdup(vertString); char * fs = strdup(fragString);
 	
     // Create individual IDs for each shader stage.
     GLuint vertID = 0, fragID = 0;
@@ -351,8 +354,8 @@ shader_error Shader::loadStrings(char* vertString, char* fragString)
     int vertLines = 0, fragLines = 0;
     
     // Parse the shader source. 
-    vertLines = Shader::parseSourceString(vertString, &vertSource);
-    fragLines = Shader::parseSourceString(fragString, &fragSource);
+    vertLines = Shader::parseSourceString(vs, &vertSource);
+    fragLines = Shader::parseSourceString(fs, &fragSource);
     
     // Coompile those shader stages.
     if(!e) e = Shader::initShader(&vertSource, vertLines, GL_VERTEX_SHADER, &vertID);
@@ -370,6 +373,8 @@ shader_error Shader::loadStrings(char* vertString, char* fragString)
     for(unsigned int i = 0; i < fragLines; ++i) free(fragSource[i]);
     free(vertSource);
     free(fragSource);
+    free(vs);
+    free(fs);
     
 	return e;
 }
