@@ -315,7 +315,7 @@ shader_error Shader::load(char* vertFile, char* fragFile)
     if(!e) e = loadSource(vertFile, &vertSource, &vertLines);
     if(!e) e = loadSource(fragFile, &fragSource, &fragLines);
     
-    // Load and compile those shader stages.
+    // Compile those shader stages.
     if(!e) e = Shader::initShader(&vertSource, vertLines, GL_VERTEX_SHADER, &vertID);
     if(!e) e = Shader::initShader(&fragSource, fragLines, GL_FRAGMENT_SHADER, &fragID);
     
@@ -336,9 +336,42 @@ shader_error Shader::load(char* vertFile, char* fragFile)
     return e;
 }
 
-shader_error Shader::loadStrings(char* vertSource, char* fragSource)
+shader_error Shader::loadStrings(char* vertString, char* fragString)
 {
-	return SHADER_NO_ERROR;
+	// A shader_error in case we need it.
+	shader_error e = SHADER_NO_ERROR; // = 0, by the way.
+	
+    // Create individual IDs for each shader stage.
+    GLuint vertID = 0, fragID = 0;
+	
+    // String arrays for each shader's source.
+    char ** vertSource = NULL; char ** fragSource = NULL;
+    
+    // Line counts for each shader as well.
+    int vertLines = 0, fragLines = 0;
+    
+    // Parse the shader source. 
+    vertLines = Shader::parseSourceString(vertString, &vertSource);
+    fragLines = Shader::parseSourceString(fragString, &fragSource);
+    
+    // Coompile those shader stages.
+    if(!e) e = Shader::initShader(&vertSource, vertLines, GL_VERTEX_SHADER, &vertID);
+    if(!e) e = Shader::initShader(&fragSource, fragLines, GL_FRAGMENT_SHADER, &fragID);
+    
+    // Now that we've compiled the shaders, we can link them.
+    if(!e) e = linkShaders(vertID, fragID);
+    
+    // Now we need to parse for uniforms.
+    this->scanSourceForUniforms(vertSource, vertLines);
+    this->scanSourceForUniforms(fragSource, fragLines);
+    
+    // Now that we're done with the source code we need to get rid of it.
+    for(unsigned int i = 0; i < vertLines; ++i) free(vertSource[i]);
+    for(unsigned int i = 0; i < fragLines; ++i) free(fragSource[i]);
+    free(vertSource);
+    free(fragSource);
+    
+	return e;
 }
 
 void Shader::addUniform(char * name, uniform_type type)
