@@ -131,6 +131,7 @@ COMP_MAIN:
 	@echo "Compiling test program into PIC object file."
 	@$(CC) $(CFLAGS) $(TST_DIR)main.cpp -o $(BLD_DIR)main.o
 
+# Creates a simple test program.
 TEST: OBJ_FILES COMP_MAIN
 	@echo "Linking object files."
 	$(CC) -o $(BLD_DIR)test $(BLD_DIR)*.o -lglfw -lGL -lGLU -lpng -lGLEW
@@ -139,7 +140,7 @@ TEST: OBJ_FILES COMP_MAIN
 	@chmod +x $(BLD_DIR)test
 	@echo "Done creating test program. Run with command ./test from $(BLD_DIR)"
 	
-# Creates and runs the test program using the static library.
+# Creates the test program using the static library.
 TEST_STATIC: STATIC COMP_MAIN
 	@echo "Linking \"$(TST_DIR)main.cpp\" using the static library."
 	@$(CC) -o $(BLD_DIR)static_test $(BLD_DIR)*.o -L$(BLD_DIR) -lTile2d -lglfw -lGL -lGLU -lpng -lGLEW
@@ -147,7 +148,7 @@ TEST_STATIC: STATIC COMP_MAIN
 	chmod +x $(BLD_DIR)static_test
 	@echo "Done creating test program. Run with command ./static_test from $(BLD_DIR)"
 	
-# Creates and runs the test program using the dynamic library.
+# Creates the test program using the dynamic library.
 TEST_DYNAMIC:  DYNAMIC COMP_MAIN
 	@echo "Have you \"made the library visible\"?"
 	@echo "Linking \"$(TST_DIR)main.cpp\" using the dynamic library."
