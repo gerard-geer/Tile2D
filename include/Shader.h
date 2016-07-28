@@ -122,6 +122,15 @@ public:
     shader_error load(char* vertFile, char* fragFile);
     
     /**
+     * @brief Creates a shader from two strings containing source code, rather than
+     *		  loading it from file.
+     * @param vertSource The source code string of the vertex shader.
+     * @param fragSource The source code string of the fragment shader.
+     * @return A shader_error, if any.
+     */
+    shader_error loadStrings(char* vertSource, char* fragSource);
+    
+    /**
      * @brief Creates a new ShaderUniform instance and adds it to this shader
      *        for later use. Any errors this function may generate will be
      *        caught by glGetError().

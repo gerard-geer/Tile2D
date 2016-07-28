@@ -285,6 +285,11 @@ shader_error Shader::load(char* vertFile, char* fragFile)
     return e;
 }
 
+shader_error Shader::loadStrings(char* vertSource, char* fragSource)
+{
+	return SHADER_NO_ERROR;
+}
+
 void Shader::addUniform(char * name, uniform_type type)
 {
     // Create a new ShaderUniform.
