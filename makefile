@@ -146,8 +146,7 @@ TEST: OBJ_FILES COMP_MAIN
 	@echo "Done creating test program. Run with command ./test from $(BLD_DIR)"
 	
 # Creates and runs the test program using the static library.
-TEST_STATIC: COMP_MAIN
-	@test -s $(BLD_DIR)$(ST_NAME) || { echo "Static library not created! Run \"make STATIC\" first."; exit 1; }
+TEST_STATIC: STATIC COMP_MAIN
 	@echo "Linking \"$(TST_DIR)main.cpp\" using the static library."
 	@$(CC) -o $(BLD_DIR)static_test $(BLD_DIR)*.o -L$(BLD_DIR) -lTile2d -lglfw -lGL -lGLU -lpng -lGLEW
 	@echo "Adding execute permission."
@@ -155,14 +154,14 @@ TEST_STATIC: COMP_MAIN
 	@echo "Done creating test program. Run with command ./static_test from $(BLD_DIR)"
 	
 # Creates and runs the test program using the dynamic library.
-TEST_DYNAMIC: COMP_MAIN
-	@echo "Have you run make DYNAMIC yet, and made the library visible?"
+TEST_DYNAMIC:  DYNAMIC COMP_MAIN
+	@echo "Have you \"made the library visible\"?"
 	@echo "Linking \"$(TST_DIR)main.cpp\" using the dynamic library."
 	@$(CC) -o $(BLD_DIR)dynamic_test $(BLD_DIR)*.o -L$(BLD_DIR) -lTile2d -lglfw -lGL -lGLU -lpng -lGLEW
 	@echo "Adding execute permission."
 	chmod +x $(BLD_DIR)dynamic_test
 	@echo "Done creating test program. Run with command ./dynamic_test from $(BLD_DIR)"
-	@echo "NOTE: By default the OS will not see the .so file in \"$(BLD_DIR)\". You need to make it see it."
+	@echo "NOTE: By default the OS may not see the .so file in \"$(LIB_DIR)\". You need to make it see it."
 	
 TEST_SHADER_TOOLCHAIN: COMP_TEST_SHADER_TOOLCHAIN
 	@test -s $(BLD_DIR)Asset.o || { echo "Object files not created! Run \"make OBJ_FILES\" first."; exit 1; }
