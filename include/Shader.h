@@ -123,7 +123,8 @@ public:
     
     /**
      * @brief Creates a shader from two strings containing source code, rather than
-     *		  loading it from file.
+     *		  loading it from file. Note, this expects the strings to be formatted
+     * 		  as by glsl-to-header, with a $ at the end of every line.
      * @param vertSource The source code string of the vertex shader.
      * @param fragSource The source code string of the fragment shader.
      * @return A shader_error, if any.
