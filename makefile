@@ -50,6 +50,8 @@ all:
 clean:
 	@echo "Cleaning out and deleting build directory \"$(BLD_DIR)\"."
 	@rm -r -f $(BLD_DIR)
+	@echo "Cleaning out and deleting library directory \"$(LIB_DIR)\"."
+	@rm -r -f $(LIB_DIR)
 	@echo "Done cleaning."
 	
 # Creates the build directory if it doesn't exist.
