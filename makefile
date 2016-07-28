@@ -54,7 +54,7 @@ clean:
 	
 # Creates the build directory if it doesn't exist, then navigates to
 # it.
-setup_dir:
+setup_build_dir:
 	@echo "Creating build directory \"$(BLD_DIR)\"."
 	@mkdir -p $(BLD_DIR)
 	@echo "Done creating build directory."
@@ -70,7 +70,7 @@ SHADERS:
 							  $(SDR_DIR)final_pass_shader.vert $(SDR_DIR)final_pass_shader.frag
 
 # Compiles all of Tile2D's source into .o files.
-OBJ_FILES_MESSAGE: setup_dir 
+OBJ_FILES_MESSAGE: setup_build_dir 
 	@echo "Compiling PIC object files and placing them in the $(BLD_DIR) directory."
 	
 # An implicit (suffix) rule to build any file in the SRC and HDR directories, into the BLD directory.
@@ -130,10 +130,10 @@ COMP_TEST_SHADER_TOOLCHAIN:
 	@echo "Compiling test program into PIC object file."
 	@$(CC) $(CFLAGS) $(TST_DIR)test_shader_toolchain.cpp -o $(BLD_DIR)test_shader_toolchain.o
 
-# Compiles the library and runs the test application. No libraries involved.
 TEST: OBJ_FILES COMP_MAIN
 	@echo "Linking object files."
 	$(CC) -o $(BLD_DIR)test $(BLD_DIR)*.o -lglfw -lGL -lGLU -lpng -lGLEW
+# Compiles the library and runs the test application. No libraries involved.
 	@echo "Adding execute permission."
 	@chmod +x $(BLD_DIR)test
 	@echo "Done creating test program. Run with command ./test from $(BLD_DIR)"
