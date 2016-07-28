@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include "tile2d.h"
+#include "shader_source.h"
 
 using namespace std;
 
@@ -10,6 +11,10 @@ int main(int argc, char **argv)
     window.create(1000, 700, 256, 224, (char*)"WOO");
     Renderer * r = window.getRenderer();
     AssetManager * a = r->getAssetManager();
+    
+    Shader * testStrings = new Shader();
+    testStrings->loadStrings(bg_tile_shader_vert, bg_tile_shader_frag);
+    
     a->addNewTexture("puppy", "../Assets/Rendering Assets/Textures/puppy.png");
     
     a->addNewTexture("kitten", "../Assets/Rendering Assets/Textures/kitten.png");
