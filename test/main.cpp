@@ -12,9 +12,6 @@ int main(int argc, char **argv)
     Renderer * r = window.getRenderer();
     AssetManager * a = r->getAssetManager();
     
-    Shader * testStrings = new Shader();
-    testStrings->loadStrings(bg_tile_shader_vert, bg_tile_shader_frag);
-    
     a->addNewTexture("puppy", "../Assets/Rendering Assets/Textures/puppy.png");
     
     a->addNewTexture("kitten", "../Assets/Rendering Assets/Textures/kitten.png");
