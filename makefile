@@ -11,7 +11,7 @@ ST_NAME=libTile2d.a
 DY_NAME=libTile2d.so
 
 # The source directory.
-SRC_DIR=lib/
+SRC_DIR=src/
 
 # The header directory.
 HDR_DIR=include/
