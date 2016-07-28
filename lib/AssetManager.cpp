@@ -37,6 +37,7 @@ tex_error AssetManager::addNewTexture(char * key, char * filepath)
     // If no errors happened, then we add the Texture to the hash.
     if( e == TEX_NO_ERROR ) this->add(key,(Asset*)t);
     
+    // Otherwise it's time to alert the user to the problems.
     else  std::cout << "Error: " << key << ": " << Texture::getErrorDesc(e) << std::endl;
     return e;
 }
@@ -48,9 +49,17 @@ tex_error AssetManager::addNewTexture(const char * key, const char * filepath)
 
 shader_error AssetManager::addNewShader(char * key, char * vertPath, char * fragPath)
 {
+	// Create the new Shader instance.
     Shader * s = new Shader();
+    
+    // Try loading it.
     shader_error e = s->load(vertPath, fragPath);
+    
+    // If there was no error, we can add it to the hash.
     if( e == SHADER_NO_ERROR ) this->add(key,(Asset*)s);
+    
+    // Otherwise it's time to report the bad news.
+    else  std::cout << "Error: " << key << ": " << Shader::getErrorDesc(e) << std::endl;
     return e;
 }
 
