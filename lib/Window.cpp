@@ -93,7 +93,11 @@ window_error Window::create(unsigned int windowW, unsigned int windowH,
     this->title = title;
     
     // Initialize GLFW.
-    if(!glfwInit()) return WIN_COULD_NOT_INIT_GLFW;
+    if(!glfwInit())
+    {
+    	std::cout << "Error: Could not initialize GLFW." << std::endl;
+    	return WIN_COULD_NOT_INIT_GLFW;
+    }
     
     glfwSetErrorCallback(error_callback);
     
@@ -103,7 +107,11 @@ window_error Window::create(unsigned int windowW, unsigned int windowH,
     
     // Create the GLFW window.
     this->baseWindow = glfwCreateWindow(this->width, this->height, this->title, NULL, NULL);
-    if(!this->baseWindow) return WIN_COULD_NOT_CREATE_WINDOW;
+    if(!this->baseWindow)
+    {
+    	std::cout << "Error: GLFW could not create a window." << std::endl;
+    	return WIN_COULD_NOT_CREATE_WINDOW;
+    }
     
     // Make the context current so we can set up some OpenGL stuff.
     // (And also initialize GLEW.)
@@ -113,7 +121,11 @@ window_error Window::create(unsigned int windowW, unsigned int windowH,
     // Otherwise we'd get the dreadful "Missing GL version" error.
     glewExperimental = GL_TRUE;
     GLenum glewErr = glewInit();
-    if(glewErr != GLEW_OK) return WIN_COULD_NOT_INIT_GLFW;
+    if(glewErr != GLEW_OK)
+    {
+    	std::cout << "Error: Could not initialize GLEW." << std::endl;
+    	return WIN_COULD_NOT_INIT_GLEW;
+    }
     
     // Implement the base callback. Do not forget to call
     // glfwPollEvents()!
@@ -174,7 +186,11 @@ window_error Window::setFullscreen(bool fullscreen)
                                               this->baseWindow);
                                               
     // If the window wasn't created successfully, we need to report an error.
-    if( !newWindow ) return WIN_COULD_NOT_CREATE_WINDOW;
+    if( !newWindow )
+    {
+    	std::cout << "Error: GLFW could not recreate the window upon fullscreen switching." << std::endl;
+    	return WIN_COULD_NOT_CREATE_WINDOW;
+    }
     
     // Destroy the old window.
     glfwDestroyWindow(this->baseWindow);
