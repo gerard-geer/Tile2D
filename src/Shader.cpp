@@ -163,12 +163,7 @@ shader_error Shader::loadSource(char* filename, char*** source, int* numLines)
         return SHADER_NO_ERROR;
     }
     // If we weren't able to open the file, we have to return an error.
-    else
-    {
-        std::cout << "Could not load " << filename << std::endl;
-        free(*source); // We didn't initialize the individiual pointers yet.
-        return SHADER_COULD_NOT_OPEN;
-    }
+    else return SHADER_COULD_NOT_OPEN;
 }
 
 shader_error Shader::initShader(char*** source, int numLines, GLenum type, GLuint* shaderID)
@@ -327,10 +322,16 @@ shader_error Shader::load(char* vertFile, char* fragFile)
     this->scanSourceForUniforms(fragSource, fragLines);
     
     // Now that we're done with the source code we need to get rid of it.
-    for(unsigned int i = 0; i < vertLines; ++i) free(vertSource[i]);
-    for(unsigned int i = 0; i < fragLines; ++i) free(fragSource[i]);
-    free(vertSource);
-    free(fragSource);
+    if(vertSource)
+    {
+    	for(unsigned int i = 0; i < vertLines; ++i) free(vertSource[i]);
+    	free(vertSource);
+    }
+    if(fragSource)
+    {
+		for(unsigned int i = 0; i < fragLines; ++i) free(fragSource[i]);
+		free(fragSource);
+	}
 
     // Return the no_error that was returned last.
     return e;
