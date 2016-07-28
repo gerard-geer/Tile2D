@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include "Asset.h"
 #include "ShaderUniform.h"
-#include "shader_source.h"
 
 /*
  * Error codes:
