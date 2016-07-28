@@ -131,12 +131,6 @@ COMP_MAIN:
 	@echo "Compiling test program into PIC object file."
 	@$(CC) $(CFLAGS) $(TST_DIR)main.cpp -o $(BLD_DIR)main.o
 
-COMP_TEST_SHADER_TOOLCHAIN:
-	# Asset.o had to have been created if OBJ_FILES was run.
-	@test -s $(BLD_DIR)Asset.o || { echo "Object files not created! Run \"make OBJ_FILES\" first."; exit 1; }
-	@echo "Compiling test program into PIC object file."
-	@$(CC) $(CFLAGS) $(TST_DIR)test_shader_toolchain.cpp -o $(BLD_DIR)test_shader_toolchain.o
-
 TEST: OBJ_FILES COMP_MAIN
 	@echo "Linking object files."
 	$(CC) -o $(BLD_DIR)test $(BLD_DIR)*.o -lglfw -lGL -lGLU -lpng -lGLEW
@@ -162,12 +156,4 @@ TEST_DYNAMIC:  DYNAMIC COMP_MAIN
 	chmod +x $(BLD_DIR)dynamic_test
 	@echo "Done creating test program. Run with command ./dynamic_test from $(BLD_DIR)"
 	@echo "NOTE: By default the OS may not see the .so file in \"$(LIB_DIR)\". You need to make it see it."
-	
-TEST_SHADER_TOOLCHAIN: COMP_TEST_SHADER_TOOLCHAIN
-	@test -s $(BLD_DIR)Asset.o || { echo "Object files not created! Run \"make OBJ_FILES\" first."; exit 1; }
-	@echo "Linking object files."
-	$(CC) -o $(BLD_DIR)test_shader_toolchain $(BLD_DIR)*.o -lglfw -lGL -lGLU -lpng -lGLEW
-	@echo "Adding execute permission."
-	@chmod +x $(BLD_DIR)test_shader_toolchain
-	@echo "Done creating test program. Run with command ./test_shader_toolchain from $(BLD_DIR)"
 	
