@@ -79,7 +79,7 @@ $(BLD_DIR)%.o: $(SRC_DIR)%.cpp $(HDR_DIR)%.h
 %.o: $(BLD_DIR)%.o
 
 	
-OBJ_FILES: OBJ_FILES_MESSAGE $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o $(BLD_DIR)Texture.o	\
+OBJ_FILES: SHADERS OBJ_FILES_MESSAGE $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o $(BLD_DIR)Texture.o	\
 		   $(BLD_DIR)Camera.o $(BLD_DIR)ShaderUniform.o $(BLD_DIR)Shader.o $(BLD_DIR)BasicMatrix.o	\
 		   $(BLD_DIR)Tile.o $(BLD_DIR)BGTile.o $(BLD_DIR)SceneTile.o $(BLD_DIR)AnimTile.o	\
 		   $(BLD_DIR)PostTile.o $(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o $(BLD_DIR)Window.o
