@@ -97,8 +97,8 @@ OBJ_FILES: SHADERS OBJ_FILES_MESSAGE $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o 
 	
 # Compiles all of Tile2D into object files then archives them into a
 # static library.
-STATIC: OBJ_FILES
-	@echo "Using ar to create static library in \"$(BLD_DIR)\" preserving original timestamps."
+STATIC: setup_library_dir OBJ_FILES
+	@echo "Using ar to create static library in \"$(LIB_DIR)\" preserving original timestamps."
 	@ar rc $(BLD_DIR)$(ST_NAME) $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o \
 							   $(BLD_DIR)Texture.o $(BLD_DIR)ShaderUniform.o \
 							   $(BLD_DIR)Shader.o $(BLD_DIR)Camera.o \
@@ -111,8 +111,8 @@ STATIC: OBJ_FILES
 							  
 # Compiles Tile2D and links it up with its dependencies (you better have them)
 # into a dynamic library.
-DYNAMIC: OBJ_FILES
-	@echo "Creating shared library \"$(DY_NAME)\" in \"$(BLD_DIR)\"."
+DYNAMIC: setup_library_dir OBJ_FILES
+	@echo "Creating shared library \"$(DY_NAME)\" in \"$(LIB_DIR)\"."
 	@$(CC) -shared $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o \
 				$(BLD_DIR)Texture.o $(BLD_DIR)ShaderUniform.o \
 				$(BLD_DIR)Shader.o $(BLD_DIR)Camera.o \
@@ -121,7 +121,7 @@ DYNAMIC: OBJ_FILES
 				$(BLD_DIR)Tile.o $(BLD_DIR)BGTile.o \
 				$(BLD_DIR)SceneTile.o $(BLD_DIR)AnimTile.o \
 				$(BLD_DIR)PostTile.o \
-				$(LFLAGS) -o $(BLD_DIR)$(DY_NAME)
+				$(LFLAGS) -o $(LIB_DIR)$(DY_NAME)
 	@echo "Done creating shared library."
 	
 # Compiles main.cpp
