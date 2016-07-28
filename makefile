@@ -52,12 +52,17 @@ clean:
 	@rm -r -f $(BLD_DIR)
 	@echo "Done cleaning."
 	
-# Creates the build directory if it doesn't exist, then navigates to
-# it.
+# Creates the build directory if it doesn't exist.
 setup_build_dir:
 	@echo "Creating build directory \"$(BLD_DIR)\"."
 	@mkdir -p $(BLD_DIR)
 	@echo "Done creating build directory."
+	
+# Creates the library output directory if it doesn't exist.
+setup_library_dir:
+	@echo "Creating library directory \"$(LIB_DIR)\"."
+	@mkdir -p $(LIB_DIR)
+	@echo "Done creating library directory."
 	
 # Compiles the shader source code files.
 SHADERS:
