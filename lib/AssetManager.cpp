@@ -70,9 +70,17 @@ shader_error AssetManager::addNewShader(const char * key, const char * vertPath,
 
 shader_error AssetManager::addNewShaderStrings(const char * key, const char * vertString, const char * fragString)
 {
+	// Create the instance.
     Shader * s = new Shader();
+    
+    // Try loading as strings.
     shader_error e = s->loadStrings(vertString, fragString);
+    
+    // If it worked out, yay!
     if( e == SHADER_NO_ERROR ) this->add(key,(Asset*)s);
+    
+    // Otherwise...
+    else  std::cout << "Error: " << key << ": " << Shader::getErrorDesc(e) << std::endl;
     return e;
 }
 	
