@@ -22,11 +22,22 @@ void AssetManager::add(const char* key, Asset * asset)
 
 tex_error AssetManager::addNewTexture(char * key, char * filepath)
 {
-    Texture * t = new Texture();
+	// An error in case we need it.
     tex_error e;
+    
+	// Instantiate the new Texture to be added.
+    Texture * t = new Texture();
+    
+    // If the path supplied is NULL, then we create an empty Texture.
     if(filepath == NULL) e = t->createEmpty();
+    
+    // Otherwise we load from file.
     else e = t->load(filepath);
+    
+    // If no errors happened, then we add the Texture to the hash.
     if( e == TEX_NO_ERROR ) this->add(key,(Asset*)t);
+    
+    else  std::cout << "Error: " << key << ": " << Texture::getErrorDesc(e) << std::endl;
     return e;
 }
 
