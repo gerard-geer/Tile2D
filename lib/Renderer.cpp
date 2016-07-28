@@ -22,18 +22,18 @@ void Renderer::initPlaceholderTexture()
 
 void Renderer::initStockShaders()
 {
-    this->vitalAssets->addNewShader("bg_tile_shader", 
-                               "../Assets/Rendering Assets/Shaders/bg_tile_shader.vert",
-                               "../Assets/Rendering Assets/Shaders/bg_tile_shader.frag");
-    this->vitalAssets->addNewShader("scene_tile_shader",
-                               "../Assets/Rendering Assets/Shaders/scene_tile_shader.vert",
-                               "../Assets/Rendering Assets/Shaders/scene_tile_shader.frag");
-    this->vitalAssets->addNewShader("anim_tile_shader", 
-                               "../Assets/Rendering Assets/Shaders/anim_tile_shader.vert",
-                               "../Assets/Rendering Assets/Shaders/anim_tile_shader.frag");
-    this->vitalAssets->addNewShader("final_pass_shader",
-                               "../Assets/Rendering Assets/Shaders/final_pass_shader.vert",
-                               "../Assets/Rendering Assets/Shaders/final_pass_shader.frag");    
+    this->vitalAssets->addNewShaderStrings("bg_tile_shader", 
+                               bg_tile_shader_vert,
+                               bg_tile_shader_frag);
+    this->vitalAssets->addNewShaderStrings("scene_tile_shader",
+                               scene_tile_shader_vert,
+                               scene_tile_shader_frag);
+    this->vitalAssets->addNewShaderStrings("anim_tile_shader", 
+                               anim_tile_shader_vert,
+                               anim_tile_shader_frag);
+    this->vitalAssets->addNewShaderStrings("final_pass_shader",
+                               final_pass_shader_vert,
+                               final_pass_shader_frag);    
 }
 
 void Renderer::initTileVAO()

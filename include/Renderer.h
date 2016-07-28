@@ -16,6 +16,7 @@
 #include "PostTile.h"
 #include "Framebuffer.h"
 #include "Window.h"
+#include "shader_source.h"
 
 // All of these classes include Renderer.h, and so in that
 // include, these classes aren't yet defined. Therefore we

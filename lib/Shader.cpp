@@ -21,6 +21,57 @@ const char * Shader::getShaderType(GLenum type)
     }
 }
 
+void Shader::replaceChar(char * src, char old, char replacement)
+{
+	for( int i = strlen(src)-1; i >= 0; --i )
+	{
+		if( src[i] == old ) src[i] = replacement;
+	}
+}
+
+int Shader::parseSourceString(char * src, char *** dst)
+{
+	// How many lines we've encountered so far.
+	int lines = 0;
+	
+	// The current line. I really hope there's not a single line longer than 2000 chars.
+	char * curLine = (char*) malloc( sizeof(char) * 2000 );
+	
+	// Initialize the destination array meant to hold all the lines we cut out.
+	(*dst) = (char**) malloc( sizeof(char*) * (lines+1) );
+	
+	// Go ahead and get the first line.
+	curLine = strtok(src, "\n");
+	
+	// While we still have tokens to get.
+	while( curLine != NULL )
+	{
+		// Duplicate the current line into the current array index.
+		(*dst)[lines] = strdup(curLine);
+		
+		// Now that we've gotten a line, we can increment how many we have.
+		++lines;
+		
+		// Extend the array.
+		(*dst) = (char**) realloc( (*dst), sizeof(char*) * (lines+1) );
+		
+		// Get the next line. WE MIGHT NEED TO CLEAR IT FIRST.
+		curLine = strtok(NULL, "\n");
+	}
+	
+	// Let's get rid of that giant string real quick.
+	free(curLine);
+	
+	// Now we can go through and replace the $ tokens with newlines.
+	for( int i = 0; i < lines; ++i )
+	{
+		Shader::replaceChar((*dst)[i], '$', '\n');
+	}	
+	
+	// Finally we return the number of lines that we've loaded.
+	return lines;	
+}
+
 void Shader::scanLineForUniforms(char* line)
 {
     // Number of tokens found in the line.
@@ -120,31 +171,21 @@ shader_error Shader::loadSource(char* filename, char*** source, int* numLines)
     }
 }
 
-shader_error Shader::initShader(char* filename, GLenum type, GLuint* shaderID)
+shader_error Shader::initShader(char*** source, int numLines, GLenum type, GLuint* shaderID)
 {
-    // An unsigned int to store the number of lines loaded.
-    int numLines;
-    
-    // An array of strings to store the lines of the source code.
-    char** source = NULL;
-        
-    // Actually load the shader.
-    shader_error e = Shader::loadSource(filename, &source, &numLines);
-    
-    if(e) return e; // Return if there was an error. The pointers were cleaned
-                    // up by loadSource, since it was where things went sideways.
     
     // Create a shader and store it in the given ID pointer.
     *shaderID = glCreateShader(type);
     
     // Send the source code to the GPU for compilation.
-    glShaderSource(*shaderID, numLines, source, NULL);
+    glShaderSource(*shaderID, numLines, *source, NULL);
     
     // Actually do that compilation.
     glCompileShader(*shaderID);
     
     // IT'S TESTING TIME. Did it actually compile?
     GLint compiled = 0;
+    
     // Get whether or not the shader compiled.
     glGetShaderiv(*shaderID, GL_COMPILE_STATUS, &compiled);
     if( compiled == GL_FALSE ) // If it didn't...
@@ -178,16 +219,8 @@ shader_error Shader::initShader(char* filename, GLenum type, GLuint* shaderID)
         // Delete the shader and source from the GPU.
         glDeleteShader(*shaderID);
         
-        // Free the source and line length arrays.
-        for( int i = 0; i < numLines; ++i ) free(source[i]);
-        free(source);
-        
         return SHADER_COULD_NOT_COMP;
     }
-        
-    // Free the source and line length arrays.
-    for( int i = 0; i < numLines; ++i ) free(source[i]);
-    free(source);
     
     // If nothing went wrong we return no error.
     return SHADER_NO_ERROR;
@@ -266,30 +299,34 @@ shader_error Shader::linkShaders(GLuint vertID, GLuint fragID)
 
 shader_error Shader::load(char* vertFile, char* fragFile)
 {
+	// A shader_error in case we need it.
+	shader_error e = SHADER_NO_ERROR; // = 0, by the way.
+	
     // Create individual IDs for each shader stage.
     GLuint vertID = 0, fragID = 0;
     
-    // Load and compile those shader stages.
-    shader_error e = SHADER_NO_ERROR;
-    e = Shader::initShader(vertFile, GL_VERTEX_SHADER, &vertID);
-    if(e) return e;
-    e = Shader::initShader(fragFile, GL_FRAGMENT_SHADER, &fragID);
-    if(e) return e;
-    // Now that we've compiled the shaders, we can link them.
-    e = linkShaders(vertID, fragID);
-    if(e) return e;
+    // String arrays for each loaded source.
+    char ** vertSource = NULL; char ** fragSource = NULL;
     
-    // Now we need to parse for uniforms. Let's just reload the source.
-    char ** vertSource = NULL;
-    char ** fragSource = NULL;
-    int vertLines = 0;
-    int fragLines = 0;
-    this->loadSource(vertFile, &vertSource, &vertLines);
+    // Line counts for each shader as well.
+    int vertLines = 0, fragLines = 0;
+    
+    // Load the source of each shader.
+    if(!e) e = loadSource(vertFile, &vertSource, &vertLines);
+    if(!e) e = loadSource(fragFile, &fragSource, &fragLines);
+    
+    // Compile those shader stages.
+    if(!e) e = Shader::initShader(&vertSource, vertLines, GL_VERTEX_SHADER, &vertID);
+    if(!e) e = Shader::initShader(&fragSource, fragLines, GL_FRAGMENT_SHADER, &fragID);
+    
+    // Now that we've compiled the shaders, we can link them.
+    if(!e) e = linkShaders(vertID, fragID);
+    
+    // Now we need to parse for uniforms.
     this->scanSourceForUniforms(vertSource, vertLines);
-    this->loadSource(fragFile, &fragSource, &fragLines);
     this->scanSourceForUniforms(fragSource, fragLines);
     
-    // Now that we're done with it (again) we need to free it (again).
+    // Now that we're done with the source code we need to get rid of it.
     for(unsigned int i = 0; i < vertLines; ++i) free(vertSource[i]);
     for(unsigned int i = 0; i < fragLines; ++i) free(fragSource[i]);
     free(vertSource);
@@ -297,6 +334,49 @@ shader_error Shader::load(char* vertFile, char* fragFile)
 
     // Return the no_error that was returned last.
     return e;
+}
+
+shader_error Shader::loadStrings(const char* vertString, const char* fragString)
+{
+	// A shader_error in case we need it.
+	shader_error e = SHADER_NO_ERROR; // = 0, by the way.
+	
+	// Create modifiable versions of the given strings.
+	char * vs = strdup(vertString); char * fs = strdup(fragString);
+	
+    // Create individual IDs for each shader stage.
+    GLuint vertID = 0, fragID = 0;
+	
+    // String arrays for each shader's source.
+    char ** vertSource = NULL; char ** fragSource = NULL;
+    
+    // Line counts for each shader as well.
+    int vertLines = 0, fragLines = 0;
+    
+    // Parse the shader source. 
+    vertLines = Shader::parseSourceString(vs, &vertSource);
+    fragLines = Shader::parseSourceString(fs, &fragSource);
+    
+    // Coompile those shader stages.
+    if(!e) e = Shader::initShader(&vertSource, vertLines, GL_VERTEX_SHADER, &vertID);
+    if(!e) e = Shader::initShader(&fragSource, fragLines, GL_FRAGMENT_SHADER, &fragID);
+    
+    // Now that we've compiled the shaders, we can link them.
+    if(!e) e = linkShaders(vertID, fragID);
+    
+    // Now we need to parse for uniforms.
+    this->scanSourceForUniforms(vertSource, vertLines);
+    this->scanSourceForUniforms(fragSource, fragLines);
+    
+    // Now that we're done with the source code we need to get rid of it.
+    for(unsigned int i = 0; i < vertLines; ++i) free(vertSource[i]);
+    for(unsigned int i = 0; i < fragLines; ++i) free(fragSource[i]);
+    free(vertSource);
+    free(fragSource);
+    free(vs);
+    free(fs);
+    
+	return e;
 }
 
 void Shader::addUniform(char * name, uniform_type type)

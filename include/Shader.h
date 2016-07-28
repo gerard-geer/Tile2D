@@ -57,6 +57,23 @@ private:
     static const char * getShaderType(GLenum type);
     
     /**
+     * @brief Traverses a string (in reverse, since we'll be looking for trailing chars)
+     * 	  	  and replaces any occurences of old with replacement.
+     * @param src The string to operate on.
+     * @param old The character to look out for and replace.
+     * @param replacement The character to replace occurences of old with.
+     */
+    static void replaceChar(char* src, char old, char replacement);
+    
+    /**
+     * @brief Parses a source string, splitting it into the required string array.
+     * @param src The source string.
+     * @param dst A pointer to the array of strings, which will be set up by this function.
+     * @return The number of lines in the array.
+     */
+    int parseSourceString(char * source, char *** dst);
+    
+    /**
      * @brief Scans a single line of source for "uniform <type> <identifier>;"
      * @param line The line to scan.
      */
@@ -82,13 +99,14 @@ private:
     static shader_error loadSource(char* filename, char*** source, int* numLines);
     
     /**
-     * @brief Loads and compiles a shader object. Any compilation errors are directed to stderr.
-     * @param filename The filename of the shader source code.
+     * @brief Instantiates a shader object on the GPU. Any compilation errors are
+     * directed to stderr.
+     * @param source A pointer to an array of strings that is the source code.
      * @param type The type of shader.
      * @param shaderID A pointer to a GLuint where the new shader ID will be placed.
      * @return A shader_error, if any.
      */
-    static shader_error initShader(char *filename, GLenum type, GLuint *shaderID);
+    static shader_error initShader(char *** source, int numLines, GLenum type, GLuint *shaderID);
     
     /**
      * @brief Takes the IDs of two compiled shader stages and links them into the shader
@@ -119,6 +137,16 @@ public:
      * @return A shader_error, if any.
      */
     shader_error load(char* vertFile, char* fragFile);
+    
+    /**
+     * @brief Creates a shader from two strings containing source code, rather than
+     *		  loading it from file. Note, this expects the strings to be formatted
+     * 		  as by glsl-to-header, with a $ at the end of every line.
+     * @param vertString The source code string of the vertex shader.
+     * @param fragString The source code string of the fragment shader.
+     * @return A shader_error, if any.
+     */
+    shader_error loadStrings(const char* vertString, const char* fragString);
     
     /**
      * @brief Creates a new ShaderUniform instance and adds it to this shader
