@@ -84,6 +84,15 @@ public:
     shader_error addNewShader(const char * key, const char * vertPath, const char * fragPath);
     
     /**
+     * @brief Creates and adds a new Shader from source strings rather than file.
+     * @param key The key to associate this Shader with.
+     * @param vertString The vertex shader source.
+     * @param fragString The fragment shader source.
+     * @return A shader_error. If no error occurred, SHADER_NO_ERROR is returned.
+     */
+    shader_error addNewShaderStrings(const char * key, const char * vertString, const char * fragString);
+    
+    /**
      * @brief Tests whether an Asset exists in the Manager.
      * @param key The key associated with the Asset.
      * @return Whether or not the Asset exists in the Manager.

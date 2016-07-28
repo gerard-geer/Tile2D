@@ -53,6 +53,15 @@ shader_error AssetManager::addNewShader(const char * key, const char * vertPath,
     return this->addNewShader((char*)key, (char*)vertPath, (char*)fragPath);
 }
 
+shader_error AssetManager::addNewShaderStrings(const char * key, const char * vertString, const char * fragString)
+{
+    Shader * s = new Shader();
+    shader_error e = s->loadStrings(vertString, fragString);
+    if( e == SHADER_NO_ERROR ) this->add(key,(Asset*)s);
+    return e;
+}
+	
+
 bool AssetManager::contains(char * key)
 {    
     // The ol' annoying iterator check.
