@@ -33,6 +33,23 @@ int main(int argc, char **argv)
     
     AnimTile * at = r->makeAnimTile(100.0, 40.0, PLANE_PLAYFIELD_A, 16.0, 20.0, true, "yumetarou", 6, 16, 20, 1.0/20.0);
     r->addToRenderQueue(ANIM_TILE, at);
+    
+    BasicMatrix * m = new BasicMatrix(3,3);
+    float * l = m->getLinear();
+    for( int i = 0; i < 9; ++i )
+    {
+    	std::cout << l[i] << " ";
+    }
+    std::cout << std::endl;
+    	
+   	m->set(1,1, 5.0); 
+   	
+    l = m->getLinear();
+    for( int i = 0; i < 9; ++i )
+    {
+    	std::cout << l[i] << " ";
+    }
+    std::cout << std::endl;
 
     while(!glfwWindowShouldClose(window.getWindow()))
     {

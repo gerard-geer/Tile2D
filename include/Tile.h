@@ -236,7 +236,7 @@ public:
      * @brief Returns a reference to this Tile's underlying BasicMatrix.
      * @return A reference to this Tile's underlying BasicMatrix.
      */
-    BasicMatrix * getMatrix() const;
+    BasicMatrix * getMatrix();
     
     /**
      * @brief Returns the unique ID of this Tile.

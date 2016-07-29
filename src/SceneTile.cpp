@@ -34,6 +34,8 @@ void SceneTile::render(Renderer * r)
     this->getMatrix()->set(0,2, ( this->getX() - r->getCamera()->getX() )*Fp );
     this->getMatrix()->set(1,2, ( this->getY() - r->getCamera()->getY() )*Fp );
     
+    //std::cout << this->getMatrix()->get(0,2) << std::endl;
+    //std::cout << ( this->getX() - r->getCamera()->getX() )*Fp << std::endl;
     // Alrighty! Now that that's done, we can feed the matrix to the shader.
     float * lm = this->getMatrix()->getLinear();
     program->setUniform((char*)"transform", &lm);

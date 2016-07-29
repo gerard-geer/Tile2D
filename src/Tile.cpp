@@ -1,5 +1,5 @@
 #include "Tile.h"
-
+#include <iostream>
 Tile::Tile()
 {
 }
@@ -22,6 +22,7 @@ void Tile::init(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, GLfloat h
     // an identity matrix, we don't need to set any values.
     this->r = new BasicMatrix(3,3);
     this->rotation = 0.0; // We do need to store the current rotation.
+    std::cout << "initializing super tile." << std::endl;
     
     // Create the swap-space matrix.
     this->mult = new BasicMatrix(3,3);
@@ -115,7 +116,7 @@ GLfloat Tile::getRotation() const
     return this->rotation;
 }
 
-BasicMatrix * Tile::getMatrix() const
+BasicMatrix * Tile::getMatrix()
 {
     // Plop the position and dimension matrix into
     // the swap space matrix.
