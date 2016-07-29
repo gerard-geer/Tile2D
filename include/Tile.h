@@ -84,6 +84,11 @@ private:
     bool trans;
     
     /*
+     * Does this Tile ignore scroll?
+     */
+    bool ignoreScroll;
+    
+    /*
      * A reference value for the current rotation, since it is not
      * trivial to extract the value from the rotation matrix.
      */
@@ -208,6 +213,12 @@ public:
     bool hasTrans() const;
     
     /**
+     * @brief Returns whether or not this Tile ignores scrolling.
+     * @return Whether or not this Tile ignores scrolling.
+     */
+    bool ignoresScroll() const;
+    
+    /**
      * @brief Returns the current texture flip mode. This is a bitwise
      *        member however, so you might get FLIP_VERT | FLIP_HORIZ.
      * @return The current texture flip mode.
@@ -268,6 +279,12 @@ public:
      * @param Sets whether or not this Tile has transparency.
      */
     void setTransparency(bool trans);
+    
+    /**
+     * @brief Sets whether or not this Tile ignores scroll.
+     * @param Whether or not this Tile ignores scroll.
+     */
+    void setIgnoreScroll(bool ignoreScroll);
     
     /**
      * @brief Sets the Tile's rotation.

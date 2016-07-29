@@ -30,6 +30,7 @@ void Tile::init(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, GLfloat h
     this->plane = plane;
     this->trans = trans;
     this->texFlip = 0;
+    this->ignoreScroll = false;
     
     // Oh why look at that our unique identifier is already figured out for us.
     this->id = (unsigned long) this;
@@ -99,6 +100,11 @@ bool Tile::hasTrans() const
     return this->trans;
 }
 
+bool Tile::ignoresScroll() const
+{
+	return this->ignoreScroll;
+}
+
 GLuint Tile::getTextureFlip() const
 {
     return this->texFlip;
@@ -157,6 +163,11 @@ void Tile::setHeight(GLfloat height)
 void Tile::setTransparency(bool trans)
 {
     this->trans = trans;
+}
+
+void Tile::setIgnoreScroll(bool ignoreScroll)
+{
+	this->ignoreScroll = ignoreScroll;
 }
 
 void Tile::setRotation(GLfloat rotation)
