@@ -233,10 +233,23 @@ public:
     GLfloat getRotation() const;
     
     /**
-     * @brief Returns a reference to this Tile's underlying BasicMatrix.
+     * @brief Returns a reference to the product of this Tile's position
+     *		  and rotation matrices.
      * @return A reference to this Tile's underlying BasicMatrix.
      */
-    BasicMatrix * getMatrix();
+    BasicMatrix * getCompoundMat();
+    
+    /**
+     * @brief Returns a reference to this Tile's position matrix.
+     * @return A reference to this Tile's underlying BasicMatrix.
+     */
+    BasicMatrix * getPositionMat();
+    
+    /**
+     * @brief Returns a reference to this Tile's rotation matrix.
+     * @return A reference to this Tile's underlying BasicMatrix.
+     */
+    BasicMatrix * getRotationMat();
     
     /**
      * @brief Returns the unique ID of this Tile.

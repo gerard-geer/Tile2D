@@ -63,11 +63,11 @@ void AnimTile::render(Renderer* r)
     // Set up the transformation matrix as usual.
     //std::cout << r->getCamera()->getX() << std::endl;
     //std::cout << "Made it here" << std::endl;
-    this->getMatrix()->set(0,2, ( this->getX() - r->getCamera()->getX() )*Fp );
-    this->getMatrix()->set(1,2, ( this->getY() - r->getCamera()->getY() )*Fp );
+    this->getPositionMat()->set(0,2, ( this->getX() - r->getCamera()->getX() )*Fp );
+    this->getPositionMat()->set(1,2, ( this->getY() - r->getCamera()->getY() )*Fp );
     
     // Hand it over to the GPU.
-    float * lm = this->getMatrix()->getLinear();
+    float * lm = this->getCompoundMat()->getLinear();
     program->setUniform((char*)"transform", &lm);
     
     // Reset the BasicMatrix.

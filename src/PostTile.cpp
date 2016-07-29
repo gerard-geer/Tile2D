@@ -99,7 +99,7 @@ void PostTile::render(Renderer * r)
     
     // Since PostTiles do the parallax effect entirely in the vertex shader,
     // we can send them a virgin matrix.
-    float * lm = this->getMatrix()->getLinear();
+    float * lm = this->getCompoundMat()->getLinear();
     program->setUniform("transform", &lm);
     
     // Let's not forget the time.

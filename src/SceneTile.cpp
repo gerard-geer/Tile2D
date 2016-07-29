@@ -31,13 +31,11 @@ void SceneTile::render(Renderer * r)
     float Fp = this->getParallaxFactor(this->getPlane());
     
     // Now we set up the matrix. There's documentation on how this works.
-    this->getMatrix()->set(0,2, ( this->getX() - r->getCamera()->getX() )*Fp );
-    this->getMatrix()->set(1,2, ( this->getY() - r->getCamera()->getY() )*Fp );
+    this->getPositionMat()->set(0,2, ( this->getX() - r->getCamera()->getX() )*Fp );
+    this->getPositionMat()->set(1,2, ( this->getY() - r->getCamera()->getY() )*Fp );
     
-    //std::cout << this->getMatrix()->get(0,2) << std::endl;
-    //std::cout << ( this->getX() - r->getCamera()->getX() )*Fp << std::endl;
     // Alrighty! Now that that's done, we can feed the matrix to the shader.
-    float * lm = this->getMatrix()->getLinear();
+    float * lm = this->getCompoundMat()->getLinear();
     program->setUniform((char*)"transform", &lm);
     
     // Reset the BasicMatrix.

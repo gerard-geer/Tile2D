@@ -116,7 +116,7 @@ GLfloat Tile::getRotation() const
     return this->rotation;
 }
 
-BasicMatrix * Tile::getMatrix()
+BasicMatrix * Tile::getCompoundMat()
 {
     // Plop the position and dimension matrix into
     // the swap space matrix.
@@ -129,6 +129,16 @@ BasicMatrix * Tile::getMatrix()
     // this function, and no extraneous matrices are
     // made.
     return this->mult;
+}
+
+BasicMatrix * Tile::getPositionMat()
+{
+    return this->pd;
+}
+
+BasicMatrix * Tile::getRotationMat()
+{
+    return this->r;
 }
 
 unsigned long Tile::getID() const
