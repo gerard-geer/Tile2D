@@ -107,11 +107,11 @@ void PostTile::render(Renderer * r)
     program->setUniform("time", &time);
     
     // Get the parallax factor and send it in.
-    float Fp = Tile::getParallaxFactor(this->getPlane());
+    float Fp = this->getParallaxFactor(this->getPlane());
     program->setUniform((char*)"pFactor", &Fp);
     
     // Give the shader the ignoreScroll value.
-    float is = (float) Tile::ignoresScroll();
+    float is = (float) this->ignoresScroll();
     program->setUniform((char*)"ignoreScroll", &is);
     
     // Send in the depth of this Tile as well.
