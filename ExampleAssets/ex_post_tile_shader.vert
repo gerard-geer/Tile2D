@@ -38,6 +38,9 @@ uniform vec2 camera;
 // The factor by which scrolling is modified to facilitate the parallax effect.
 uniform float pFactor;
 
+// Whether or not to ignore scrolling.
+uniform float ignoreScroll;
+
 // The depth of this PostTile.
 uniform float depth;
 
@@ -57,11 +60,15 @@ mat3 parallaxSetup()
     // One can't edit uniforms, so we need to make a copy.
     mat3 m = transform;
     
-    // Now we do the actual math to enable the parallax.
-    // This boils down to essentially:
-    // TilePosition = (TilePosition - CameraPosition) / ParallaxFactor
-    m[2][0] = (m[2][0] - camera.x) * pFactor;
-    m[2][1] = (m[2][1] - camera.y) * pFactor;
+    // Check to see if we need to ignore scrolling.
+    if(ignoreScroll  > .5)
+    {
+		// Now we do the actual math to enable the parallax.
+		// This boils down to essentially:
+		// TilePosition = (TilePosition - CameraPosition) / ParallaxFactor
+		m[2][0] = (m[2][0] - camera.x) * pFactor;
+		m[2][1] = (m[2][1] - camera.y) * pFactor;
+	}
     
     return m;
 }
