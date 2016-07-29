@@ -42,15 +42,14 @@ void BGTile::render(Renderer * r)
     // Get the parallax factor.
     float Fp = this->getParallaxFactor(this->getPlane());
     
+	// Now we set up the matrix. There's documentation on how this works.
     if( this->ignoresScroll() )
     {
-		// Now we set up the matrix. There's documentation on how this works.
 		this->getPositionMat()->set(0,2, this->getX() );
 		this->getPositionMat()->set(1,2, this->getY() );
 	}
     else
     {	
-		// Now we set up the matrix. There's documentation on how this works.
 		this->getPositionMat()->set(0,2, ( this->getX() - r->getCamera()->getX() )*Fp );
 		this->getPositionMat()->set(1,2, ( this->getY() - r->getCamera()->getY() )*Fp );
 	}
