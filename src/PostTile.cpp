@@ -65,6 +65,7 @@ char * PostTile::getTexD()
 
 void PostTile::render(Renderer * r)
 {
+	// Get all the stuff we need out of the AssetManager.
     Shader * program = (Shader*)r->getAssetManager()->get(this->shader);
     Texture * a = (Texture*)r->getAssetManager()->get(this->texA);
     Texture * b = (Texture*)r->getAssetManager()->get(this->texB);
@@ -108,21 +109,21 @@ void PostTile::render(Renderer * r)
     
     // Get the parallax factor and send it in.
     float Fp = this->getParallaxFactor(this->getPlane());
-    program->setUniform((char*)"pFactor", &Fp);
+    program->setUniform("pFactor", &Fp);
     
     // Give the shader the ignoreScroll value.
     float is = (float) this->ignoresScroll();
-    program->setUniform((char*)"ignoreScroll", &is);
+    program->setUniform("ignoreScroll", &is);
     
     // Send in the depth of this Tile as well.
     float depth = Tile::getTileDepth(this->getPlane());
-    program->setUniform((char*)"depth", &depth);
+    program->setUniform("depth", &depth);
     
     // Let's not forget about texture flip!
     GLuint hFlip = (GLuint)(this->getTextureFlip() & Tile::FLIP_HORIZ);
     GLuint vFlip = (GLuint)(this->getTextureFlip() & Tile::FLIP_VERT);
-    program->setUniform((char*)"hFlip", &hFlip);
-    program->setUniform((char*)"vFlip", &vFlip);
+    program->setUniform("hFlip", &hFlip);
+    program->setUniform("vFlip", &vFlip);
     
     // The usual call to glDrawArrays()
     glDrawArrays(GL_TRIANGLES, 0, 6);

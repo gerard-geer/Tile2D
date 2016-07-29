@@ -56,7 +56,7 @@ void BGTile::render(Renderer * r)
     
     // Alrighty! Now that that's done, we can feed the matrix to the shader.
     float * lm = this->getCompoundMat()->getLinear();
-    program->setUniform((char*)"transform", &lm);
+    program->setUniform("transform", &lm);
     
     // Reset the BasicMatrix.
     this->setX(x);
@@ -64,16 +64,16 @@ void BGTile::render(Renderer * r)
     
     // Feed this tile's depth information to the shader.
     float depth = Tile::getTileDepth(this->getPlane());
-    program->setUniform((char*)"depth", &depth);
+    program->setUniform("depth", &depth);
 
     // Now we set up this texture.
-    program->setTextureUniform((char*)"texture", tex->getID(), 0); 
+    program->setTextureUniform("texture", tex->getID(), 0); 
     
     // Let's not forget about texture flip!
     GLuint hFlip = (GLuint)(this->getTextureFlip() & Tile::FLIP_HORIZ);
     GLuint vFlip = (GLuint)(this->getTextureFlip() & Tile::FLIP_VERT);
-    program->setUniform((char*)"hFlip", &hFlip);
-    program->setUniform((char*)"vFlip", &vFlip);
+    program->setUniform("hFlip", &hFlip);
+    program->setUniform("vFlip", &vFlip);
     
     // Draw the vertex arrays. We want the primitives drawn to be
     // triangles, and to start at the 0th vertex, and to draw a
