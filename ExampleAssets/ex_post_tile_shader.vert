@@ -61,7 +61,7 @@ mat3 parallaxSetup()
     mat3 m = transform;
     
     // Check to see if we need to ignore scrolling.
-    if(ignoreScroll  > .5)
+    if(ignoreScroll  < .5)
     {
 		// Now we do the actual math to enable the parallax.
 		// This boils down to essentially:
