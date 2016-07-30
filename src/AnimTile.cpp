@@ -60,15 +60,21 @@ void AnimTile::render(Renderer* r)
     GLfloat x = this->getX();
     GLfloat y = this->getY();
     
-    // Set up the transformation matrix as usual.
-    //std::cout << r->getCamera()->getX() << std::endl;
-    //std::cout << "Made it here" << std::endl;
-    this->getMatrix()->set(0,2, ( this->getX() - r->getCamera()->getX() )*Fp );
-    this->getMatrix()->set(1,2, ( this->getY() - r->getCamera()->getY() )*Fp );
+	// Now we set up the matrix. There's documentation on how this works.
+    if( this->ignoresScroll() )
+    {
+		this->getPositionMat()->set(0,2, this->getX() );
+		this->getPositionMat()->set(1,2, this->getY() );
+	}
+    else
+    {	
+		this->getPositionMat()->set(0,2, ( this->getX() - r->getCamera()->getX() )*Fp );
+		this->getPositionMat()->set(1,2, ( this->getY() - r->getCamera()->getY() )*Fp );
+	}
     
     // Hand it over to the GPU.
-    float * lm = this->getMatrix()->getLinear();
-    program->setUniform((char*)"transform", &lm);
+    float * lm = this->getCompoundMat()->getLinear();
+    program->setUniform("transform", &lm);
     
     // Reset the BasicMatrix.
     this->setX(x);
@@ -76,16 +82,16 @@ void AnimTile::render(Renderer* r)
     
     // Feed this tile's depth information to the shader.
     float depth = Tile::getTileDepth(this->getPlane());
-    program->setUniform((char*)"depth", &depth);
+    program->setUniform("depth", &depth);
     
     // Now we set up this texture.
-    program->setTextureUniform((char*)"texture", frames->getID(), 0);   
+    program->setTextureUniform("texture", frames->getID(), 0);   
     
     // Let's not forget about texture flip!
     GLuint hFlip = (GLuint)(this->getTextureFlip() & Tile::FLIP_HORIZ);
     GLuint vFlip = (GLuint)(this->getTextureFlip() & Tile::FLIP_VERT);
-    program->setUniform((char*)"hFlip", &hFlip);
-    program->setUniform((char*)"vFlip", &vFlip);
+    program->setUniform("hFlip", &hFlip);
+    program->setUniform("vFlip", &vFlip);
     
     
     // Draw the vertex arrays. We want the primitives drawn to be

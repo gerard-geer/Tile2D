@@ -189,7 +189,7 @@ shader_error Shader::initShader(char*** source, int numLines, GLenum type, GLuin
         for( unsigned int i = 0; i < numLines; ++i )
         {
             printf("%4d: ",i+1); // Print the line number.
-            std::cerr << source[i]; // We already have a newline! No std::endl today.
+            std::cerr << (*source)[i]; // We already have a newline! No std::endl today.
         }
         
         // Create an integer to store the length of the info log.

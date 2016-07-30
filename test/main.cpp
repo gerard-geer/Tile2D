@@ -30,12 +30,14 @@ int main(int argc, char **argv)
     
     SceneTile * st = r->makeSceneTile(.25, 0, PLANE_NEG_2, .5, .5, false, "fish");
     r->addToRenderQueue(SCENE_TILE, st);
+    st->setIgnoreScroll(true);
     
     AnimTile * at = r->makeAnimTile(100.0, 40.0, PLANE_PLAYFIELD_A, 16.0, 20.0, true, "yumetarou", 6, 16, 20, 1.0/20.0);
     r->addToRenderQueue(ANIM_TILE, at);
 
     while(!glfwWindowShouldClose(window.getWindow()))
     {
+    	r->getCamera()->setPos(4.0*sin(glfwGetTime()*.1), 0.0);
         at->setRotation(at->getRotation()+.01);
         window.update();
     }

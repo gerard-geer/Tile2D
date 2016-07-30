@@ -1,5 +1,5 @@
 #include "Tile.h"
-
+#include <iostream>
 Tile::Tile()
 {
 }
@@ -30,6 +30,7 @@ void Tile::init(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, GLfloat h
     this->plane = plane;
     this->trans = trans;
     this->texFlip = 0;
+    this->ignoreScroll = false;
     
     // Oh why look at that our unique identifier is already figured out for us.
     this->id = (unsigned long) this;
@@ -99,6 +100,11 @@ bool Tile::hasTrans() const
     return this->trans;
 }
 
+bool Tile::ignoresScroll() const
+{
+	return this->ignoreScroll;
+}
+
 GLuint Tile::getTextureFlip() const
 {
     return this->texFlip;
@@ -109,7 +115,7 @@ GLfloat Tile::getRotation() const
     return this->rotation;
 }
 
-BasicMatrix * Tile::getMatrix() const
+BasicMatrix * Tile::getCompoundMat()
 {
     // Plop the position and dimension matrix into
     // the swap space matrix.
@@ -122,6 +128,16 @@ BasicMatrix * Tile::getMatrix() const
     // this function, and no extraneous matrices are
     // made.
     return this->mult;
+}
+
+BasicMatrix * Tile::getPositionMat()
+{
+    return this->pd;
+}
+
+BasicMatrix * Tile::getRotationMat()
+{
+    return this->r;
 }
 
 unsigned long Tile::getID() const
@@ -157,6 +173,11 @@ void Tile::setHeight(GLfloat height)
 void Tile::setTransparency(bool trans)
 {
     this->trans = trans;
+}
+
+void Tile::setIgnoreScroll(bool ignoreScroll)
+{
+	this->ignoreScroll = ignoreScroll;
 }
 
 void Tile::setRotation(GLfloat rotation)
