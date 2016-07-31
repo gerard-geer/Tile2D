@@ -242,7 +242,7 @@ bool Renderer::onScreenTest(Tile * t)
 {
 	// Get the Tile's projected screen coordinates.
     float tx, ty;
-    float Fp = Tile::getParallaxFactor(t->getPlane());
+    float Fp = t->getParallaxFactor(t->getPlane());
     if( t->ignoresScroll() )
     {
     	tx = t->getX();
@@ -257,9 +257,9 @@ bool Renderer::onScreenTest(Tile * t)
     // First we check if the distance between the center of the screen and the
     // center of the Tile is greater than 1 + the width of the Tile. If so the
     // Tile is not on screen.
-    if( tx > 1.0 + t->getWidth()*.5 ) return false;
+    if( fabs(tx) > 1.0 + t->getWidth()*.5 ) return false;
     // We do the same in the vertical axis.
-    if( ty > 1.0 + t->getHeight()*.5 ) return false;
+    if( fabs(ty) > 1.0 + t->getHeight()*.5 ) return false;
     
     return true;
 }
@@ -297,6 +297,7 @@ void Renderer::render(Window * window)
     
     // Now that we've sorted things, we go through and render the
     // non-post-process Tiles.
+    int count = 0;
     for(std::vector<TileWithType>::iterator it = renderQueue.begin(); it != renderQueue.end(); ++it)
     {
         // it->first is the tile_type;
@@ -310,14 +311,11 @@ void Renderer::render(Window * window)
         
         // Otherwise we render the tile.
         it->second->render(this);
+        count ++;
     }
     
     // Now for the PostTiles we flip to the second framebuffer.
     this->defFB->setAsRenderTarget();
-    //glClearColor(1.0f, 0.0f, 0.0f, 0.0f); // Set the clear color to have an alpha of zero
-                                          // so that any pixel not rendered to has an easily
-                                          // identifiable attribute. This makes mixing the
-                                          // two framebuffers much easier later on.
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Flush again.
     // Now that the primary-pass Tiles have been rendered...
     for(std::vector<TileWithType>::iterator it = renderQueue.begin(); it != renderQueue.end(); ++it)
@@ -330,6 +328,7 @@ void Renderer::render(Window * window)
         
         // Render the PostTile.
         it->second->render(this);
+        count ++;
     }
     
     // Now we go back to renderering to the window.
