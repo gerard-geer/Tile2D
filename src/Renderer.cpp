@@ -240,12 +240,27 @@ void Renderer::flushRenderQueue()
 
 bool Renderer::onScreenTest(Tile * t)
 {
+	// Get the Tile's projected screen coordinates.
+    float tx, ty;
+    float Fp = Tile::getParallaxFactor(t->getPlane());
+    if( t->ignoresScroll() )
+    {
+    	tx = t->getX();
+    	ty = t->getY();
+    }
+    else
+    {
+    	tx = ( t->getX() - this->getCamera()->getX() )*Fp;
+    	ty = ( t->getY() - this->getCamera()->getY() )*Fp;
+    }
+    	
     // First we check if the distance between the center of the screen and the
     // center of the Tile is greater than 1 + the width of the Tile. If so the
     // Tile is not on screen.
-    if( std::abs( this->camera->getX() - t->getX() ) > 1.0 + t->getWidth()*.5 ) return false;
+    if( tx > 1.0 + t->getWidth()*.5 ) return false;
     // We do the same in the vertical axis.
-    if( std::abs( this->camera->getY() - t->getY() ) > 1.0 + t->getHeight()*.5 ) return false;
+    if( ty > 1.0 + t->getHeight()*.5 ) return false;
+    
     return true;
 }
 
