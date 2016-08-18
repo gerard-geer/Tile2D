@@ -30,7 +30,7 @@ TST_DIR=test/
 
 # Compilation flags. Specifies to only compile (and not to link), as well as
 # a custom include directory of HDR_DIR.
-CFLAGS= -c -I $(HDR_DIR) 
+CFLAGS= -c -g -I $(HDR_DIR) 
 
 # Linking flags to make sure everything is bound up tight.
 LFLAGS= -lglfw -lGL -lGLU -lpng -lGLEW -lm -lz -ldl
@@ -152,7 +152,7 @@ TEST_STATIC: STATIC COMP_MAIN
 TEST_DYNAMIC:  DYNAMIC COMP_MAIN
 	@echo "Have you \"made the library visible\"?"
 	@echo "Linking \"$(TST_DIR)main.cpp\" using the dynamic library."
-	@$(CC) -o $(BLD_DIR)dynamic_test $(BLD_DIR)*.o -L$(BLD_DIR) -lTile2d -lglfw -lGL -lGLU -lpng -lGLEW
+	@$(CC) -o $(BLD_DIR)dynamic_test $(BLD_DIR)*.o -L$(BLD_DIR) -g -lTile2d -lglfw -lGL -lGLU -lpng -lGLEW
 	@echo "Adding execute permission."
 	chmod +x $(BLD_DIR)dynamic_test
 	@echo "Done creating test program. Run with command ./dynamic_test from $(BLD_DIR)"
