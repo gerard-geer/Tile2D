@@ -113,7 +113,16 @@ tex_error Texture::load(char* filename)
     tex_error error = this->loadPNG(filename, &rows);
     
     // If that process errored out, we just pass that error right on up.
-    if(error) return error;
+    if(error)
+    {
+        if(rows)
+        {
+            for( int i = 0; i < this->height; ++i ) // For each row...
+                free(rows[i]);
+            free(rows);
+        }
+        return error;
+    }
     
     // The data we get from loadPNG is a 2D list of individual color channel values.
     // These values are bytes.
@@ -147,6 +156,7 @@ tex_error Texture::load(char* filename)
                 data[i*this->width*4 + j*4 + 2] = rows[i][j*4 + 2];
                 data[i*this->width*4 + j*4 + 3] = rows[i][j*4 + 3];
             }
+            free(rows[i]);
         }
     }
 
