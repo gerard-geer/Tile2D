@@ -48,7 +48,7 @@ enum tile_type
     BG_TILE,
     SCENE_TILE,
     ANIM_TILE,
-    POST_TILE
+    DEF_TILE
 };
 
 class Tile
