@@ -84,6 +84,7 @@ public:
      * @param data The data to be assigned to the uniform.
      */
     void set(void * data);
+    
 };
 
 #endif // SHADERUNIFORM_H
