@@ -152,6 +152,11 @@ public:
      * @return The key used to access this FwdTile's second custom texture.
      */
     char * getTexD();
+    
+    /**
+	 * @brief Prints out info to stdout about this Tile.
+	 */
+    void report();
 };
 
-#endif // FWDTILE_HFWDTILE_H
+#endif // FWDTILE_H

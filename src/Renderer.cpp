@@ -287,6 +287,8 @@ void Renderer::render(Window * window)
     // Bind to the VAO.
     glBindVertexArray( this->tileVAO );
     
+    std::cout << "NEW FRAME" << std::endl;
+    
     // Enable these just in case.
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
@@ -311,6 +313,7 @@ void Renderer::render(Window * window)
         
         // Otherwise we render the tile.
         it->second->render(this);
+        it->second->report();
         count ++;
     }
     
@@ -328,6 +331,7 @@ void Renderer::render(Window * window)
         
         // Render the DefTile.
         it->second->render(this);
+        it->second->report();
         count ++;
     }
     

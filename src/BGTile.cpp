@@ -88,3 +88,11 @@ char * BGTile::getTexture()
 {
     return this->texture;
 }
+
+void BGTile::report()
+{
+    std::cout << "BGTile:\t\t" << this->getID()  
+              << " trans: " << this->hasTrans() 
+              << " plane: " << this->getPlane()
+              << " tex: " << this->texture << std::endl;
+}

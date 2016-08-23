@@ -124,3 +124,14 @@ void FwdTile::render(Renderer * r)
     // The usual call to glDrawArrays()
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
+
+void FwdTile::report()
+{
+    std::cout << "FwdTile:\t" << this->getID()  
+              << " trans: " << this->hasTrans() 
+              << " plane: " << this->getPlane()
+              << " texA: " << this->texA 
+              << " texB: " << this->texB
+              << " texC: " << this->texC 
+              << " texD: " << this->texD << std::endl;
+}
