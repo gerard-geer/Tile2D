@@ -20,8 +20,8 @@ int main(int argc, char **argv)
     
     a->addNewTexture("yumetarou", "../ExampleAssets/yumetarou_frame16x20.png");
     
-    a->addNewShader("example_post_shader", "../ExampleAssets/ex_post_tile_shader.vert",
-                                                           "../ExampleAssets/ex_post_tile_shader.frag");
+    a->addNewShader("example_post_shader", "../ExampleAssets/ex_def_tile_shader.vert",
+                                                           "../ExampleAssets/ex_def_tile_shader.frag");
     BGTile * bg = r->makeBGTile(0.0, 0.0, 1.5, 1.5, false, "puppy");
     r->addToRenderQueue(BG_TILE, bg);
     
