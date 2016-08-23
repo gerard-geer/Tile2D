@@ -28,8 +28,8 @@ int main(int argc, char **argv)
     BGTile * bg = r->makeBGTile(0.0, 0.0, 1.5, 1.5, false, "puppy");
     r->addToRenderQueue(BG_TILE, bg);
     
-    DefTile * pt = r->makeDefTile(.025, .25, PLANE_POS_1, .5, .5, false, "kitten", "kitten", NULL, NULL, "example_def_shader");
-    r->addToRenderQueue(DEF_TILE, pt);
+    DefTile * dt = r->makeDefTile(.025, .25, PLANE_POS_1, .5, .5, false, "kitten", "kitten", NULL, NULL, "example_def_shader");
+    r->addToRenderQueue(DEF_TILE, dt);
     
     SceneTile * st = r->makeSceneTile(.25, 0, PLANE_NEG_2, .5, .5, false, "fish");
     r->addToRenderQueue(SCENE_TILE, st);
