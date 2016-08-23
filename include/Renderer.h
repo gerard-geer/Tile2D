@@ -14,6 +14,7 @@
 #include "SceneTile.h"
 #include "AnimTile.h"
 #include "DefTile.h"
+#include "FwdTile.h"
 #include "Framebuffer.h"
 #include "Window.h"
 #include "shader_source.h"
@@ -26,6 +27,7 @@ class BGTile;
 class SceneTile;
 class AnimTile;
 class DefTile;
+class FwdTile;
 
 /*
  * A type definition that links a Tile with the subclass it was cast from.
@@ -422,6 +424,44 @@ public:
                             GLfloat height, bool normalize, char * texA, char * texB,
                             char * texC, char * texD, char * shader);
     DefTile * makeDefTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
+                            GLfloat height, bool normalize, const char * texA, const char * texB,
+                            const char * texC, const char * texD, const char * shader);
+    
+    /**
+     * @brief A factory method used to create a FwdTile. Make sure that every
+     *        texture specified is already loaded.
+     *        To not use a texture slot, just pass in NULL. Note though, that 
+     *        the corresponding uniform must still be present in the shader. 
+     *        The only difference is that an empty texture will be passed to 
+     *        it. 
+     *        Also realize that since FwdTiles use bespoke shaders X, Y, plane, 
+     *        width and height may be ignored by the shader. 
+     *        Also because of the custom shaders, it's assumed that these will
+     *        have transparency. 
+     *        Finally, remember that the shader and textures must already be 
+     *        added to the Renderer's Asset Manager.
+     * 
+     * @param x The X position of this FwdTile.
+     * @param y The Y position of this FwdTile.
+     * @param plane The parallax plane to draw this FwdTile to.
+     * @param width The width of this FwdTile.
+     * @param height The height of this FwdTile.
+     * @param normalize Normally X, Y, width and height are in the range [-1,1]. This
+     *        parameter specifies whether or not to divide these by the framebuffer
+     *        resolution in order to have a 1:1 pixel ratio. This remaps X and Y
+     *        to be in the range [0, FBO resolution]. Note though, calls to Tile::set()
+     *        will still evaluate in the [-1,1] range.
+     * @param texA The first custom texture that this FwdTile uses.
+     * @param texB The second custom texture that this FwdTile uses.
+     * @param texC The third custom texture that this FwdTile uses.
+     * @param texD The fourth custom texture that this FwdTile uses.
+     * @param shader This FwdTile's shader.
+     * @return A pointer to a freshly constructed FwdTile.
+     */
+    FwdTile * makeFwdTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
+                            GLfloat height, bool normalize, char * texA, char * texB,
+                            char * texC, char * texD, char * shader);
+    FwdTile * makeFwdTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
                             GLfloat height, bool normalize, const char * texA, const char * texB,
                             const char * texC, const char * texD, const char * shader);
     

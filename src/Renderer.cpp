@@ -436,6 +436,31 @@ DefTile * Renderer::makeDefTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat 
 							  (char*)texC, (char*)texD, (char*)shader);
 }
 
+FwdTile * Renderer::makeFwdTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
+                                GLfloat height, bool normalize, char* texA, char* texB,
+                                char* texC, char* texD, char* shader)
+{
+    FwdTile * t = new FwdTile();
+    if(normalize)
+    {
+        width /= this->getWidth()*.5;
+        height /= this->getHeight()*.5;
+        x = (x/(this->getWidth()*.5))-1.0+width*.5;
+        y = (y/(this->getHeight()*.5))-1.0+height*.5;
+    }
+    t->init(x, y, plane, width, height, texA, texB, texC, texD, shader);
+    return t;
+}
+
+FwdTile * Renderer::makeFwdTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
+								  GLfloat height, bool normalize, const char * texA, 
+								  const char * texB, const char * texC, const char * texD,
+								  const char * shader)
+{
+	return this->makeFwdTile(x,y,plane,width,height,normalize,(char*)texA,(char*)texB,
+							  (char*)texC, (char*)texD, (char*)shader);
+}
+
 GLfloat Renderer::getTilePxX(Tile * tile)
 {
     return ( tile->getX()+1.0 ) * (this->getWidth() * .5);
