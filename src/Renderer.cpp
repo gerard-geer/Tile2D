@@ -188,11 +188,24 @@ bool tileSortingPredicate(TileWithType lhs, TileWithType rhs)
     
     // At this point both operands will have the same transparency status.
     
-    // Now we're comparing rendering planes. We want to
-    // draw the closest Tiles first, so we can take
-    // advantage of depth testing and thusly minimize redraw.
-    if( a->getPlane() <= b->getPlane() ) return true;
-    if( a->getPlane() >  b->getPlane() ) return false;
+    // When Tiles don't have transparency, we can draw them from front to
+    // back and take advantage of z-culling.
+    if( !a->hasTrans() )
+    {
+        // Now we're comparing rendering planes. We want to
+        // draw the closest Tiles first, so we can take
+        // advantage of depth testing and thusly minimize redraw.
+        if( a->getPlane() <= b->getPlane() ) return true;
+        if( a->getPlane() >  b->getPlane() ) return false;
+    }
+    
+    // Otherwise we need to draw from back to front in order for transparency
+    // to work right.
+    else
+    {
+        if( a->getPlane() <= b->getPlane() ) return false;
+        if( a->getPlane() >  b->getPlane() ) return true;
+    }
     return true; // Just to get rid of the warnings.
 }
 
