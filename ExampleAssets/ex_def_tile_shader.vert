@@ -1,10 +1,10 @@
 #version 120
 /**
- * File: ex_post_tile_shader.vert
+ * File: ex_def_tile_shader.vert
  * Author: Gerard Geer (github.com/gerard-geer)
  * License: GPL v3.0
  * 
- * This is an example vertex shader for PostTiles, which require
+ * This is an example vertex shader for DefTiles, which require
  * shaders to be written for them. There are several things to
  * note about this shader:
  * -First, the transformation matrix of PostTiles isn't set up to
