@@ -13,7 +13,8 @@
 #include "BGTile.h"
 #include "SceneTile.h"
 #include "AnimTile.h"
-#include "PostTile.h"
+#include "DefTile.h"
+#include "FwdTile.h"
 #include "Framebuffer.h"
 #include "Window.h"
 #include "shader_source.h"
@@ -25,7 +26,8 @@ class Window;
 class BGTile;
 class SceneTile;
 class AnimTile;
-class PostTile;
+class DefTile;
+class FwdTile;
 
 /*
  * A type definition that links a Tile with the subclass it was cast from.
@@ -61,15 +63,15 @@ typedef std::pair<unsigned long, unsigned int> IdAndIndex;
  *         to front.
  *        -Next the BG-, Scene-, and AnimTiles are rendered into a first,
  *         forward framebuffer.
- *        -Then all of the PostTiles are rendered into a second, deferred
+ *        -Then all of the DefTiles are rendered into a second, deferred
  *         framebuffer, with the depth and color buffers of the first pass made
  *         available to them. (As well as all of their custom textures, and
  *         using their custom shaders.)
- *        -PostTiles must do their own parallax calculations in their vertex
+ *        -DefTiles must do their own parallax calculations in their vertex
  *         Shader to allow for disabling them.
- *        -PostTiles must also do their own depth-test against the depth buffer
+ *        -DefTiles must also do their own depth-test against the depth buffer
  *         of the first pass, also to make for being able to disable it.
- *        -If a PostTile fragment fails a depthtest, it needs to output an alpha
+ *        -If a DefTile fragment fails a depthtest, it needs to output an alpha
  *         of zero.
  *        -Finally the two buffers are stitched together and drawn onto a full
  *         screen quad. They're stitched together by mixing a texel from the 
@@ -97,7 +99,7 @@ private:
      * This Asset Manager is used for keeping the things Tiles
      * need to be drawn. This Renderer is passed to the Tiles'
      * render() function, and from there they will have access
-     * to their Textures and in the case of PostTiles, their
+     * to their Textures and in the case of DefTiles, their
      * shaders.
      */
     AssetManager * assets;
@@ -155,19 +157,19 @@ private:
     
     /*
      * The forward pass Framebuffer. This is where all the good Tiles 
-     * are drawn to so that they can be judged by PostTiles in the deferred pass.
+     * are drawn to so that they can be judged by DefTiles in the deferred pass.
      */
     Framebuffer * fwdFB;
     
     /*
      * The deferred pass Framebuffer. Alrightly, so it's not quite a "deferred"
-     * rendering pass, but it does receive all the PostTiles.
+     * rendering pass, but it does receive all the DefTiles.
      */
     Framebuffer * defFB;
     
     /**
      * @brief Adds a single, empty placeholder texture to the AssetManager for 
-     *        use when PostTiles don't specify one or more of their textures.
+     *        use when DefTiles don't specify one or more of their textures.
      */
     void initPlaceholderTexture();
     /**
@@ -388,40 +390,78 @@ public:
                             float frameTime);
     
     /**
-     * @brief A factory method used to create a PostTile. Make sure that every
+     * @brief A factory method used to create a DefTile. Make sure that every
      *        texture specified is already loaded.
      *        To not use a texture slot, just pass in NULL. Note though, that 
      *        the corresponding uniform must still be present in the shader. 
      *        The only difference is that an empty texture will be passed to 
      *        it. 
-     *        Also realize that since PostTiles use bespoke shaders X, Y, plane, 
+     *        Also realize that since DefTiles use bespoke shaders X, Y, plane, 
      *        width and height may be ignored by the shader. 
      *        Also because of the custom shaders, it's assumed that these will
      *        have transparency. 
      *        Finally, remember that the shader and textures must already be 
      *        added to the Renderer's Asset Manager.
      * 
-     * @param x The X position of this PostTile.
-     * @param y The Y position of this PostTile.
-     * @param plane The parallax plane to draw this PostTile to.
-     * @param width The width of this PostTile.
-     * @param height The height of this PostTile.
+     * @param x The X position of this DefTile.
+     * @param y The Y position of this DefTile.
+     * @param plane The parallax plane to draw this DefTile to.
+     * @param width The width of this DefTile.
+     * @param height The height of this DefTile.
      * @param normalize Normally X, Y, width and height are in the range [-1,1]. This
      *        parameter specifies whether or not to divide these by the framebuffer
      *        resolution in order to have a 1:1 pixel ratio. This remaps X and Y
      *        to be in the range [0, FBO resolution]. Note though, calls to Tile::set()
      *        will still evaluate in the [-1,1] range.
-     * @param texA The first custom texture that this PostTile uses.
-     * @param texB The second custom texture that this PostTile uses.
-     * @param texC The third custom texture that this PostTile uses.
-     * @param texD The fourth custom texture that this PostTile uses.
-     * @param shader This PostTile's shader.
-     * @return A pointer to a freshly constructed PostTile.
+     * @param texA The first custom texture that this DefTile uses.
+     * @param texB The second custom texture that this DefTile uses.
+     * @param texC The third custom texture that this DefTile uses.
+     * @param texD The fourth custom texture that this DefTile uses.
+     * @param shader This DefTile's shader.
+     * @return A pointer to a freshly constructed DefTile.
      */
-    PostTile * makePostTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
+    DefTile * makeDefTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
                             GLfloat height, bool normalize, char * texA, char * texB,
                             char * texC, char * texD, char * shader);
-    PostTile * makePostTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
+    DefTile * makeDefTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
+                            GLfloat height, bool normalize, const char * texA, const char * texB,
+                            const char * texC, const char * texD, const char * shader);
+    
+    /**
+     * @brief A factory method used to create a FwdTile. Make sure that every
+     *        texture specified is already loaded.
+     *        To not use a texture slot, just pass in NULL. Note though, that 
+     *        the corresponding uniform must still be present in the shader. 
+     *        The only difference is that an empty texture will be passed to 
+     *        it. 
+     *        Also realize that since FwdTiles use bespoke shaders X, Y, plane, 
+     *        width and height may be ignored by the shader. 
+     *        Also because of the custom shaders, it's assumed that these will
+     *        have transparency. 
+     *        Finally, remember that the shader and textures must already be 
+     *        added to the Renderer's Asset Manager.
+     * 
+     * @param x The X position of this FwdTile.
+     * @param y The Y position of this FwdTile.
+     * @param plane The parallax plane to draw this FwdTile to.
+     * @param width The width of this FwdTile.
+     * @param height The height of this FwdTile.
+     * @param normalize Normally X, Y, width and height are in the range [-1,1]. This
+     *        parameter specifies whether or not to divide these by the framebuffer
+     *        resolution in order to have a 1:1 pixel ratio. This remaps X and Y
+     *        to be in the range [0, FBO resolution]. Note though, calls to Tile::set()
+     *        will still evaluate in the [-1,1] range.
+     * @param texA The first custom texture that this FwdTile uses.
+     * @param texB The second custom texture that this FwdTile uses.
+     * @param texC The third custom texture that this FwdTile uses.
+     * @param texD The fourth custom texture that this FwdTile uses.
+     * @param shader This FwdTile's shader.
+     * @return A pointer to a freshly constructed FwdTile.
+     */
+    FwdTile * makeFwdTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
+                            GLfloat height, bool normalize, char * texA, char * texB,
+                            char * texC, char * texD, char * shader);
+    FwdTile * makeFwdTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
                             GLfloat height, bool normalize, const char * texA, const char * texB,
                             const char * texC, const char * texD, const char * shader);
     

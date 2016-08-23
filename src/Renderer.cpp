@@ -303,8 +303,8 @@ void Renderer::render(Window * window)
         // it->first is the tile_type;
         // it->second is the Tile*.
         
-        // If this is a PostTile, then we go ahead and save it for later.
-        if( it->first == POST_TILE ) continue;
+        // If this is a DefTile, then we go ahead and save it for later.
+        if( it->first == DEF_TILE ) continue;
         
         // Also if it's offscreen we don't need to render it.
         if( !this->onScreenTest(it->second) ) continue;
@@ -314,19 +314,19 @@ void Renderer::render(Window * window)
         count ++;
     }
     
-    // Now for the PostTiles we flip to the second framebuffer.
+    // Now for the DefTiles we flip to the second framebuffer.
     this->defFB->setAsRenderTarget();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Flush again.
     // Now that the primary-pass Tiles have been rendered...
     for(std::vector<TileWithType>::iterator it = renderQueue.begin(); it != renderQueue.end(); ++it)
     {
-        // Now we only render PostTiles.
-        if( it->first != POST_TILE ) continue;
+        // Now we only render DefTiles.
+        if( it->first != DEF_TILE ) continue;
         
         // Again, if it's offscreen we don't need to render it.
         if( !this->onScreenTest(it->second) ) continue;
         
-        // Render the PostTile.
+        // Render the DefTile.
         it->second->render(this);
         count ++;
     }
@@ -411,11 +411,11 @@ AnimTile * Renderer::makeAnimTile(GLfloat x, GLfloat y, tile_plane plane, GLfloa
 							  frameWidth,frameHeight,frameTime);
 }
 
-PostTile * Renderer::makePostTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
+DefTile * Renderer::makeDefTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
                                 GLfloat height, bool normalize, char* texA, char* texB,
                                 char* texC, char* texD, char* shader)
 {
-    PostTile * t = new PostTile();
+    DefTile * t = new DefTile();
     if(normalize)
     {
         width /= this->getWidth()*.5;
@@ -427,12 +427,37 @@ PostTile * Renderer::makePostTile(GLfloat x, GLfloat y, tile_plane plane, GLfloa
     return t;
 }
 
-PostTile * Renderer::makePostTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
+DefTile * Renderer::makeDefTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
 								  GLfloat height, bool normalize, const char * texA, 
 								  const char * texB, const char * texC, const char * texD,
 								  const char * shader)
 {
-	return this->makePostTile(x,y,plane,width,height,normalize,(char*)texA,(char*)texB,
+	return this->makeDefTile(x,y,plane,width,height,normalize,(char*)texA,(char*)texB,
+							  (char*)texC, (char*)texD, (char*)shader);
+}
+
+FwdTile * Renderer::makeFwdTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
+                                GLfloat height, bool normalize, char* texA, char* texB,
+                                char* texC, char* texD, char* shader)
+{
+    FwdTile * t = new FwdTile();
+    if(normalize)
+    {
+        width /= this->getWidth()*.5;
+        height /= this->getHeight()*.5;
+        x = (x/(this->getWidth()*.5))-1.0+width*.5;
+        y = (y/(this->getHeight()*.5))-1.0+height*.5;
+    }
+    t->init(x, y, plane, width, height, texA, texB, texC, texD, shader);
+    return t;
+}
+
+FwdTile * Renderer::makeFwdTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
+								  GLfloat height, bool normalize, const char * texA, 
+								  const char * texB, const char * texC, const char * texD,
+								  const char * shader)
+{
+	return this->makeFwdTile(x,y,plane,width,height,normalize,(char*)texA,(char*)texB,
 							  (char*)texC, (char*)texD, (char*)shader);
 }
 

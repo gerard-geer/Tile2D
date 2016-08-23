@@ -4,7 +4,7 @@
  * Author: Gerard Geer (github.com/gerard-geer)
  * License: GPL v3.0
  * 
- * This is an example vertex shader for PostTiles, which require
+ * This is an example vertex shader for FwdTiles, which require
  * shaders to be written for them. There are several things to
  * note about this shader:
  * -First, the transformation matrix of PostTiles isn't set up to

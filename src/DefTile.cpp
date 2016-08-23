@@ -1,14 +1,14 @@
-#include "PostTile.h"
+#include "DefTile.h"
 
-PostTile::PostTile()
+DefTile::DefTile()
 {
 }
 
-PostTile::~PostTile()
+DefTile::~DefTile()
 {
 }
 
-void PostTile::init(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
+void DefTile::init(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
                     GLfloat height, char * texA, char * texB,
                     char * texC, char * texD, char * shader)
 {
@@ -20,50 +20,50 @@ void PostTile::init(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
     this->shader = shader;
 }
 
-void PostTile::setShader(char* shader)
+void DefTile::setShader(char* shader)
 {
     this->shader = shader;
 }
-void PostTile::setTexA(char* texA)
+void DefTile::setTexA(char* texA)
 {
     this->texA = texA;
 }
-void PostTile::setTexB(char* texB)
+void DefTile::setTexB(char* texB)
 {
     this->texB = texB;
 }
-void PostTile::setTexC(char* texC)
+void DefTile::setTexC(char* texC)
 {
     this->texC = texC;
 }
-void PostTile::setTexD(char* texD)
+void DefTile::setTexD(char* texD)
 {
     this->texD = texD;
 }
-char * PostTile::getShader()
+char * DefTile::getShader()
 {
     return shader;
 }
-char * PostTile::getTexA()
+char * DefTile::getTexA()
 {
     return texA;
 }
 
-char * PostTile::getTexB()
+char * DefTile::getTexB()
 {
     return texB;
 }
-char * PostTile::getTexC()
+char * DefTile::getTexC()
 {
     return texC;
 }
 
-char * PostTile::getTexD()
+char * DefTile::getTexD()
 {
     return texD;
 }
 
-void PostTile::render(Renderer * r)
+void DefTile::render(Renderer * r)
 {
 	// Get all the stuff we need out of the AssetManager.
     Shader * program = (Shader*)r->getAssetManager()->get(this->shader);
@@ -72,7 +72,7 @@ void PostTile::render(Renderer * r)
     Texture * c = (Texture*)r->getAssetManager()->get(this->texC);
     Texture * d = (Texture*)r->getAssetManager()->get(this->texD);
     
-    // Start using this PostTile's shader.
+    // Start using this DefTile's shader.
     glUseProgram(program->getID());
     
     // Set the texture unit uniforms.
@@ -98,7 +98,7 @@ void PostTile::render(Renderer * r)
     program->setUniform("camera", &camPosition);
     free(camPosition);
     
-    // Since PostTiles do the parallax effect entirely in the vertex shader,
+    // Since DefTiles do the parallax effect entirely in the vertex shader,
     // we can send them a virgin matrix.
     float * lm = this->getCompoundMat()->getLinear();
     program->setUniform("transform", &lm);

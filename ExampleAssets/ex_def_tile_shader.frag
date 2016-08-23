@@ -1,7 +1,7 @@
 #version 120
 
 /**
- * File: ex_post_tile_shader.vert
+ * File: ex_def_tile_shader.frag
  * Author: Gerard Geer
  * License: GPL v3.0
  * 

@@ -30,7 +30,7 @@ TST_DIR=test/
 
 # Compilation flags. Specifies to only compile (and not to link), as well as
 # a custom include directory of HDR_DIR.
-CFLAGS= -c -I $(HDR_DIR) 
+CFLAGS= -c -g -I $(HDR_DIR) 
 
 # Linking flags to make sure everything is bound up tight.
 LFLAGS= -lglfw -lGL -lGLU -lpng -lGLEW -lm -lz -ldl
@@ -71,9 +71,9 @@ SHADERS:
 	@echo "Consolidating shaders into header file named \"shader_source.h\""
 	@rm -f $(HDR_DIR)shader_source.h
 	@python glsl-to-header.py $(HDR_DIR)shader_source.h \
-							  $(SDR_DIR)bg_tile_shader.vert    $(SDR_DIR)bg_tile_shader.frag       \
-							  $(SDR_DIR)scene_tile_shader.vert $(SDR_DIR)scene_tile_shader.frag \
-							  $(SDR_DIR)anim_tile_shader.vert  $(SDR_DIR)anim_tile_shader.frag   \
+							  $(SDR_DIR)bg_tile_shader.vert    $(SDR_DIR)bg_tile_shader.frag        \
+							  $(SDR_DIR)scene_tile_shader.vert $(SDR_DIR)scene_tile_shader.frag     \
+							  $(SDR_DIR)anim_tile_shader.vert  $(SDR_DIR)anim_tile_shader.frag      \
 							  $(SDR_DIR)final_pass_shader.vert $(SDR_DIR)final_pass_shader.frag
 
 # Compiles all of Tile2D's source into .o files.
@@ -91,36 +91,37 @@ $(BLD_DIR)%.o: $(SRC_DIR)%.cpp $(HDR_DIR)%.h
 	
 OBJ_FILES: SHADERS OBJ_FILES_MESSAGE $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o $(BLD_DIR)Texture.o	\
 		   $(BLD_DIR)Camera.o $(BLD_DIR)ShaderUniform.o $(BLD_DIR)Shader.o $(BLD_DIR)BasicMatrix.o	\
-		   $(BLD_DIR)Tile.o $(BLD_DIR)BGTile.o $(BLD_DIR)SceneTile.o $(BLD_DIR)AnimTile.o	\
-		   $(BLD_DIR)PostTile.o $(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o $(BLD_DIR)Window.o
+		   $(BLD_DIR)Tile.o $(BLD_DIR)BGTile.o $(BLD_DIR)SceneTile.o $(BLD_DIR)AnimTile.o	        \
+		   $(BLD_DIR)DefTile.o $(BLD_DIR)FwdTile.o $(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o     \
+           $(BLD_DIR)Window.o
 	@echo "Done creating object files. Note: some may not have been recompiled."
 	
 # Compiles all of Tile2D into object files then archives them into a
 # static library.
 STATIC: setup_library_dir OBJ_FILES
 	@echo "Using ar to create static library in \"$(LIB_DIR)\" preserving original timestamps."
-	@ar rc $(BLD_DIR)$(ST_NAME) $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o \
-							   $(BLD_DIR)Texture.o $(BLD_DIR)ShaderUniform.o \
-							   $(BLD_DIR)Shader.o $(BLD_DIR)Camera.o \
-							   $(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o \
-							   $(BLD_DIR)Window.o $(BLD_DIR)BasicMatrix.o \
-							   $(BLD_DIR)Tile.o $(BLD_DIR)BGTile.o \
-							   $(BLD_DIR)SceneTile.o $(BLD_DIR)AnimTile.o \
-							   $(BLD_DIR)PostTile.o -o -v
+	@ar rc $(BLD_DIR)$(ST_NAME) $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o      \
+							   $(BLD_DIR)Texture.o $(BLD_DIR)ShaderUniform.o    \
+							   $(BLD_DIR)Shader.o $(BLD_DIR)Camera.o            \
+							   $(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o     \
+							   $(BLD_DIR)Window.o $(BLD_DIR)BasicMatrix.o       \
+							   $(BLD_DIR)Tile.o $(BLD_DIR)BGTile.o              \
+							   $(BLD_DIR)SceneTile.o $(BLD_DIR)AnimTile.o       \
+							   $(BLD_DIR)DefTile.o $(BLD_DIR)FwdTile.o -o -v
 	@echo "Done archiving."
 							  
 # Compiles Tile2D and links it up with its dependencies (you better have them)
 # into a dynamic library.
 DYNAMIC: setup_library_dir OBJ_FILES
 	@echo "Creating shared library \"$(DY_NAME)\" in \"$(LIB_DIR)\"."
-	@$(CC) -shared $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o \
-				$(BLD_DIR)Texture.o $(BLD_DIR)ShaderUniform.o \
-				$(BLD_DIR)Shader.o $(BLD_DIR)Camera.o \
-				$(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o \
-				$(BLD_DIR)Window.o $(BLD_DIR)BasicMatrix.o \
-				$(BLD_DIR)Tile.o $(BLD_DIR)BGTile.o \
-				$(BLD_DIR)SceneTile.o $(BLD_DIR)AnimTile.o \
-				$(BLD_DIR)PostTile.o \
+	@$(CC) -shared $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o   \
+				$(BLD_DIR)Texture.o $(BLD_DIR)ShaderUniform.o   \
+				$(BLD_DIR)Shader.o $(BLD_DIR)Camera.o           \
+				$(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o    \
+				$(BLD_DIR)Window.o $(BLD_DIR)BasicMatrix.o      \
+				$(BLD_DIR)Tile.o $(BLD_DIR)BGTile.o             \
+				$(BLD_DIR)SceneTile.o $(BLD_DIR)AnimTile.o      \
+				$(BLD_DIR)DefTile.o $(BLD_DIR)FwdTile.o         \
 				$(LFLAGS) -o $(LIB_DIR)$(DY_NAME)
 	@echo "Done creating shared library."
 	
@@ -152,7 +153,7 @@ TEST_STATIC: STATIC COMP_MAIN
 TEST_DYNAMIC:  DYNAMIC COMP_MAIN
 	@echo "Have you \"made the library visible\"?"
 	@echo "Linking \"$(TST_DIR)main.cpp\" using the dynamic library."
-	@$(CC) -o $(BLD_DIR)dynamic_test $(BLD_DIR)*.o -L$(BLD_DIR) -lTile2d -lglfw -lGL -lGLU -lpng -lGLEW
+	@$(CC) -o $(BLD_DIR)dynamic_test $(BLD_DIR)*.o -L$(BLD_DIR) -g -lTile2d -lglfw -lGL -lGLU -lpng -lGLEW
 	@echo "Adding execute permission."
 	chmod +x $(BLD_DIR)dynamic_test
 	@echo "Done creating test program. Run with command ./dynamic_test from $(BLD_DIR)"

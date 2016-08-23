@@ -16,7 +16,8 @@
 #include "BGTile.h"
 #include "SceneTile.h"
 #include "AnimTile.h"
-#include "PostTile.h"
+#include "DefTile.h"
+#include "FwdTile.h"
 #include "Texture.h"
 #include "Framebuffer.h"
 

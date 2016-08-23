@@ -480,5 +480,8 @@ const char* Shader::getErrorDesc(shader_error e)
 void Shader::destroy()
 {
     glDeleteProgram(this->id);
+    for (std::map<std::string,ShaderUniform*>::iterator it=uniforms.begin(); it!=uniforms.end(); ++it)
+        delete it->second;
+    uniforms.clear();
 }
 
