@@ -20,12 +20,15 @@ int main(int argc, char **argv)
     
     a->addNewTexture("yumetarou", "../ExampleAssets/yumetarou_frame16x20.png");
     
-    a->addNewShader("example_post_shader", "../ExampleAssets/ex_def_tile_shader.vert",
+    a->addNewShader("example_def_shader", "../ExampleAssets/ex_def_tile_shader.vert",
+                                                           "../ExampleAssets/ex_def_tile_shader.frag");
+                                                           
+    a->addNewShader("example_fwd_shader", "../ExampleAssets/ex_def_tile_shader.vert",
                                                            "../ExampleAssets/ex_def_tile_shader.frag");
     BGTile * bg = r->makeBGTile(0.0, 0.0, 1.5, 1.5, false, "puppy");
     r->addToRenderQueue(BG_TILE, bg);
     
-    DefTile * pt = r->makeDefTile(.025, .25, PLANE_POS_1, .5, .5, false, "kitten", "kitten", NULL, NULL, "example_post_shader");
+    DefTile * pt = r->makeDefTile(.025, .25, PLANE_POS_1, .5, .5, false, "kitten", "kitten", NULL, NULL, "example_def_shader");
     r->addToRenderQueue(DEF_TILE, pt);
     
     SceneTile * st = r->makeSceneTile(.25, 0, PLANE_NEG_2, .5, .5, false, "fish");
