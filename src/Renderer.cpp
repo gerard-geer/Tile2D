@@ -298,18 +298,18 @@ void Renderer::render(Window * window)
 {
     // Counters for how many Tiles were drawn and how many were culled, and
     // timer values for how long the entire frame, fwd pass, and deferred pass takes.
-    #ifdef T2D_DB_PER_FRAME_STATS
+    #ifdef T2D_PER_FRAME_STATS
     int drawn = 0, culled = 0;
     float total, fwd, def;
     #endif
     
     // Print a header to delineate each frame.
-    #ifdef T2D_DB_PER_TILE_STATS
+    #ifdef T2D_PER_TILE_STATS
     std::cout << "START OF FRAME" << std::endl;
     #endif
     
     // Start timing the frame.
-    #ifdef T2D_DB_PER_FRAME_STATS
+    #ifdef T2D_PER_FRAME_STATS
     total = glfwGetTime();
     #endif
     
@@ -321,7 +321,7 @@ void Renderer::render(Window * window)
     glEnableVertexAttribArray(1);
     
     // Start timing the forward pass.
-    #ifdef T2D_DB_PER_FRAME_STATS
+    #ifdef T2D_PER_FRAME_STATS
     fwd = glfwGetTime();
     #endif
     
@@ -343,7 +343,7 @@ void Renderer::render(Window * window)
         if( !this->onScreenTest(it->second) ) 
         {
     
-            #ifdef T2D_DB_PER_FRAME_STATS
+            #ifdef T2D_PER_FRAME_STATS
             ++ culled;
             #endif
             continue;
@@ -353,18 +353,18 @@ void Renderer::render(Window * window)
         it->second->render(this);
     
         // Print out the current tile if necessary.
-        #ifdef T2D_DB_PER_TILE_STATS
+        #ifdef T2D_PER_TILE_STATS
         it->second->report();
         #endif
         
-        #ifdef T2D_DB_PER_FRAME_STATS
+        #ifdef T2D_PER_FRAME_STATS
         ++ drawn;
         #endif
     }
     
     // Clock the forward pass and
     // start timing the deferred pass.
-    #ifdef T2D_DB_PER_FRAME_STATS
+    #ifdef T2D_PER_FRAME_STATS
     fwd = glfwGetTime()-fwd;
     def = glfwGetTime();
     #endif
@@ -382,7 +382,7 @@ void Renderer::render(Window * window)
         if( !this->onScreenTest(it->second) )
         {
     
-            #ifdef T2D_DB_PER_FRAME_STATS
+            #ifdef T2D_PER_FRAME_STATS
             ++ culled;
             #endif
             continue;
@@ -391,17 +391,17 @@ void Renderer::render(Window * window)
         // Render the DefTile.
         it->second->render(this);
     
-        #ifdef T2D_DB_PER_TILE_STATS
+        #ifdef T2D_PER_TILE_STATS
         it->second->report();
         #endif
         
-        #ifdef T2D_DB_PER_FRAME_STATS
+        #ifdef T2D_PER_FRAME_STATS
         ++ drawn;
         #endif
     }
     
     // Clock the final pass.
-    #ifdef T2D_DB_PER_FRAME_STATS
+    #ifdef T2D_PER_FRAME_STATS
     def = glfwGetTime()-def;
     #endif
     
@@ -411,7 +411,7 @@ void Renderer::render(Window * window)
     this->renderFinalPass(); // Draws a full screen quad with the two FBOs mixed.
     
     // Clock the entire frame and actually print the stats to the screen.
-    #ifdef T2D_DB_PER_FRAME_STATS
+    #ifdef T2D_PER_FRAME_STATS
     total = glfwGetTime()-total;
     std::cout << "Tiles drawn: " << drawn << "\tculled: " << culled << "\ttotal: " << drawn+culled << std::endl;
     std::cout << "Frame time: " << total << " (fwd: " << fwd << ") (def: " << def << ")" << std::endl;
