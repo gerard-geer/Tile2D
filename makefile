@@ -56,6 +56,8 @@ all:
 	@echo "as DBFLAGS."
 	@echo "T2D_PER_TILE_STATS:  Prints information about each Tile drawn, when drawn."
 	@echo "T2D_PER_FRAME_STATS: Prints draw-times for the various passes every frame."
+	@echo "T2D_SHADER_UNI_INFO: Use to check and see if the uniform parser saw all your vars."
+	@echo "T2D_SHADER_LOADING_STATS: Use to verify shader loading. Keep an eye on line counts."
 	@echo "Example: make TEST DBFLAGS='T2D_PER_TILE_STATS T2D_PER_FRAME_STATS'"
 
 # Simply prints the help info displayed by the all target.
