@@ -107,7 +107,7 @@ void Shader::scanLineForUniforms(char* line)
         {
             this->addUniform( tokens[2], ShaderUniform::getType(tokens[1]) );
             #ifdef T2D_SHADER_UNI_INFO
-            std::cout << "Found uniform: \"" << tokens[2] << "\" (" << tokens[1] << ")" << std::endl;
+            std::cout << "    -Found uniform: \"" << tokens[2] << "\" (" << tokens[1] << ")" << std::endl;
             #endif
         }
     }
@@ -329,8 +329,9 @@ shader_error Shader::load(char* vertFile, char* fragFile)
     this->scanSourceForUniforms(fragSource, fragLines);
     
     #ifdef T2D_SHADER_LOADING_STATS
-    std::cout << (e ? "SHADER LOADING ERROR: " : "" ) << (e ? Shader::getErrorDesc(e): "No loading errors." ) << std::endl; 
-    std::cout << "Lines loaded: " << vertLines << "(vertex) " << fragLines << "(fragment)" << std::endl;
+    std::cout << (e ? "  -SHADER LOADING ERROR: " : "" ) << (e ? Shader::getErrorDesc(e): "  -No loading errors." ) << std::endl; 
+    std::cout << "  -Vertex shader length:   " << vertLines << " lines" << std::endl;
+    std::cout << "  -Fragment shader length: " << fragLines << " lines" << std::endl;
     #endif
     // Now that we're done with the source code we need to get rid of it.
     if(vertSource)
@@ -385,8 +386,9 @@ shader_error Shader::loadStrings(const char* vertString, const char* fragString)
     this->scanSourceForUniforms(fragSource, fragLines);
     
     #ifdef T2D_SHADER_LOADING_STATS
-    std::cout << (e ? "SHADER LOADING ERROR: " : "" ) << (e ? Shader::getErrorDesc(e): "No loading errors." ) << std::endl; 
-    std::cout << "Lines loaded: " << vertLines << "(vertex) " << fragLines << "(fragment)" << std::endl;
+    std::cout << (e ? "  -SHADER LOADING ERROR: " : "" ) << (e ? Shader::getErrorDesc(e): "  -No loading errors." ) << std::endl; 
+    std::cout << "  -Vertex shader length:   " << vertLines << " lines" << std::endl;
+    std::cout << "  -Fragment shader length: " << fragLines << " lines" << std::endl;
     #endif
     
     // Now that we're done with the source code we need to get rid of it.
