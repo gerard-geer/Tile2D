@@ -51,14 +51,14 @@ all:
 	@echo "TEST_DYNAMIC - Creates and tests the dynamic library against a test program."
 	@echo "help         - Displays this help dialog."
 	@echo "** Notes on debugging and profiling:"
-	@echo "To enable certain debug options, clean your Tile2D build with \"clean\" and"
-	@echo "then build with your choice of rule, specifying one of the following options"
-	@echo "as DBFLAGS."
+	@echo "To enable profiling and  debug options, clean your Tile2D build with \"clean\""
+	@echo "then build with your choice of rule, specifying any combination of the following"
+	@echo "options as DBFLAGS."
 	@echo "T2D_PER_TILE_STATS:  Prints information about each Tile drawn, when drawn."
 	@echo "T2D_PER_FRAME_STATS: Prints draw-times for the various passes every frame."
 	@echo "T2D_SHADER_UNI_INFO: Use to check and see if the uniform parser saw all your vars."
 	@echo "T2D_SHADER_LOADING_STATS: Use to verify shader loading. Keep an eye on line counts."
-	@echo "T2D_TEX_LOADING_STATS: Use to view statistics about loaded images."
+	@echo "T2D_TEX_LOADING_STATS: Use to view statistics about loaded textures."
 	@echo "Example: make TEST DBFLAGS='T2D_PER_TILE_STATS T2D_PER_FRAME_STATS'"
 
 # Simply prints the help info displayed by the all target.
