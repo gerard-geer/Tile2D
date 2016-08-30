@@ -29,7 +29,7 @@ LIB_DIR=lib/
 TST_DIR=test/
 
 # The build options variable, to be used to specify debug flags through make.
-DBFLAGS='some_random_define_that_will_get_defined_but_wont_matter'
+DBFLAGS=''
 
 # Compilation flags. Specifies to only compile (and not to link), as well as
 # a custom include directory of HDR_DIR.
