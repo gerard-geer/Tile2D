@@ -82,7 +82,7 @@ void Shader::scanLineForUniforms(char* line)
     char ** tokens = (char**) malloc( sizeof(char*) * 3 );
     
     // Get the first token.
-    token = strtok(line, " ;,/*+-^&!()\n=?.!{}[]");
+    token = strtok(line, " ;,/*+-^&!()\n=?.!{}[]"); /**/
     
     // While we've no more than three tokens, and the prior token
     // read returned something. (Since all uniform declarations
@@ -95,7 +95,7 @@ void Shader::scanLineForUniforms(char* line)
         // Update how many tokens we have.
         ++numTokens;
         // Get the next token.
-        token = strtok(NULL, " ;,/*+-^&!()\n=?.!{}[]");
+        token = strtok(NULL, " ;,/*+-^&!()\n=?.!{}[]"); /**/
     }
     
     // If we have three tokens, there's a chance this is a uniform!
@@ -106,6 +106,9 @@ void Shader::scanLineForUniforms(char* line)
         if( strcmp(tokens[0], "uniform") == 0 )
         {
             this->addUniform( tokens[2], ShaderUniform::getType(tokens[1]) );
+            #ifdef T2D_SHADER_UNI_INFO
+            std::cout << "Found uniform: \"" << tokens[2] << "\" (" << tokens[1] << ")" << std::endl;
+            #endif
         }
     }
     
@@ -294,8 +297,12 @@ shader_error Shader::linkShaders(GLuint vertID, GLuint fragID)
 
 shader_error Shader::load(char* vertFile, char* fragFile)
 {
-	// A shader_error in case we need it.
-	shader_error e = SHADER_NO_ERROR; // = 0, by the way.
+    #ifdef T2D_SHADER_LOADING_STATS
+    std::cout << "Loading shaders from source: \n" << vertFile << "\n" << fragFile << std::endl;
+    #endif
+    
+    // A shader_error in case we need it.
+    shader_error e = SHADER_NO_ERROR; // = 0, by the way.
 	
     // Create individual IDs for each shader stage.
     GLuint vertID = 0, fragID = 0;
@@ -321,6 +328,10 @@ shader_error Shader::load(char* vertFile, char* fragFile)
     this->scanSourceForUniforms(vertSource, vertLines);
     this->scanSourceForUniforms(fragSource, fragLines);
     
+    #ifdef T2D_SHADER_LOADING_STATS
+    std::cout << (e ? "SHADER LOADING ERROR: " : "" ) << (e ? Shader::getErrorDesc(e): "No loading errors." ) << std::endl; 
+    std::cout << "Lines loaded: " << vertLines << "(vertex) " << fragLines << "(fragment)" << std::endl;
+    #endif
     // Now that we're done with the source code we need to get rid of it.
     if(vertSource)
     {
@@ -339,6 +350,10 @@ shader_error Shader::load(char* vertFile, char* fragFile)
 
 shader_error Shader::loadStrings(const char* vertString, const char* fragString)
 {
+    #ifdef T2D_SHADER_LOADING_STATS
+    std::cout << "Loading shaders from strings:" << std::endl;
+    #endif
+    
 	// A shader_error in case we need it.
 	shader_error e = SHADER_NO_ERROR; // = 0, by the way.
 	
@@ -368,6 +383,11 @@ shader_error Shader::loadStrings(const char* vertString, const char* fragString)
     // Now we need to parse for uniforms.
     this->scanSourceForUniforms(vertSource, vertLines);
     this->scanSourceForUniforms(fragSource, fragLines);
+    
+    #ifdef T2D_SHADER_LOADING_STATS
+    std::cout << (e ? "SHADER LOADING ERROR: " : "" ) << (e ? Shader::getErrorDesc(e): "No loading errors." ) << std::endl; 
+    std::cout << "Lines loaded: " << vertLines << "(vertex) " << fragLines << "(fragment)" << std::endl;
+    #endif
     
     // Now that we're done with the source code we need to get rid of it.
     for(unsigned int i = 0; i < vertLines; ++i) free(vertSource[i]);
