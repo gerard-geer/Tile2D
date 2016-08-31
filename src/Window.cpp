@@ -87,7 +87,7 @@ window_error Window::initGLState(unsigned int width, unsigned int height)
 window_error Window::create(unsigned int windowW, unsigned int windowH,
                             unsigned int fbW, unsigned int fbH, char* title)
 {
-    #ifdef T2D_WINDOW_STATS
+    #ifdef T2D_WINDOW_INFO
     std::cout << "Creating Tile2D window \""<< title << "\":" << std::endl;
     #endif
     
@@ -146,7 +146,7 @@ window_error Window::create(unsigned int windowW, unsigned int windowH,
     if(!e && this->renderer) rSuccess = this->renderer->init(fbW, fbH);
     e = (rSuccess)? e : WIN_COULD_NOT_INIT_RENDERER;
     
-    #ifdef T2D_WINDOW_STATS
+    #ifdef T2D_WINDOW_INFO
     bool fbo = ( glewIsSupported("GL_ARB_framebuffer_object") || glewIsSupported("GL_EXT_framebuffer_object") )
               && (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_UNSUPPORTED);
     std::cout << (e ? "  -WINDOW CREATION ERROR: " : "" ) << (e ? Window::getErrorDesc(e) : "  -No creation errors." ) << std::endl; 
@@ -163,7 +163,7 @@ window_error Window::create(unsigned int windowW, unsigned int windowH,
 
 void Window::setResolution(unsigned int width, unsigned int height)
 {
-	#ifdef T2D_WINDOW_STATS
+	#ifdef T2D_WINDOW_INFO
 	std::cout << "Changing window resolution to " << width << "x" << height << std::endl;
 	#endif
     this->width = width;
@@ -173,7 +173,7 @@ void Window::setResolution(unsigned int width, unsigned int height)
 
 void Window::setFBResolution(unsigned int width, unsigned int height)
 {
-	#ifdef T2D_WINDOW_STATS
+	#ifdef T2D_WINDOW_INFO
 	std::cout << "Resizing internal framebuffers to " << width << "x" << height << std::endl;
 	#endif
     this->renderer->resize(width, height);
@@ -181,7 +181,7 @@ void Window::setFBResolution(unsigned int width, unsigned int height)
 
 window_error Window::setFullscreen(bool fullscreen)
 {
-    #ifdef T2D_WINDOW_STATS
+    #ifdef T2D_WINDOW_INFO
 	std::cout << "Window \"" << this->title << "\" switching to " << (fullscreen ? "fullscreen" : "windowed") << " mode." << std::endl;
 	#endif
 	
@@ -212,7 +212,7 @@ window_error Window::setFullscreen(bool fullscreen)
     // If the window wasn't created successfully, we need to report an error.
     if( !newWindow )
     {
-		#ifdef T2D_WINDOW_STATS
+		#ifdef T2D_WINDOW_INFO
     	std::cout << "  -ERROR: GLFW could not recreate the window upon fullscreen switching." << std::endl;
 		#endif
     	return WIN_COULD_NOT_CREATE_WINDOW;
