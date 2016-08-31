@@ -321,6 +321,18 @@ void Renderer::renderFinalPass()
     // that unit to the shader program.
     program->setTextureUniform("fwdFB", this->fwdFB->getRenderTexture(), 0);
     program->setTextureUniform("defFB", this->defFB->getRenderTexture(), 1);
+	
+	// If we're using a custom shader, we pass in extra stuff that's useful.
+	if( this->customCompositor == NULL )
+	{
+		GLfloat * resolution = (GLfloat*) malloc(sizeof(GLfloat)*2);
+		resolution[0] = (GLfloat)(this->getWidth());
+		resolution[1] = (GLfloat)(this->getHeight());
+		program->setTextureUniform("resolution", this->fwdFB->getRenderTexture(), 0);
+		free(resolution);
+		float time = glfwGetTime();
+		program->setUniform("time", &time);
+	}
     
     // Now we just draw the triangles.
     glDrawArrays(GL_TRIANGLES, 0, 6); 
