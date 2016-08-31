@@ -323,7 +323,7 @@ void Renderer::renderFinalPass()
     program->setTextureUniform("defFB", this->defFB->getRenderTexture(), 1);
 	
 	// If we're using a custom shader, we pass in extra stuff that's useful.
-	if( this->customCompositor == NULL )
+	if( this->customCompositor != NULL )
 	{
 		GLfloat * resolution = (GLfloat*) malloc(sizeof(GLfloat)*2);
 		resolution[0] = (GLfloat)(this->getWidth());
