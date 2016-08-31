@@ -149,11 +149,11 @@ window_error Window::create(unsigned int windowW, unsigned int windowH,
     #ifdef T2D_WINDOW_INFO
     bool fbo = ( glewIsSupported("GL_ARB_framebuffer_object") || glewIsSupported("GL_EXT_framebuffer_object") )
               && (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_UNSUPPORTED);
+	float fboW = this->renderer ? this->renderer->getWidth() : -1;
+	float fboH = this->renderer ? this->renderer->getHeight() : -1;
     std::cout << (e ? "  -WINDOW CREATION ERROR: " : "" ) << (e ? Window::getErrorDesc(e) : "  -No creation errors." ) << std::endl; 
-    std::cout << "  -H Res:   " << this->width << std::endl;
-    std::cout << "  -V Res:   " << this->height << std::endl;
-    std::cout << "  -FBH Res: " << (this->renderer ? this->renderer->getWidth() : -1) << std::endl;
-    std::cout << "  -FBV Res: " << (this->renderer ? this->renderer->getHeight() : -1) << std::endl;
+    std::cout << "  -Window res:  " << this->width << "x"<<this->height << std::endl;
+    std::cout << "  -FBO Res:     " << fboW << "x" << fboH << std::endl;
     std::cout << "  -OpenGL ver.: " << glGetString(GL_VERSION) << std::endl;
     std::cout << "  -FBO support: " << (fbo?"true":"false") << std::endl;
     #endif
