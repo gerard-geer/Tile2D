@@ -144,7 +144,7 @@ window_error Window::create(unsigned int windowW, unsigned int windowH,
     if(!e) this->renderer = new Renderer();
     bool rSuccess = false;
     if(!e && this->renderer) rSuccess = this->renderer->init(fbW, fbH);
-    e = (rErr)? e : WIN_COULD_NOT_INIT_RENDERER;
+    e = (rSuccess)? e : WIN_COULD_NOT_INIT_RENDERER;
     
     #ifdef T2D_WINDOW_STATS
     
