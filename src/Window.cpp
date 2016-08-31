@@ -147,7 +147,6 @@ window_error Window::create(unsigned int windowW, unsigned int windowH,
     e = (rSuccess)? e : WIN_COULD_NOT_INIT_RENDERER;
     
     #ifdef T2D_WINDOW_STATS
-    
     bool fbo = ( glewIsSupported("GL_ARB_framebuffer_object") || glewIsSupported("GL_EXT_framebuffer_object") )
               && (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_UNSUPPORTED);
     std::cout << (e ? "  -WINDOW CREATION ERROR: " : "" ) << (e ? Window::getErrorDesc(e) : "  -No creation errors." ) << std::endl; 
@@ -164,6 +163,9 @@ window_error Window::create(unsigned int windowW, unsigned int windowH,
 
 void Window::setResolution(unsigned int width, unsigned int height)
 {
+	#ifdef T2D_WINDOW_STATS
+	std::cout << "Changing window resolution to " << width << "x" << height << std::endl;
+	#endif
     this->width = width;
     this->height = height;
     glfwSetWindowSize(this->baseWindow, this->width, this->height);
@@ -171,11 +173,18 @@ void Window::setResolution(unsigned int width, unsigned int height)
 
 void Window::setFBResolution(unsigned int width, unsigned int height)
 {
+	#ifdef T2D_WINDOW_STATS
+	std::cout << "Resizing internal framebuffers to " << width << "x" << height << std::endl;
+	#endif
     this->renderer->resize(width, height);
 }
 
 window_error Window::setFullscreen(bool fullscreen)
 {
+    #ifdef T2D_WINDOW_STATS
+	std::cout << "Window \"" << this->title << "\" switching to " << (fullscreen ? "fullscreen" : "windowed") << " mode." << std::endl;
+	#endif
+	
     // Don't want to waste time doing stuff we don't need to,
     // do we?
     if( this->fullscreen == fullscreen ) return WIN_NO_ERROR;
@@ -203,7 +212,9 @@ window_error Window::setFullscreen(bool fullscreen)
     // If the window wasn't created successfully, we need to report an error.
     if( !newWindow )
     {
-    	std::cout << "Error: GLFW could not recreate the window upon fullscreen switching." << std::endl;
+		#ifdef T2D_WINDOW_STATS
+    	std::cout << "  -ERROR: GLFW could not recreate the window upon fullscreen switching." << std::endl;
+		#endif
     	return WIN_COULD_NOT_CREATE_WINDOW;
     }
     
@@ -225,7 +236,7 @@ window_error Window::setFullscreen(bool fullscreen)
     // Remind OpenGL how to go about its affairs.
     this->initGLState(this->width, this->height);
     
-    // Oh man, let's recreate the Tile VAO.
+    // Oh man, let's recreate the Tile VAO since we fried the OpenGL state.
     this->renderer->initTileVAO();
     
     // We should probably resize the framebuffers to recreate them.
