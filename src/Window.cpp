@@ -280,6 +280,19 @@ void Window::update()
     glfwSwapBuffers(this->getWindow());
 }
 
+const char * Window::getErrorDesc(window_error e)
+{
+    switch(e)
+    {
+		case WIN_NO_ERROR: return "WIN_NO_ERROR";
+		case WIN_COULD_NOT_INIT_GLFW: return "WIN_COULD_NOT_INIT_GLFW";
+		case WIN_COULD_NOT_CREATE_WINDOW: return "WIN_COULD_NOT_CREATE_WINDOW";
+		case WIN_COULD_NOT_INIT_GLEW: return "WIN_COULD_NOT_INIT_GLEW";
+		case WIN_COULD_NOT_INIT_RENDERER: return "WIN_COULD_NOT_INIT_RENDERER";
+		default: return "Undefined error.";
+    }
+}
+
 void Window::destroy()
 {
     if(fullscreen) this->setFullscreen(false);

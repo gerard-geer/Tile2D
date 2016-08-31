@@ -165,6 +165,12 @@ public:
     void update();
     
     /**
+		 * @brief Takes a window_error and returns a string describing the error.
+		 * @return A string describing the given window_error.
+		 */
+    static const char * getErrorDesc(window_error e);
+    
+    /**
      * @brief Destroys the window, clearing its resources, and the OpenGL 
      *        context bound to it.
      */
