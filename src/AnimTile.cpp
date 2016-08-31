@@ -147,3 +147,11 @@ void AnimTile::setNumFrames(unsigned int numFrames)
 {
     this->numFrames = numFrames;
 }
+
+void AnimTile::report()
+{
+    std::cout << "AnimTile:\t" << this->getID()  
+              << " trans: " << this->hasTrans() 
+              << " plane: " << this->getPlane()
+              << " tex: " << this->texture << std::endl;
+}

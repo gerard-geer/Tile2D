@@ -194,6 +194,11 @@ void Tile::setTextureFlip(GLuint flip)
     this->texFlip = flip;
 }
 
+void Tile::report()
+{
+    std::cout << "Tile: " << this->id  << " trans: " << this->trans << " plane: " << this->plane << std::endl;
+}
+
 void Tile::destroy()
 {
     delete this->pd;

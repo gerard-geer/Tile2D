@@ -147,6 +147,11 @@ public:
      * @param numFrames The new number of frames stored in the texture.
      */
     void setNumFrames(unsigned int numFrames);
+    
+    /**
+	 * @brief Prints out info to stdout about this Tile.
+	 */
+    void report();
 
 };
 

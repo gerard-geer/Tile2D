@@ -87,68 +87,85 @@ window_error Window::initGLState(unsigned int width, unsigned int height)
 window_error Window::create(unsigned int windowW, unsigned int windowH,
                             unsigned int fbW, unsigned int fbH, char* title)
 {
+    #ifdef T2D_WINDOW_INFO
+    std::cout << "Creating Tile2D window \""<< title << "\":" << std::endl;
+    #endif
+    
+    // A window_error in case we need it.
+    window_error e = WIN_NO_ERROR; // = 0
+    
     // Store the width and height and title for later use.
     this->width = windowW;
     this->height = windowH;
     this->title = title;
     
     // Initialize GLFW.
-    if(!glfwInit())
-    {
-    	std::cout << "Error: Could not initialize GLFW." << std::endl;
-    	return WIN_COULD_NOT_INIT_GLFW;
-    }
+    if(!glfwInit()) e = WIN_COULD_NOT_INIT_GLFW;
     
-    glfwSetErrorCallback(error_callback);
+    if(!e) glfwSetErrorCallback(error_callback);
     
     // Set window hints.
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    glfwWindowHint(GLFW_FOCUSED, GL_TRUE);
+    if(!e) glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    if(!e) glfwWindowHint(GLFW_FOCUSED, GL_TRUE);
     
     // Create the GLFW window.
-    this->baseWindow = glfwCreateWindow(this->width, this->height, this->title, NULL, NULL);
-    if(!this->baseWindow)
-    {
-    	std::cout << "Error: GLFW could not create a window." << std::endl;
-    	return WIN_COULD_NOT_CREATE_WINDOW;
-    }
+    this->baseWindow = NULL;
+    if(!e) this->baseWindow = glfwCreateWindow(this->width, this->height, this->title, NULL, NULL);
+    if(!this->baseWindow) e = WIN_COULD_NOT_CREATE_WINDOW;
     
     // Make the context current so we can set up some OpenGL stuff.
     // (And also initialize GLEW.)
-    glfwMakeContextCurrent(this->baseWindow);
+    if(!e) glfwMakeContextCurrent(this->baseWindow);
     
     // Now that we have a current OpenGL context we can initialize GLEW.
     // Otherwise we'd get the dreadful "Missing GL version" error.
-    glewExperimental = GL_TRUE;
-    GLenum glewErr = glewInit();
-    if(glewErr != GLEW_OK)
+    if(!e)
     {
-    	std::cout << "Error: Could not initialize GLEW." << std::endl;
-    	return WIN_COULD_NOT_INIT_GLEW;
+        glewExperimental = GL_TRUE;
+        GLenum glewErr = glewInit();
+        if(glewErr != GLEW_OK) e = WIN_COULD_NOT_INIT_GLEW;
     }
     
     // Implement the base callback. Do not forget to call
     // glfwPollEvents()!
-    glfwSetWindowSizeCallback(this->baseWindow, this->resize_callback);
+    if(!e) glfwSetWindowSizeCallback(this->baseWindow, this->resize_callback);
     
     // Also set our keyboard callback.
-    glfwSetKeyCallback(this->baseWindow, key_callback);
+    if(!e) glfwSetKeyCallback(this->baseWindow, key_callback);
     
     // At this point we should also create the renderer.
     this->renderer = NULL;
     
     // Initialize OpenGL itself.
-    window_error glErr = this->initGLState(this->width, this->height);
-    if(glErr) return glErr;
+    if(!e) e = this->initGLState(this->width, this->height);
     
     // Initialize the renderer.
-    this->renderer = new Renderer();
-    bool rErr = this->renderer->init(fbW, fbH);
-    return (rErr==false)? WIN_NO_ERROR : WIN_COULD_NOT_INIT_RENDERER;
+    this->renderer = NULL;
+    if(!e) this->renderer = new Renderer();
+    bool rSuccess = false;
+    if(!e && this->renderer) rSuccess = this->renderer->init(fbW, fbH);
+    e = (rSuccess)? e : WIN_COULD_NOT_INIT_RENDERER;
+    
+    #ifdef T2D_WINDOW_INFO
+    bool fbo = ( glewIsSupported("GL_ARB_framebuffer_object") || glewIsSupported("GL_EXT_framebuffer_object") )
+              && (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_UNSUPPORTED);
+	float fboW = this->renderer ? this->renderer->getWidth() : -1;
+	float fboH = this->renderer ? this->renderer->getHeight() : -1;
+    std::cout << (e ? "  -WINDOW CREATION ERROR: " : "" ) << (e ? Window::getErrorDesc(e) : "  -No creation errors." ) << std::endl; 
+    std::cout << "  -Window res:  " << this->width << "x"<<this->height << std::endl;
+    std::cout << "  -FBO Res:     " << fboW << "x" << fboH << std::endl;
+    std::cout << "  -OpenGL ver.: " << glGetString(GL_VERSION) << std::endl;
+    std::cout << "  -FBO support: " << (fbo?"true":"false") << std::endl;
+    #endif
+    
+    return e;
 }
 
 void Window::setResolution(unsigned int width, unsigned int height)
 {
+	#ifdef T2D_WINDOW_INFO
+	std::cout << "Changing window resolution to " << width << "x" << height << std::endl;
+	#endif
     this->width = width;
     this->height = height;
     glfwSetWindowSize(this->baseWindow, this->width, this->height);
@@ -156,11 +173,18 @@ void Window::setResolution(unsigned int width, unsigned int height)
 
 void Window::setFBResolution(unsigned int width, unsigned int height)
 {
+	#ifdef T2D_WINDOW_INFO
+	std::cout << "Resizing internal framebuffers to " << width << "x" << height << std::endl;
+	#endif
     this->renderer->resize(width, height);
 }
 
 window_error Window::setFullscreen(bool fullscreen)
 {
+    #ifdef T2D_WINDOW_INFO
+	std::cout << "Window \"" << this->title << "\" switching to " << (fullscreen ? "fullscreen" : "windowed") << " mode." << std::endl;
+	#endif
+	
     // Don't want to waste time doing stuff we don't need to,
     // do we?
     if( this->fullscreen == fullscreen ) return WIN_NO_ERROR;
@@ -188,7 +212,9 @@ window_error Window::setFullscreen(bool fullscreen)
     // If the window wasn't created successfully, we need to report an error.
     if( !newWindow )
     {
-    	std::cout << "Error: GLFW could not recreate the window upon fullscreen switching." << std::endl;
+		#ifdef T2D_WINDOW_INFO
+    	std::cout << "  -ERROR: GLFW could not recreate the window upon fullscreen switching." << std::endl;
+		#endif
     	return WIN_COULD_NOT_CREATE_WINDOW;
     }
     
@@ -210,7 +236,7 @@ window_error Window::setFullscreen(bool fullscreen)
     // Remind OpenGL how to go about its affairs.
     this->initGLState(this->width, this->height);
     
-    // Oh man, let's recreate the Tile VAO.
+    // Oh man, let's recreate the Tile VAO since we fried the OpenGL state.
     this->renderer->initTileVAO();
     
     // We should probably resize the framebuffers to recreate them.
@@ -263,6 +289,19 @@ void Window::update()
     
     // Flip front/back buffers.
     glfwSwapBuffers(this->getWindow());
+}
+
+const char * Window::getErrorDesc(window_error e)
+{
+    switch(e)
+    {
+		case WIN_NO_ERROR: return "WIN_NO_ERROR";
+		case WIN_COULD_NOT_INIT_GLFW: return "WIN_COULD_NOT_INIT_GLFW";
+		case WIN_COULD_NOT_CREATE_WINDOW: return "WIN_COULD_NOT_CREATE_WINDOW";
+		case WIN_COULD_NOT_INIT_GLEW: return "WIN_COULD_NOT_INIT_GLEW";
+		case WIN_COULD_NOT_INIT_RENDERER: return "WIN_COULD_NOT_INIT_RENDERER";
+		default: return "Undefined error.";
+    }
 }
 
 void Window::destroy()

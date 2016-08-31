@@ -150,6 +150,11 @@ public:
      * @return The key used to access this DefTile's second custom texture.
      */
     char * getTexD();
+    
+    /**
+	 * @brief Prints out info to stdout about this Tile.
+	 */
+    void report();
 };
 
 #endif // DefTile_H

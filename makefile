@@ -28,24 +28,56 @@ LIB_DIR=lib/
 # The test code directory.
 TST_DIR=test/
 
+# The build options variable, to be used to specify debug flags through make.
+DBFLAGS=''
+
 # Compilation flags. Specifies to only compile (and not to link), as well as
 # a custom include directory of HDR_DIR.
-CFLAGS= -c -g -I $(HDR_DIR) 
+CFLAGS= -c -g -I $(HDR_DIR) $(subst  T2D_, -D T2D_,$(strip $(DBFLAGS)))
 
 # Linking flags to make sure everything is bound up tight.
 LFLAGS= -lglfw -lGL -lGLU -lpng -lGLEW -lm -lz -ldl
 
 all:
+	@echo ""
 	@echo "Welcome to the Tile2D makefile!"
+	@echo ""
+	@echo "** Building and testing **"
 	@echo "This makes a static or shared library, a pile of .o files, or tests for each."
 	@echo "Please run again with one of the rules below:"
+	@echo ""
 	@echo "clean        - Clears out the build directory \"$(BLD_DIR)\""
 	@echo "OBJ_FILES    - Compiles Tile2D into .o files. For those who enjoy linking."
 	@echo "STATIC       - Compiles Tile2D into a static library called \"$(ST_NAME)\"."
 	@echo "DYNAMIC      - Compiles Tile2D into a dynamic library named \"$(DY_NAME)\""
+	@echo "TEST         - Compiles Tile2D into object files, and links it with the base test."
 	@echo "TEST_STATIC  - Creates and tests the static library against a test program."
 	@echo "TEST_DYNAMIC - Creates and tests the dynamic library against a test program."
+	@echo "help         - Displays this help dialog."
+	@echo ""
+	@echo "Example: "
+	@echo "> make TEST"
+	@echo ""
+	@echo "** Ddebugging and profiling **"
+	@echo "To enable profiling and  debug options, clean your Tile2D build with \"clean\""
+	@echo "then build with your choice of rule, specifying any combination of the following"
+	@echo "options as DBFLAGS."
+	@echo ""
+	@echo "T2D_PER_TILE_STATS:      - Prints information about each Tile drawn, when drawn."
+	@echo "T2D_PER_FRAME_STATS      - Prints draw-times for the various passes every frame."
+	@echo "T2D_SHADER_UNI_INFO      - Displays uniforms variables seen and parsed by the parser."
+	@echo "T2D_SHADER_LOADING_STATS - Use to verify shader loading. Keep an eye on line counts."
+	@echo "T2D_TEX_LOADING_STATS    - Displays statistics about loaded textures."
+	@echo "T2D_WINDOW_INFO          - Displays info about the window during creation and change."
+	@echo ""
+	@echo "Example: "
+	@echo "> make clean"
+	@echo "> make TEST DBFLAGS='T2D_PER_TILE_STATS T2D_PER_FRAME_STATS'"
+	@echo ""
 
+# Simply prints the help info displayed by the all target.
+help: all
+    
 # Cleans the build directory and deletes it.
 clean:
 	@echo "Cleaning out and deleting build directory \"$(BLD_DIR)\"."
@@ -56,6 +88,7 @@ clean:
 	
 # Creates the build directory if it doesn't exist.
 setup_build_dir:
+	@echo $(subst  T2D_, -D T2D_,$(strip $(DBFLAGS)))
 	@echo "Creating build directory \"$(BLD_DIR)\"."
 	@mkdir -p $(BLD_DIR)
 	@echo "Done creating build directory."

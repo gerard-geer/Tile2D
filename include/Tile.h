@@ -321,6 +321,11 @@ public:
     virtual void render(Renderer* r) = 0;
     
     /**
+	 * @brief Prints out info to stdout about this Tile.
+	 */
+    virtual void report();
+    
+    /**
      * @brief Destroys this Tile's underlying BasicMatrix. Call this before
      * deletion and destruction.
      */

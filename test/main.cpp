@@ -2,7 +2,6 @@
 #include <cmath>
 #include "tile2d.h"
 #include "shader_source.h"
-
 using namespace std;
 
 int main(int argc, char **argv)
@@ -47,7 +46,7 @@ int main(int argc, char **argv)
 
     while(!glfwWindowShouldClose(window.getWindow()))
     {
-    	r->getCamera()->setPos(.5*sin(glfwGetTime()*4.0), 0.0);
+    	r->getCamera()->setPos(3.0*sin(glfwGetTime()*4.0), 0.0);
         at->setRotation(at->getRotation()+.01);
         window.update();
     }

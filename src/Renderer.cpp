@@ -188,11 +188,24 @@ bool tileSortingPredicate(TileWithType lhs, TileWithType rhs)
     
     // At this point both operands will have the same transparency status.
     
-    // Now we're comparing rendering planes. We want to
-    // draw the closest Tiles first, so we can take
-    // advantage of depth testing and thusly minimize redraw.
-    if( a->getPlane() <= b->getPlane() ) return true;
-    if( a->getPlane() >  b->getPlane() ) return false;
+    // When Tiles don't have transparency, we can draw them from front to
+    // back and take advantage of z-culling.
+    if( !a->hasTrans() )
+    {
+        // Now we're comparing rendering planes. We want to
+        // draw the closest Tiles first, so we can take
+        // advantage of depth testing and thusly minimize redraw.
+        if( a->getPlane() <= b->getPlane() ) return true;
+        if( a->getPlane() >  b->getPlane() ) return false;
+    }
+    
+    // Otherwise we need to draw from back to front in order for transparency
+    // to work right.
+    else
+    {
+        if( a->getPlane() <= b->getPlane() ) return false;
+        if( a->getPlane() >  b->getPlane() ) return true;
+    }
     return true; // Just to get rid of the warnings.
 }
 
@@ -283,13 +296,34 @@ void Renderer::renderFinalPass()
 
 void Renderer::render(Window * window)
 {
+    // Counters for how many Tiles were drawn and how many were culled, and
+    // timer values for how long the entire frame, fwd pass, and deferred pass takes.
+    #ifdef T2D_PER_FRAME_STATS
+    int drawn = 0, culled = 0;
+    float total, fwd, def;
+    #endif
+    
+    // Print a header to delineate each frame.
+    #ifdef T2D_PER_TILE_STATS
+    std::cout << "START OF FRAME" << std::endl;
+    #endif
+    
+    // Start timing the frame.
+    #ifdef T2D_PER_FRAME_STATS
+    total = glfwGetTime();
+    #endif
     
     // Bind to the VAO.
-    glBindVertexArray( this->tileVAO );
+    glBindVertexArray( this->tileVAO );    
     
     // Enable these just in case.
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
+    
+    // Start timing the forward pass.
+    #ifdef T2D_PER_FRAME_STATS
+    fwd = glfwGetTime();
+    #endif
     
     // Start drawing to the forward framebuffer.
     this->fwdFB->setAsRenderTarget();
@@ -297,7 +331,6 @@ void Renderer::render(Window * window)
     
     // Now that we've sorted things, we go through and render the
     // non-post-process Tiles.
-    int count = 0;
     for(std::vector<TileWithType>::iterator it = renderQueue.begin(); it != renderQueue.end(); ++it)
     {
         // it->first is the tile_type;
@@ -307,12 +340,34 @@ void Renderer::render(Window * window)
         if( it->first == DEF_TILE ) continue;
         
         // Also if it's offscreen we don't need to render it.
-        if( !this->onScreenTest(it->second) ) continue;
+        if( !this->onScreenTest(it->second) ) 
+        {
+    
+            #ifdef T2D_PER_FRAME_STATS
+            ++ culled;
+            #endif
+            continue;
+        }
         
         // Otherwise we render the tile.
         it->second->render(this);
-        count ++;
+    
+        // Print out the current tile if necessary.
+        #ifdef T2D_PER_TILE_STATS
+        it->second->report();
+        #endif
+        
+        #ifdef T2D_PER_FRAME_STATS
+        ++ drawn;
+        #endif
     }
+    
+    // Clock the forward pass and
+    // start timing the deferred pass.
+    #ifdef T2D_PER_FRAME_STATS
+    fwd = glfwGetTime()-fwd;
+    def = glfwGetTime();
+    #endif
     
     // Now for the DefTiles we flip to the second framebuffer.
     this->defFB->setAsRenderTarget();
@@ -324,17 +379,43 @@ void Renderer::render(Window * window)
         if( it->first != DEF_TILE ) continue;
         
         // Again, if it's offscreen we don't need to render it.
-        if( !this->onScreenTest(it->second) ) continue;
+        if( !this->onScreenTest(it->second) )
+        {
+    
+            #ifdef T2D_PER_FRAME_STATS
+            ++ culled;
+            #endif
+            continue;
+        }
         
         // Render the DefTile.
         it->second->render(this);
-        count ++;
+    
+        #ifdef T2D_PER_TILE_STATS
+        it->second->report();
+        #endif
+        
+        #ifdef T2D_PER_FRAME_STATS
+        ++ drawn;
+        #endif
     }
+    
+    // Clock the final pass.
+    #ifdef T2D_PER_FRAME_STATS
+    def = glfwGetTime()-def;
+    #endif
     
     // Now we go back to renderering to the window.
     window->setAsRenderTarget();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Jiggle the handle.
     this->renderFinalPass(); // Draws a full screen quad with the two FBOs mixed.
+    
+    // Clock the entire frame and actually print the stats to the screen.
+    #ifdef T2D_PER_FRAME_STATS
+    total = glfwGetTime()-total;
+    std::cout << "Tiles drawn: " << drawn << "\tculled: " << culled << "\ttotal: " << drawn+culled << std::endl;
+    std::cout << "Frame time: " << total << " (fwd: " << fwd << ") (def: " << def << ")" << std::endl;
+    #endif
 }
 
 BGTile * Renderer::makeBGTile(GLfloat x, GLfloat y, GLfloat width, GLfloat height, 

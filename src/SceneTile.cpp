@@ -76,3 +76,11 @@ char * SceneTile::getTexture()
 {
     return this->texture;
 }
+
+void SceneTile::report()
+{
+    std::cout << "SceneTile:\t" << this->getID()  
+              << " trans: " << this->hasTrans() 
+              << " plane: " << this->getPlane()
+              << " tex: " << this->texture << std::endl;
+}

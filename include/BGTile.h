@@ -61,6 +61,11 @@ public:
      */
     char * getTexture();
     
+    /**
+	 * @brief Prints out info to stdout about this Tile.
+	 */
+    void report();
+    
 
 };
 

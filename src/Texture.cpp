@@ -26,7 +26,7 @@ const char* Texture::getColorType(png_byte t)
         case PNG_COLOR_TYPE_RGB: return "PNG_COLOR_TYPE_RGB";
         case PNG_COLOR_TYPE_RGBA: return "PNG_COLOR_TYPE_RGBA";
     }
-    return "SOME_OTHER_ERROR";
+    return "ERROR_SOMETHING_WENT_WRONG";
 }
 
 
@@ -106,11 +106,24 @@ tex_error Texture::loadPNG(char* filename, png_bytep** data)
 
 tex_error Texture::load(char* filename)
 {
+    #ifdef T2D_TEX_LOADING_STATS
+    std::cout << "Loading texture: " << filename << std::endl;
+    #endif
+    
     // Declare a pointer for the data.
     png_bytep* rows = NULL;  
     
     // Oh god let's load the image into memory.
     tex_error error = this->loadPNG(filename, &rows);
+    
+    #ifdef T2D_TEX_LOADING_STATS
+    std::cout << (error ? "  -TEXTURE LOADING ERROR: " : "") << (error ? Texture::getErrorDesc(error) : "  -No errors.") << std::endl;
+    std::cout << "  -Width:         " << this->width << "px" << std::endl;
+    std::cout << "  -Height:        " << this->height << "px" << std::endl;
+    std::cout << "  -Color Type:    " << Texture::getColorType(this->colorType) << std::endl;
+    std::cout << "  -Channel Depth: " << (int)this->colorDepth << std::endl;
+    std::cout << "  -Has alpha:     " << (this->hasAlpha()?"true":"false") << std::endl;
+    #endif
     
     // If that process errored out, we just pass that error right on up.
     if(error)
