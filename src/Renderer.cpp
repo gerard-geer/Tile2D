@@ -328,7 +328,10 @@ void Renderer::renderFinalPass(Window * window)
 		GLfloat * resolution = (GLfloat*) malloc(sizeof(GLfloat)*2);
 		resolution[0] = (GLfloat)(this->getWidth());
 		resolution[1] = (GLfloat)(this->getHeight());
-		program->setUniform("resolution", &resolution);
+		program->setUniform("fbResolution", &resolution);
+		resolution[0] = (GLfloat)(window->getWidth());  // Oh yeah memory reuse.
+		resolution[1] = (GLfloat)(window->getHeight());
+		program->setUniform("winResolution", &resolution);
 		free(resolution);
 		float time = glfwGetTime();
 		program->setUniform("time", &time);
