@@ -135,6 +135,11 @@ private:
     Camera * camera;
     
     /*
+	 * The key to the potential custom composition shader.
+	 */
+    char * customCompositor;
+    
+    /*
      * The render queue. The way framebuilding works here is that
      * one adds Tiles to the renderQueue, and then calls render()
      * to render them all.
@@ -248,6 +253,16 @@ public:
      *         has to be entirely recreated.
      */
     bool resize(GLuint width, GLuint height);
+    
+    /**
+     * @brief Specifies a custom shader for the composition pass. Pass in NULL
+     *        to revert to the stock composition shader. If the shader is accidentally
+     *        removed from the AssetManager the renderer will revert to the stock
+     *        shader automatically.
+     * @param customCompositor The key to the desired shader in the AssetManager.
+     */
+    void setCustomShader(char * customCompositor);
+    void setCustomShader(const char * customCompositor);
     
     /**
      * @brief Returns a handle to the Renderer's AsssetManager.

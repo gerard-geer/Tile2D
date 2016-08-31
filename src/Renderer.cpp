@@ -124,6 +124,23 @@ bool Renderer::resize(GLuint width, GLuint height)
     return true;
 }
 
+void Renderer::setCustomShader(char * customCompositor)
+{
+	if( customCompositor == NULL )
+	{
+		this->customCompositor = customCompositor;
+	}
+	else if( this->assets->contains(customCompositor) )
+	{
+		this->customCompositor = customCompositor;
+	}
+	else this->customCompositor = NULL;	
+}
+void Renderer::setCustomShader(const char * customCompositor)
+{
+	this->setCustomShader((char*)customCompositor);
+}
+
 AssetManager * Renderer::getAssetManager()
 {
     return this->assets;
@@ -279,8 +296,23 @@ bool Renderer::onScreenTest(Tile * t)
 
 void Renderer::renderFinalPass()
 {
-    // Get the shader that we need for the final pass' screen quad.
-    Shader * program = (Shader*) this->vitalAssets->get("final_pass_shader");
+    // Get the shader that we need for the final pass' screen quad. If the customCompositor key
+	// is not NULL, and actually represents a value in the AssetManager then it is used for
+	// composition. Otherwise the stock shader is used.
+	Shader * program;
+	if( this->customCompositor == NULL )
+	{
+		program = (Shader*) this->vitalAssets->get("final_pass_shader");
+	}
+	else if( ! this->assets->contains(customCompositor) )
+	{
+		program = (Shader*) this->vitalAssets->get("final_pass_shader");
+		customCompositor = NULL;
+	}
+	else
+	{
+		program = (Shader*) this->assets->get(this->customCompositor);
+	}
     
     // Tell OpenGL to use that program.
     program->use();
