@@ -87,64 +87,79 @@ window_error Window::initGLState(unsigned int width, unsigned int height)
 window_error Window::create(unsigned int windowW, unsigned int windowH,
                             unsigned int fbW, unsigned int fbH, char* title)
 {
+    #ifdef T2D_WINDOW_STATS
+    std::cout << "Creating Tile2D window \""<< title << "\":" << std::endl;
+    #endif
+    
+    // A window_error in case we need it.
+    window_error e = WIN_NO_ERROR; // = 0
+    
     // Store the width and height and title for later use.
     this->width = windowW;
     this->height = windowH;
     this->title = title;
     
     // Initialize GLFW.
-    if(!glfwInit())
-    {
-    	std::cout << "Error: Could not initialize GLFW." << std::endl;
-    	return WIN_COULD_NOT_INIT_GLFW;
-    }
+    if(!glfwInit()) e = WIN_COULD_NOT_INIT_GLFW;
     
-    glfwSetErrorCallback(error_callback);
+    if(!e) glfwSetErrorCallback(error_callback);
     
     // Set window hints.
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    glfwWindowHint(GLFW_FOCUSED, GL_TRUE);
+    if(!e) glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    if(!e) glfwWindowHint(GLFW_FOCUSED, GL_TRUE);
     
     // Create the GLFW window.
-    this->baseWindow = glfwCreateWindow(this->width, this->height, this->title, NULL, NULL);
-    if(!this->baseWindow)
-    {
-    	std::cout << "Error: GLFW could not create a window." << std::endl;
-    	return WIN_COULD_NOT_CREATE_WINDOW;
-    }
+    this->baseWindow = NULL;
+    if(!e) this->baseWindow = glfwCreateWindow(this->width, this->height, this->title, NULL, NULL);
+    if(!this->baseWindow) e = WIN_COULD_NOT_CREATE_WINDOW;
     
     // Make the context current so we can set up some OpenGL stuff.
     // (And also initialize GLEW.)
-    glfwMakeContextCurrent(this->baseWindow);
+    if(!e) glfwMakeContextCurrent(this->baseWindow);
     
     // Now that we have a current OpenGL context we can initialize GLEW.
     // Otherwise we'd get the dreadful "Missing GL version" error.
-    glewExperimental = GL_TRUE;
-    GLenum glewErr = glewInit();
-    if(glewErr != GLEW_OK)
+    if(!e)
     {
-    	std::cout << "Error: Could not initialize GLEW." << std::endl;
-    	return WIN_COULD_NOT_INIT_GLEW;
+        glewExperimental = GL_TRUE;
+        GLenum glewErr = glewInit();
+        if(glewErr != GLEW_OK) e = WIN_COULD_NOT_INIT_GLEW;
     }
     
     // Implement the base callback. Do not forget to call
     // glfwPollEvents()!
-    glfwSetWindowSizeCallback(this->baseWindow, this->resize_callback);
+    if(!e) glfwSetWindowSizeCallback(this->baseWindow, this->resize_callback);
     
     // Also set our keyboard callback.
-    glfwSetKeyCallback(this->baseWindow, key_callback);
+    if(!e) glfwSetKeyCallback(this->baseWindow, key_callback);
     
     // At this point we should also create the renderer.
     this->renderer = NULL;
     
     // Initialize OpenGL itself.
-    window_error glErr = this->initGLState(this->width, this->height);
-    if(glErr) return glErr;
+    if(!e) e = this->initGLState(this->width, this->height);
     
     // Initialize the renderer.
-    this->renderer = new Renderer();
-    bool rErr = this->renderer->init(fbW, fbH);
-    return (rErr==false)? WIN_NO_ERROR : WIN_COULD_NOT_INIT_RENDERER;
+    this->renderer = NULL;
+    if(!e) this->renderer = new Renderer();
+    bool rErr = false;
+    if(!e && this->renderer) rErr = this->renderer->init(fbW, fbH);
+    e = (rErr==false)? e : WIN_COULD_NOT_INIT_RENDERER;
+    
+    #ifdef T2D_WINDOW_STATS
+    
+    bool fbo = ( glewIsSupported("GL_ARB_framebuffer_object") || glewIsSupported("GL_EXT_framebuffer_object") )
+              && (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_UNSUPPORTED);
+    std::cout << (e ? "  -WINDOW CREATION ERROR: " : "" ) << (e ? "error": "  -No creation errors." ) << std::endl; 
+    std::cout << "  -H Res:   " << this->width << std::endl;
+    std::cout << "  -V Res:   " << this->height << std::endl;
+    std::cout << "  -FBH Res: " << (this->renderer ? this->renderer->getWidth() : -1) << std::endl;
+    std::cout << "  -FBV Res: " << (this->renderer ? this->renderer->getHeight() : -1) << std::endl;
+    std::cout << "  -OpenGL revision: " << glGetString(GL_VERSION) << std::endl;
+    std::cout << "  -Supports FBO: " << (fbo?"true":"false") << std::endl;
+    #endif
+    
+    return e;
 }
 
 void Window::setResolution(unsigned int width, unsigned int height)
