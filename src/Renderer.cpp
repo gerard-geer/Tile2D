@@ -294,7 +294,7 @@ bool Renderer::onScreenTest(Tile * t)
     return true;
 }
 
-void Renderer::renderFinalPass()
+void Renderer::renderFinalPass(Window * window)
 {
     // Get the shader that we need for the final pass' screen quad. If the customCompositor key
 	// is not NULL, and actually represents a value in the AssetManager then it is used for
@@ -328,7 +328,7 @@ void Renderer::renderFinalPass()
 		GLfloat * resolution = (GLfloat*) malloc(sizeof(GLfloat)*2);
 		resolution[0] = (GLfloat)(this->getWidth());
 		resolution[1] = (GLfloat)(this->getHeight());
-		program->setTextureUniform("resolution", this->fwdFB->getRenderTexture(), 0);
+		program->setUniform("resolution", &resolution);
 		free(resolution);
 		float time = glfwGetTime();
 		program->setUniform("time", &time);
@@ -452,7 +452,7 @@ void Renderer::render(Window * window)
     // Now we go back to renderering to the window.
     window->setAsRenderTarget();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Jiggle the handle.
-    this->renderFinalPass(); // Draws a full screen quad with the two FBOs mixed.
+    this->renderFinalPass(window); // Draws a full screen quad with the two FBOs mixed.
     
     // Clock the entire frame and actually print the stats to the screen.
     #ifdef T2D_PER_FRAME_STATS

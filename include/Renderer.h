@@ -204,7 +204,7 @@ private:
      * @brief Draws the finished framebuffer onto a full screen Tile and
      *        renders it to the screen.
      */
-    void renderFinalPass();
+    void renderFinalPass(Window * window);
     
     /**
      * @brief Destroys the Tile VAO. This is useful for when context switching.
