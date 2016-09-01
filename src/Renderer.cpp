@@ -124,6 +124,23 @@ bool Renderer::resize(GLuint width, GLuint height)
     return true;
 }
 
+void Renderer::setCustomShader(char * customCompositor)
+{
+	if( customCompositor == NULL )
+	{
+		this->customCompositor = customCompositor;
+	}
+	else if( this->assets->contains(customCompositor) )
+	{
+		this->customCompositor = customCompositor;
+	}
+	else this->customCompositor = NULL;	
+}
+void Renderer::setCustomShader(const char * customCompositor)
+{
+	this->setCustomShader((char*)customCompositor);
+}
+
 AssetManager * Renderer::getAssetManager()
 {
     return this->assets;
@@ -277,10 +294,25 @@ bool Renderer::onScreenTest(Tile * t)
     return true;
 }
 
-void Renderer::renderFinalPass()
+void Renderer::renderFinalPass(Window * window)
 {
-    // Get the shader that we need for the final pass' screen quad.
-    Shader * program = (Shader*) this->vitalAssets->get("final_pass_shader");
+    // Get the shader that we need for the final pass' screen quad. If the customCompositor key
+	// is not NULL, and actually represents a value in the AssetManager then it is used for
+	// composition. Otherwise the stock shader is used.
+	Shader * program;
+	if( this->customCompositor == NULL )
+	{
+		program = (Shader*) this->vitalAssets->get("final_pass_shader");
+	}
+	else if( ! this->assets->contains(customCompositor) )
+	{
+		program = (Shader*) this->vitalAssets->get("final_pass_shader");
+		customCompositor = NULL;
+	}
+	else
+	{
+		program = (Shader*) this->assets->get(this->customCompositor);
+	}
     
     // Tell OpenGL to use that program.
     program->use();
@@ -289,6 +321,21 @@ void Renderer::renderFinalPass()
     // that unit to the shader program.
     program->setTextureUniform("fwdFB", this->fwdFB->getRenderTexture(), 0);
     program->setTextureUniform("defFB", this->defFB->getRenderTexture(), 1);
+	
+	// If we're using a custom shader, we pass in extra stuff that's useful.
+	if( this->customCompositor != NULL )
+	{
+		GLfloat * resolution = (GLfloat*) malloc(sizeof(GLfloat)*2);
+		resolution[0] = (GLfloat)(this->getWidth());
+		resolution[1] = (GLfloat)(this->getHeight());
+		program->setUniform("fbResolution", &resolution);
+		resolution[0] = (GLfloat)(window->getWidth());  // Oh yeah memory reuse.
+		resolution[1] = (GLfloat)(window->getHeight());
+		program->setUniform("winResolution", &resolution);
+		free(resolution);
+		float time = glfwGetTime();
+		program->setUniform("time", &time);
+	}
     
     // Now we just draw the triangles.
     glDrawArrays(GL_TRIANGLES, 0, 6); 
@@ -408,7 +455,7 @@ void Renderer::render(Window * window)
     // Now we go back to renderering to the window.
     window->setAsRenderTarget();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Jiggle the handle.
-    this->renderFinalPass(); // Draws a full screen quad with the two FBOs mixed.
+    this->renderFinalPass(window); // Draws a full screen quad with the two FBOs mixed.
     
     // Clock the entire frame and actually print the stats to the screen.
     #ifdef T2D_PER_FRAME_STATS

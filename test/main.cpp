@@ -22,6 +22,10 @@ int main(int argc, char **argv)
     a->addNewShader("example_def_shader", "../ExampleAssets/ex_def_tile_shader.vert",
                                                            "../ExampleAssets/ex_def_tile_shader.frag");
                                                            
+    a->addNewShader("example_cust_comp_shader", "../ExampleAssets/ex_compositor_shader.vert",
+                                                "../ExampleAssets/ex_compositor_shader.frag");
+    r->setCustomShader("example_cust_comp_shader");
+                                                           
     a->addNewShader("example_fwd_shader", "../ExampleAssets/ex_fwd_tile_shader.vert",
                                                            "../ExampleAssets/ex_fwd_tile_shader.frag");
     BGTile * bg = r->makeBGTile(0.0, 0.0, 1.5, 1.5, false, "puppy");
