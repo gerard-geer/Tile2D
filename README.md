@@ -41,7 +41,7 @@ Window w = new Window();
 w->create(1000, 700, 256, 224, (char*)"Tile2D Window");
 Renderer * r = w->getRenderer();
 AssetManager * a = r->getAssetManager();
-```c++
+```
 **Step 4:** Load some assets. Most Tiles need textures, and some even use custom shaders. In Tile2D, shaders and textures are
 considered to be Assets. Assets are stored in a key-value structure called an AssetManager, contained within the renderer itself.
 ```c++
