@@ -50,7 +50,7 @@ a:hover {
 header {
   background: white;
   color: white;
-  box-shadow: 0px 4px 15px RGBA(0, 0, 0, 0.1), 0px 1px 2px RGBA(0, 0, 0, 0.25);
+  box-shadow: 0px 3px 10px RGBA(0, 0, 0, 0.1), 0px 1px 3px RGBA(0, 0, 0, 0.25);
   max-width: 800px;
   padding: 15px;
   text-align: center;
@@ -64,7 +64,7 @@ main {
   background: white;
   padding: 0em 1em 1em 1em;
   margin: 20px 80px 20px 80px;
-  box-shadow: 0px 4px 15px RGBA(0, 0, 0, 0.1), 0px 1px 2px RGBA(0, 0, 0, 0.25);
+  box-shadow: 0px 3px 10px RGBA(0, 0, 0, 0.1), 0px 1px 3px RGBA(0, 0, 0, 0.25);
   max-width: 800px;
   margin: 0 auto; }
 
@@ -88,7 +88,7 @@ aside {
   background: #fff;
   width: 100%;
   z-index: 2;
-  box-shadow: 0px 4px 15px RGBA(0, 0, 0, 0.1), 0px 1px 2px RGBA(0, 0, 0, 0.25);
+  box-shadow: 0px 3px 10px RGBA(0, 0, 0, 0.1), 0px 1px 3px RGBA(0, 0, 0, 0.25);
   /* Top navigation menu.*/ }
   aside nav {
     float: left;
@@ -104,7 +104,7 @@ aside {
         float: left;
         position: relative; }
         aside nav ul li a {
-          color: #ff0000;
+          color: #888888;
           text-decoration: none;
           display: inline;
           padding: 1em;
@@ -113,14 +113,14 @@ aside {
           margin-bottom: -1px; }
           aside nav ul li a:hover, aside nav ul li a:active {
             text-decoration: none;
-            color: #a2a2a2; }
+            color: #bbbbbb; }
     aside nav:after {
       content: '';
       display: table;
       clear: both; }
 
 .floating-header {
-  box-shadow: 0px 4px 15px RGBA(0, 0, 0, 0.1), 0px 1px 2px RGBA(0, 0, 0, 0.25);
+  box-shadow: 0px 3px 10px RGBA(0, 0, 0, 0.1), 0px 1px 3px RGBA(0, 0, 0, 0.25);
   background: white;
   position: relative;
   top: -.5em;
@@ -152,7 +152,7 @@ aside {
   margin: auto;
   padding: .5em 0em .5em 0em;
   max-width: 264px;
-  box-shadow: 0px 4px 15px RGBA(0, 0, 0, 0.1), 0px 1px 2px RGBA(0, 0, 0, 0.25); }
+  box-shadow: 0px 3px 10px RGBA(0, 0, 0, 0.1), 0px 1px 3px RGBA(0, 0, 0, 0.25); }
 
 footer {
   font-size: .66em;
