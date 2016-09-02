@@ -20,7 +20,7 @@ of tiles without consequence, texture objects and shaders are stored in an *Asse
 shared amongst all Tile2D Tiles. Not only that, only one copy of the vertex data used to draw
 each Tile is kept in memory and is simply reused. This keeps the memory complexity of drawing
 several Tiles that share resources well below _O(n)_. 
-![Tiles share assets](/assets/tiles_share_assets.svg){:class="inline-image"}
+![Tiles share assets]({{ site.baseurl }}/assets/tiles_share_assets.svg){:class="inline-image"}
 *Every Tile gets its GPU assets from a shared resource, and can share those GPU assets with
 one another.*{:class="image-text"}
 
@@ -32,7 +32,7 @@ planes. Scrolling is done in the fragment shader by taking the camera and tile p
 to the 2D transformation matrix and throttling it by a constant based upon the Tile's rendering
 plane. This moves parallax plane scrolling--often a non-negligibly complex CPU-side task--to the
 vertex shader, which is often under-utilized in 2D games.
-![The parallax scrolling transformation matrix](/assets/transmat.svg){:class="inline-image"}
+![The parallax scrolling transformation matrix]({{ site.baseurl }}/assets/transmat.svg){:class="inline-image"}
 *Where Fp is the plane-dependent parallax scrolling factor. This curtails the movements made by
 either the camera or the Tile itself.*{:class="image-text"}
 
@@ -114,5 +114,5 @@ own. In this case, the shader receives extra inputs: the resolutions of the fram
 and the time since startup. This facilitates several effects with ease, such as CRT-blur or the Gunstar Heroes
 teleportation effect, among other things.
 
-![The general data-path of the renderer.](/assets/renderer_architecture.svg){:class="inline-image"}
+![The general data-path of the renderer.]({{ site.baseurl }}/assets/renderer_architecture.svg){:class="inline-image"}
 *An overview of the inner workings of the rendering engine.*{:class="image-text"}
