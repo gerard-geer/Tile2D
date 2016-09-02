@@ -95,19 +95,21 @@ aside {
         
         /* Top navigation menu item list. */
 		ul {
+      color: $main;
 			margin: 0;
 			padding: 0;
 			list-style: none;
             
             /* Top navigation menu item. */
 			li {
+        color: $main;
 				float: left;
 				position: relative;
 				a {
           color: $main;
 					text-decoration: none;
-					display: inline;
 					padding: 1em;
+					display: inline;
 					font-family: $font-style;
 					line-height: 20px;
 					margin-bottom: -1px;

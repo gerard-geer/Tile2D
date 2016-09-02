@@ -58,6 +58,7 @@ Also, it’s also a good idea to store local pointers to the <code class="highli
 <span class="n">AssetManager</span> <span class="o">*</span> <span class="n">a</span> <span class="o">=</span> <span class="n">r</span><span class="o">-&gt;</span><span class="n">getAssetManager</span><span class="p">();</span>
 </code></pre>
 </div>
+
 <p><strong>Step 4:</strong> Load some assets. Most Tiles need textures, and some even use custom shaders. In Tile2D,
 shaders and textures are considered to be Assets. Assets are stored in a key-value structure called
 an AssetManager, contained within the renderer itself. It provides factory functions for both textures
@@ -65,16 +66,19 @@ and shaders.</p>
 <div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">a</span><span class="o">-&gt;</span><span class="n">addNewTexture</span><span class="p">(</span><span class="s">"puppy"</span><span class="p">,</span> <span class="s">"../ExampleAssets/puppy.png"</span><span class="p">);</span>
 </code></pre>
 </div>
+
 <p><strong>Step 5:</strong> Create some Tiles. The Renderer contains several factory methods to easily create Tiles.
 Note though that there are more types of Tiles, and more options than apparent here.</p>
 <div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">SceneTile</span> <span class="o">*</span> <span class="n">st</span> <span class="o">=</span> <span class="n">r</span><span class="o">-&gt;</span><span class="n">makeSceneTile</span><span class="p">(</span><span class="mf">.25</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">PLANE_NEG_2</span><span class="p">,</span> <span class="mf">.5</span><span class="p">,</span> <span class="mf">.5</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="s">"puppy"</span><span class="p">);</span>
 </code></pre>
 </div>
+
 <p><strong>Step 6:</strong> Add the Tiles to the rendering queue. The rendering queue is an opaque list that
 automatically sorts the Tiles when added to minimize overdraw and maximize efficiency.</p>
 <div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">r</span><span class="o">-&gt;</span><span class="n">addToRenderQueue</span><span class="p">(</span><span class="n">BG_TILE</span><span class="p">,</span> <span class="n">bg</span><span class="p">);</span>
 </code></pre>
 </div>
+
 <p><strong>Step 7:</strong> Render! (In the style of GLFW)</p>
 <div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">glfwPollEvents</span><span class="p">();</span>
 <span class="n">glClear</span><span class="p">(</span> <span class="n">GL_COLOR_BUFFER_BIT</span> <span class="o">|</span> <span class="n">GL_DEPTH_BUFFER_BIT</span> <span class="p">);</span>

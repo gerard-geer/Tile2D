@@ -96,18 +96,20 @@ aside {
     margin: 0 auto;
     /* Top navigation menu item list. */ }
     aside nav ul {
+      color: #888888;
       margin: 0;
       padding: 0;
       list-style: none;
       /* Top navigation menu item. */ }
       aside nav ul li {
+        color: #888888;
         float: left;
         position: relative; }
         aside nav ul li a {
           color: #888888;
           text-decoration: none;
-          display: inline;
           padding: 1em;
+          display: inline;
           font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
           line-height: 20px;
           margin-bottom: -1px; }
