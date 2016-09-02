@@ -41,11 +41,3 @@ resolution (of the window or framebuffers)? They're single function calls.
 extra output to ```stdout```. Want to see what Tiles are drawn each frame? What are your
 render times? The properties of the textures you've loaded? What the current screen and
 buffer resolutions are? This and more can be specified to be displayed.
-
-Dependencies
---------------
-- **LibPNG** for image reading.
-- **GLFW** for OpenGL context creation.
-- **GLEW** for OpenGL extension wrangling.
-- **OpenGL 2.1 with ```GL_ext_framebuffer```** so we can have a programmable pipeline and framebuffer objects.
-- **Python** (2 or 3) for the script that consolidates shader code into a header file.

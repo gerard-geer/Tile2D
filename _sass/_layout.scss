@@ -1,11 +1,16 @@
-obody {
+body {
 	margin: 0;
 	color: $font-color;
 	font-family: $font-style;
 	font-size: 1.0em;
 	line-height: 1.6;
-    text-shadow: $text-shadow;
+  text-shadow: $text-shadow;
 	-webkit-font-smoothing: antialiased;
+  background: white;
+}
+div
+{
+  background: white;
 }
 h1,
 h2,
@@ -52,6 +57,7 @@ header {
 	align-items: center;
 }
 main {
+  background: white;
 	padding: 0em 1em 1em 1em; 
 	margin: 20px 80px 20px 80px;
     box-shadow: $shadow;
