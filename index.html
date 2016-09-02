@@ -1,144 +1,23 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <title>Tile2D by gerard-geer</title>
-  </head>
+---
+layout: default
+---
 
-  <body>
-    <div id="container">
-      <div class="inner">
+<div class="home">
 
-        <header>
-          <h1>Tile2D</h1>
-          <h2>A Tile-based 2D rendering engine.</h2>
-        </header>
+  <h1 class="page-heading">Posts</h1>
 
-        <section id="downloads" class="clearfix">
-          <a href="https://github.com/gerard-geer/Tile2D/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/gerard-geer/Tile2D/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
-          <a href="https://github.com/gerard-geer/Tile2D" id="view-on-github" class="button"><span>View on GitHub</span></a>
-        </section>
+  <ul class="post-list">
+    {% for post in site.posts %}
+      <li>
+        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
 
-        <hr>
+        <h2>
+          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title | escape }}</a>
+        </h2>
+      </li>
+    {% endfor %}
+  </ul>
 
-        <section id="main_content">
-          <h1>
-<a id="tile2d" class="anchor" href="#tile2d" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Tile2D</h1>
+  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
 
-<h2>
-<a id="a-tile-based-2d-rendering-engine" class="anchor" href="#a-tile-based-2d-rendering-engine" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>A Tile-based 2D rendering engine.</h2>
-
-<p>Ever just want a decent way to just make a window, load some sprites and blit them?
-This is for you. Ever want a 2D engine that's super light, but also highly capable?
-This is also for you.</p>
-
-<h2>
-<a id="features" class="anchor" href="#features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Features</h2>
-
-<ul>
-<li>
-<strong>PNG support.</strong> It's a pretty good image format. Tile2D also autodetects alpha channels and optimizes on the presence
-or absence of an alpha channel.</li>
-<li>
-<strong>Targets OpenGL 2.1 (With FBO support).</strong> Uses OpenGL 2.1 (GLSL 1.2) and its programmable pipeline for maximimum
-compatibility.</li>
-<li>
-<strong>Passive parallax scrolling.</strong> Parallax scrolling is deferred to the vertex shader. Just set a plane and that's it.</li>
-<li>
-<strong>Rotation.</strong> Not too many sprite-based rendering libraries give you clear and simple rotation. (Also deferred to the vertex shader.)</li>
-<li>
-<strong>Extensive programability.</strong> Custom shader code can be written for FwdTiles, DefTiles and the screen compositor (what combines both passes). Even further, you can extend the base Tile class to create whatever kind of Tile you want. Further yet, GLFW, GLEW, and OpenGL are all visible. Tile2D's encapsulated GLFW and OpenGL objects can all be accessed directly. Want to set a crazy GLFW window option, or change the OpenGL state to do some wild stuff? Nothing is stopping you.</li>
-<li>
-<strong>Deferred rendering and post processing.</strong> With DefTiles you can write your own shader code, with access to the depth and color buffer of the forward rendering pass. Post-processed and deferred effects await!</li>
-<li>
-<strong>Proactive downsampling</strong> The Renderer and Window have independent resolutions. Therefore you can render at lower
-resolutions such as <code>256x240</code>(NES) or <code>320x224</code>(Genesis) and have that great pixelated appearance.
-Better yet Tiles are renderered at this resolution--not rendered then downsampled--so overdraw is kept to a minimum.</li>
-<li>
-<strong>Screenspace and normalized coordinate systems.</strong> You can work in terms of pixels <em>or</em> [-1,1].</li>
-<li>
-<strong>Automatic optimization.</strong> Add Tiles in whatever order you want. They're sorted each frame to minimize overdraw and
-maximize culling.</li>
-<li>
-<strong>Simplified window management.</strong> Fullscreen rendering and resolution changing and OpenGL state management are all handled
-behind the scenes. Want to go fullscreen or change resolution (of the window or framebuffers)? They're single function
-calls.</li>
-<li>
-<strong>Profiling and debugging.</strong> Tile2D can be built with several debug options that send extra output to <code>stdout</code>. Want to see what Tiles are drawn each frame? What are your render times? The properties of the textures you've loaded? What the current screen and buffer resolutions are? This and more can be specified to be displayed.</li>
-</ul>
-
-<h2>
-<a id="quickstart" class="anchor" href="#quickstart" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Quickstart</h2>
-
-<p>In just a few steps you can draw sprites to the screen.</p>
-
-<p><strong>Step 1:</strong> Build. Download the source and run <code>make</code> to view the avaiable build options, then
-build with your preferred method. Make sure you have all the dependencies! (Listed below.)</p>
-
-<p><strong>Step 2:</strong> Setup. Include the common header <code>tile2d.h</code> in your project, as well as the results of
-the build. 
-<strong>Step 3:</strong> Create a window! This creates a Tile2D Window, which is simply just a managed GLFW window. Also, it's also a good idea to store local pointers to the <code>Renderer</code> and <code>AssetManager</code>.</p>
-
-<div class="highlight highlight-source-c++"><pre>Window w = <span class="pl-k">new</span> Window();
-w-&gt;<span class="pl-en">create</span>(<span class="pl-c1">1000</span>, <span class="pl-c1">700</span>, <span class="pl-c1">256</span>, <span class="pl-c1">224</span>, (<span class="pl-k">char</span>*)"Tile2D Window");
-Renderer * r = w-&gt;<span class="pl-en">getRenderer</span>();
-AssetManager * a = r-&gt;<span class="pl-en">getAssetManager</span>();</pre></div>
-
-<p><strong>Step 4:</strong> Load some assets. Most Tiles need textures, and some even use custom shaders. In Tile2D, shaders and textures are
-considered to be Assets. Assets are stored in a key-value structure called an AssetManager, contained within the renderer itself.</p>
-
-<div class="highlight highlight-source-c++"><pre>a-&gt;<span class="pl-en">addNewTexture</span>(<span class="pl-s"><span class="pl-pds">"</span>puppy<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>../ExampleAssets/puppy.png<span class="pl-pds">"</span></span>);</pre></div>
-
-<p><strong>Step 5:</strong> Create some Tiles. The Renderer contains several factory methods to easily create Tiles. Note though that there are more types of Tiles, and more options than apparent here.</p>
-
-<div class="highlight highlight-source-c++"><pre>SceneTile * st = r-&gt;<span class="pl-en">makeSceneTile</span>(.<span class="pl-c1">25</span>, <span class="pl-c1">0</span>, PLANE_NEG_2, .<span class="pl-c1">5</span>, .<span class="pl-c1">5</span>, <span class="pl-c1">false</span>, <span class="pl-s"><span class="pl-pds">"</span>puppy<span class="pl-pds">"</span></span>);</pre></div>
-
-<p><strong>Step 6:</strong> Add the Tiles to the rendering queue. The rendering queue is an opaque list that automatically sorts the Tiles
-when added to minimize overdraw and maximize efficiency.</p>
-
-<div class="highlight highlight-source-c++"><pre>r-&gt;<span class="pl-en">addToRenderQueue</span>(BG_TILE, bg);</pre></div>
-
-<p><strong>Step 7:</strong> Render! (In the style of GLFW)</p>
-
-<div class="highlight highlight-source-c++"><pre><span class="pl-en">glfwPollEvents</span>();
-<span class="pl-en">glClear</span>( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-r-&gt;<span class="pl-en">render</span>(&amp;window);
-<span class="pl-en">glfwSwapBuffers</span>(window.getWindow());
-++framecount;</pre></div>
-
-<h2>
-<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependencies</h2>
-
-<ul>
-<li>
-<strong>LibPNG</strong> for image reading.</li>
-<li>
-<strong>GLFW</strong> for OpenGL context creation.</li>
-<li>
-<strong>GLEW</strong> for OpenGL extension wrangling.</li>
-<li>
-<strong>OpenGL 2.1 with <code>GL_ext_framebuffer</code></strong> so we can have a programmable pipeline and framebuffer objects.</li>
-<li>
-<strong>Python</strong> (2 or 3) for the script that consolidates shader code into a header file.</li>
-</ul>
-        </section>
-
-        <footer>
-          Tile2D is maintained by <a href="https://github.com/gerard-geer">gerard-geer</a><br>
-          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
-        </footer>
-
-        
-      </div>
-    </div>
-  </body>
-</html>
+</div>
