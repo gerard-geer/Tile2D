@@ -17,7 +17,7 @@ title: "Tile2D: A Tile-based Renderer"
 email: gerarddgeer@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
   Tile2D is an easy-to-use, lightweight, deferred 2D rendering engine.
-baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: "/Tile2D" # the subpath of your site, e.g. /blog
 url: "https://github.io/Tile2D/" # the base hostname & protocol for your site
 github_username:  gerard-geer
 
