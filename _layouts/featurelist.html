@@ -1,0 +1,11 @@
+---
+layout: default
+---
+<div>
+    {{ content }}
+    <ul>
+        {% for page in site.pages %} {% if page.featuretitle %}
+        <li><a href="{{ page.url | prepend: site.baseurl }}">{{ page.title }}</a></li>
+        {% endif %} {% endfor %}
+    </ul>
+</div>

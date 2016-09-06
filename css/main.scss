@@ -26,6 +26,11 @@ $content-width:    800px;
 $on-palm:          600px;
 $on-laptop:        800px;
 
+// The background image. Yes, it is from the CSH members page.
+body {
+  background-image: url('{{ site.baseurl }}/assets/bg.png');
+}
+
 // Minima also includes a mixin for defining media queries.
 // Use media queries like this:
 // @include media-query($on-palm) {

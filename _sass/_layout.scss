@@ -6,7 +6,6 @@ body {
 	line-height: 1.6;
   text-shadow: $text-shadow;
 	-webkit-font-smoothing: antialiased;
-  background: white;
 }
 div
 {
@@ -41,6 +40,30 @@ a:visited {
 a:hover {
 	color: $link-hover-color;
 	text-decoration: none;
+}
+
+table {
+    box-shadow: $inset-shadow;
+    width: 100%;
+    text-align: center;
+    margin: .5em auto 1.75em auto;
+    border-collapse: collapse;
+    font-size: .9em;
+}
+
+tbody
+{
+    padding: 1em .5em 1em .5em;
+}
+
+th, td {
+    text-align: left;
+    border: 1px solid #EEEEEE;
+    //border-bottom: 1px solid #EEEEEE;
+    padding: .25em .5em .25em .5em;
+}
+tr:nth-child(even) {
+    background-color: #F8F8F8;
 }
 
 header {
