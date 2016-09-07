@@ -119,6 +119,7 @@ time {
 div.language-cpp,
 div.language-glsl{
     padding: .25em 1em .25em 1em;
+    overflow: auto;
     box-shadow: $inset-shadow;
 }
 .container {
@@ -184,6 +185,17 @@ aside {
     background: white;
     position: relative;
     top: -.5em;
+    left: .125em;
+    padding: .25em .5em .25em .5em;
+    display: inline;
+}
+
+.floating-footer
+{
+    box-shadow: $shadow;
+    background: white;
+    position: relative;
+    top: 1.5em;
     left: .125em;
     padding: .25em .5em .25em .5em;
     display: inline;
