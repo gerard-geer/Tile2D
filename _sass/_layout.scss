@@ -35,12 +35,18 @@ h2 {
 a,
 a:visited {
 	color: $main;
-	text-decoration: underline;
+	text-decoration: none;
 	font-weight: bold;
 }
 a:hover {
-	color: $link-hover-color;
+	color: lighten($main, 20);
 	text-decoration: none;
+}
+
+ul
+{
+    list-style-type: circle;
+    
 }
 
 table {

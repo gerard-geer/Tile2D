@@ -43,12 +43,15 @@ h2 {
 a,
 a:visited {
   color: #888888;
-  text-decoration: underline;
+  text-decoration: none;
   font-weight: bold; }
 
 a:hover {
-  color: #888888;
+  color: #bbbbbb;
   text-decoration: none; }
+
+ul {
+  list-style-type: circle; }
 
 table {
   box-shadow: inset 0px 0px 8px RGBA(0, 0, 0, 0.125), inset 0px 0px 1px RGBA(0, 0, 0, 0.2);
