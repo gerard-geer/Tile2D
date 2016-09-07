@@ -4,8 +4,9 @@ body {
 	font-family: $font-style;
 	font-size: 1.0em;
 	line-height: 1.6;
-  text-shadow: $text-shadow;
+    text-shadow: $text-shadow;
 	-webkit-font-smoothing: antialiased;
+    background-image: $bg-image;
 }
 div
 {
