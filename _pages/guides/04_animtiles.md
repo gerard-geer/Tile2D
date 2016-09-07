@@ -43,10 +43,12 @@ AnimTile Texture Organization
 AnimTiles need their frames organized in a specific way to work right. Illustrated above is the expected
 way for frames to be organized.
 
-- Frames are stored from left to right on a single row.
-- ```frameHeight``` is the height of each frame.
-- ```frameWidth``` is the width of each frame.
-- ```numFrames``` is the number of frames stored in the texture.
+{::options parse_block_html="true" /}
+
+- <p class='li-text'>Frames are stored from left to right on a single row.</p>
+- <p class='li-text'>```frameHeight``` is the height of each frame.</p>
+- <p class='li-text'>```frameWidth``` is the width of each frame.</p>
+- <p class='li-text'>```numFrames``` is the number of frames stored in the texture.</p>
 
 Yes, this does result in some very wide images, but restrictions--and in general, care--regarding texture
 dimensions has evaporated.
