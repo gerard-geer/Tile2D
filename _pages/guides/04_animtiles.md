@@ -62,7 +62,7 @@ To retrieve the frame duration:
 float getFrameTime() const;
 ```
 
-| Returns |  The amount of time to wait before iterating the current frame. |
+| Returns | The amount of time to wait before iterating the current frame. |
 
 To get the current frame index:
 
