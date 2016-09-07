@@ -22,8 +22,8 @@ Creating a BGTile
 To create a BGTile use the static factory method in the Renderer class.
 
 ```cpp
-BGTile *tile Renderer::makeBGTile(GLfloat x, GLfloat y, GLfloat width, GLfloat height,
-bool normalize, char * texture);
+BGTile* Renderer::makeBGTile(GLfloat x, GLfloat y, GLfloat width, GLfloat height,
+                             bool normalize, char * texture);
 ```
 
 | ```x``` | The X position of the new BGTile. |
@@ -31,4 +31,10 @@ bool normalize, char * texture);
 | ```width``` | The width of the new BGTile. |
 | ```height``` | The height of the new BGTile. |
 | ```normalize``` | When true, uses a pixel-based coordinate system for x, y, width, and height. |
+| ```texture``` | The key to this BGTile's texture in the AssetManager. |
 | Returns | a pointer to a new ```BGTile```. |
+
+Usage Notes
+-----------
+Since BGTiles are constrained to the background rendering plane PLANE_BG, the function ```Tile::setPlane()``` is
+overridden so that it does nothing. Likewise, ```Tile::getPlane()``` will always return PLANE_BG.
