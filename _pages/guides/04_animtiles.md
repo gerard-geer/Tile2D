@@ -57,6 +57,7 @@ As AnimTiles are the first real extension of the base Tile class, they define a 
 their parent.
 
 To retrieve the frame duration:
+
 ```cpp
 float getFrameTime() const;
 ```
