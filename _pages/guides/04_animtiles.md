@@ -48,7 +48,7 @@ way for frames to be organized.
 - ```frameWidth``` is the width of each frame.
 - ```numFrames``` is the number of frames stored in the texture.
 
-Yes, this does result in some very wide images, but restrictions--and in general--care regarding texture
+Yes, this does result in some very wide images, but restrictions--and in general, care--regarding texture
 dimensions has evaporated.
 
 Additional AnimTile Features
