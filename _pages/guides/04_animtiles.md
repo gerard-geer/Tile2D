@@ -42,10 +42,12 @@ AnimTile Texture Organization
 
 AnimTiles need their frames organized in a specific way to work right. Illustrated above is the expected
 way for frames to be organized.
+
 - Frames are stored from left to right on a single row.
 - ```frameHeight``` is the height of each frame.
 - ```frameWidth``` is the width of each frame.
 - ```numFrames``` is the number of frames stored in the texture.
+
 Yes, this does result in some very wide images, but restrictions--and in general--care regarding texture
 dimensions has evaporated.
 
@@ -62,6 +64,7 @@ float getFrameTime() const;
 | Returns |  The amount of time to wait before iterating the current frame. |
 
 To get the current frame index:
+
 ```cpp
 unsigned int getCurFrame() const;
 ```
@@ -69,6 +72,7 @@ unsigned int getCurFrame() const;
 | Returns | The current frame of animation. |
 
 To get the height of each frame:
+
 ```cpp
 unsigned int getFrameHeight() const;
 ```
@@ -76,6 +80,7 @@ unsigned int getFrameHeight() const;
 | Returns | The height of each individual frame. |
 
 To get the width of each frame:
+
 ```cpp
 unsigned int getFrameWidth() const;
 ```
@@ -83,6 +88,7 @@ unsigned int getFrameWidth() const;
 | Returns | The width of each individual frame. |
 
 To get the total number of frames:
+
 ```cpp
 unsigned int getNumFrames() const;
 ```
@@ -97,6 +103,7 @@ char* getTexture();
 | Returns | The key used to retrieve the texture. |
 
 To set the duration of each frame:
+
 ```cpp
 void setFrameTime(float animWait);
 ```
@@ -104,6 +111,7 @@ void setFrameTime(float animWait);
 |  animWait | The new amount of time to wait between frames. |
 
 To override the underlying animation mechanics and set the frame yourself:
+
 ```cpp
 void setCurFrame(unsigned int curFrame);
 ```
@@ -111,6 +119,7 @@ void setCurFrame(unsigned int curFrame);
 |  curFrame | The new current frame. |
 
 To change the total number of frames:
+
 ```cpp
 void setNumFrames(unsigned int numFrames);
 ```
