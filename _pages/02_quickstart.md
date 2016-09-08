@@ -6,14 +6,14 @@ permalink: /quickstart/
 ---
 
 Quickstart
-==========
+----------
 {: .floating-header}
 In just a few steps you can draw sprites to the screen. This walkthrough assumes you've downloaded the
 repository and makes use of the example assets. **Note that all file paths described below must be
 relative to your executable (or be  definite paths.)**
 
 **Step 1:** Build. Download the source and run ```make``` to view the avaiable build options, then
-build with your preferred method. Make sure you have all the [dependencies](/dependencies/)! (Listed below.)
+build with your preferred method. Make sure you have all the [dependencies](/Tile2D/dependencies/)! (Listed below.)
 
 **Step 2:** Setup. Include the common header ```tile2d.h``` in your project, as well as the results of
 the build. 

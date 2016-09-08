@@ -7,7 +7,7 @@ permalink: /dependencies/
 
 
 Dependencies and Requirements
-=============================
+-----------------------------
 {: .floating-header}
 
 - **LibPNG** for image reading.

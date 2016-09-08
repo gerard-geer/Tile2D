@@ -5,7 +5,7 @@ navtitle: Features
 permalink: /features/
 ---
 Features
-==================
+--------
 {: .floating-header}
 - **PNG support.** It's a pretty good image format. Tile2D also autodetects alpha
 channels and optimizes on the presence or absence of an alpha channel.

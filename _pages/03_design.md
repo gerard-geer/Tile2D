@@ -6,7 +6,7 @@ permalink: /design/
 ---
 
 Design
-=============
+------
 {: .floating-header}
 Tile2D is a deferred rendering engine that draws elements called *Tiles* to a GLFW window
 managed by the engine. The GLFW context used by Tile2D targets OpenGL 2.1 with GL_FRAMEBUFFER_EXT

@@ -23,14 +23,26 @@ h3 {
 }
 h1 {
 	font-size: 2.5em;
+    display: block;
+    position: relative;
 	a,
 	a:visited {
 		text-decoration: none;
 		color: $main;
 	}
+    margin: 0;
+    padding: 0em .125em 0em .125em;
 }
 h2 {
-	font-size: 2em; 
+	font-size: 2em;    
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-color: $light-accent-color;
+}
+h3 {
+    border-bottom-width: 1px;
+    border-bottom-style: dashed;
+    border-color: $light-accent-color;
 }
 a,
 a:visited {
@@ -97,10 +109,10 @@ header {
     color: $header-color;
     box-shadow: $shadow;    
 	max-width: $content-width;
-	padding: 15px;
+	padding: .0125em;
 	text-align: center;
 	margin: 90px auto 50px auto;
-	height: 15vh;
+	min-height: 15vh;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -158,7 +170,7 @@ aside {
 				a {
           color: $main;
 					text-decoration: none;
-					padding: 1em;
+					padding: 0em 1em 0em 1em;
 					display: inline;
 					font-family: $font-style;
 					line-height: 20px;
@@ -190,7 +202,7 @@ aside {
     display: inline;
 }
 
-.floating-footer
+.return-button-bottom
 {
     box-shadow: $shadow;
     background: white;
@@ -199,6 +211,16 @@ aside {
     left: .125em;
     padding: .25em .5em .25em .5em;
     display: inline;
+}
+.return-button-top
+{
+    box-shadow: $shadow;
+    background: white;
+    position: relative;
+    top: -1.125em;
+    padding: .25em .5em .25em .5em;
+    display: inline;
+    float: right;
 }
 
 #header-text:hover
@@ -212,6 +234,7 @@ aside {
     text-align: center;
     margin: 1em auto .25em auto;
     padding: 1em;
+    max-width: 100%;
     box-shadow: $inset-shadow;
 }
 
@@ -222,6 +245,7 @@ aside {
     box-shadow: $inset-shadow;
     max-width: $content-width *.5;
     display: block;
+    max-width: 90%;
     margin: .25em auto .0em auto;
     padding: .5em .125em .5em .125em;
 }
@@ -239,4 +263,10 @@ footer {
     font-size: .66em;
 	text-align: center;
 	padding: 40px;
+}
+
+@media only screen and (max-width: 479px) {
+   .return-button-top{ display: none; }
+   
+   h1,h2,h3{text-align:center;}
 }

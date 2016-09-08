@@ -8,13 +8,13 @@ permalink: /guides/fwdshaders/
 {::options parse_block_html="true" /}
 
 Writing FwdTile Shaders
-=============
+-----------------------
 {: .floating-header}
 FwdTiles require a custom shader to function. This guide describes how to write one.
 
 Expected Attribute Variables
 ----------------------------
-In order for geometry to get passed into the fragment shader, you need to define the
+In order for geometry to get passed into the vertex shader, you need to define the
 attributes the rendering code is expecting in your shader.
 
 | ```attribute vec3``` | ```vertPos``` | The incoming vertex position. |
@@ -53,7 +53,7 @@ GPU-side features expected by the Tile class.
 
 Here are some examples describing how to do so.
 
-<h3>Texture flipping</h3>
+<h3>Texture Flipping</h3>
 A quick but not very fast function that illustrates the basic behavior of texture
 flipping could be:
 

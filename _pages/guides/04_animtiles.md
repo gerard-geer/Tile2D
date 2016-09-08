@@ -6,7 +6,7 @@ permalink: /guides/animtiles/
 ---
 
 Using AnimTiles
-=============
+---------------
 {: .floating-header}
 AnimTiles--or Animated-Tiles--are just that: Tiles that are animated. Give them a texture that contains
 multiple frames of animation, set up your animation preferences, and away it goes!

@@ -6,7 +6,7 @@ permalink: /guides/bgtiles/
 ---
 
 Using BGTiles
-=============
+-------------
 {: .floating-header}
 BGTiles are the most basic kind of Tile, meant to be the absolute fastest-drawn Tile, since
 it's likely that they'll take up a large percentage of the screen, and are most likely to

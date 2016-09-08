@@ -32,14 +32,26 @@ h3 {
   color: #888888; }
 
 h1 {
-  font-size: 2.5em; }
+  font-size: 2.5em;
+  display: block;
+  position: relative;
+  margin: 0;
+  padding: 0em .125em 0em .125em; }
   h1 a,
   h1 a:visited {
     text-decoration: none;
     color: #888888; }
 
 h2 {
-  font-size: 2em; }
+  font-size: 2em;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-color: #F2F2F2; }
+
+h3 {
+  border-bottom-width: 1px;
+  border-bottom-style: dashed;
+  border-color: #F2F2F2; }
 
 a,
 a:visited {
@@ -96,10 +108,10 @@ header {
   color: white;
   box-shadow: 0px 3px 10px RGBA(0, 0, 0, 0.1), 0px 1px 3px RGBA(0, 0, 0, 0.25);
   max-width: 800px;
-  padding: 15px;
+  padding: .0125em;
   text-align: center;
   margin: 90px auto 50px auto;
-  height: 15vh;
+  min-height: 15vh;
   display: flex;
   justify-content: center;
   align-items: center; }
@@ -153,7 +165,7 @@ aside {
         aside nav ul li a {
           color: #888888;
           text-decoration: none;
-          padding: 1em;
+          padding: 0em 1em 0em 1em;
           display: inline;
           font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
           line-height: 20px;
@@ -175,7 +187,7 @@ aside {
   padding: .25em .5em .25em .5em;
   display: inline; }
 
-.floating-footer {
+.return-button-bottom {
   box-shadow: 0px 3px 10px RGBA(0, 0, 0, 0.1), 0px 1px 3px RGBA(0, 0, 0, 0.25);
   background: white;
   position: relative;
@@ -183,6 +195,15 @@ aside {
   left: .125em;
   padding: .25em .5em .25em .5em;
   display: inline; }
+
+.return-button-top {
+  box-shadow: 0px 3px 10px RGBA(0, 0, 0, 0.1), 0px 1px 3px RGBA(0, 0, 0, 0.25);
+  background: white;
+  position: relative;
+  top: -1.125em;
+  padding: .25em .5em .25em .5em;
+  display: inline;
+  float: right; }
 
 #header-text:hover {
   color: #a2a2a2; }
@@ -192,6 +213,7 @@ aside {
   text-align: center;
   margin: 1em auto .25em auto;
   padding: 1em;
+  max-width: 100%;
   box-shadow: inset 0px 0px 8px RGBA(0, 0, 0, 0.125), inset 0px 0px 1px RGBA(0, 0, 0, 0.2); }
 
 .image-text {
@@ -200,6 +222,7 @@ aside {
   box-shadow: inset 0px 0px 8px RGBA(0, 0, 0, 0.125), inset 0px 0px 1px RGBA(0, 0, 0, 0.2);
   max-width: 400px;
   display: block;
+  max-width: 90%;
   margin: .25em auto .0em auto;
   padding: .5em .125em .5em .125em; }
 
@@ -215,6 +238,12 @@ footer {
   text-align: center;
   padding: 40px; }
 
+@media only screen and (max-width: 479px) {
+  .return-button-top {
+    display: none; }
+
+  h1, h2, h3 {
+    text-align: center; } }
 /**
  * Syntax highlighting styles
  */

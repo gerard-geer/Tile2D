@@ -6,7 +6,7 @@ permalink: /guides/renderer/
 ---
 
 Advanced Renderer Usage
-=======================
+-----------------------
 {: .floating-header}
 
 The Renderer can do much more than the Quickstart lets on. To refresh, here's a diagram describing its operation.

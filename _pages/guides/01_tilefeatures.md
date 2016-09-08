@@ -6,7 +6,7 @@ permalink: /guides/tilefeatures/
 ---
 
 Advanced Tile Features
-======================
+----------------------
 {: .floating-header}
 Tiles have many more features than what's described in the Quickstart.
 
