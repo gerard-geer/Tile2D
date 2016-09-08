@@ -160,13 +160,16 @@ First, let me answer the question you may be asking: Why are we doing depth test
 The forward and deferred rendering passes have independent depth buffers so that Z culling can
 be altered or skipped by Tile2D users. However, this means that OpenGL at large is unaware of
 the depth values of the forward pass when drawing DefTiles in the deferred pass. 
+
 This means you have to manually compare each fragment with its analog in the forward pass should
 you want your DefTiles to be depth tested against the Tiles of the forward pass. Don't worry though:
 testing is still done as usual between DefTiles.
+
 Another important note is that the compositor depends on how your depth-test goes, and how failures
 are represented. The compositor mixes between the forward and deferred pass based on the alpha of
 the deferred pass' color buffer. **Therefore in order to specify that you want the fragment of the
 forward buffer to be displayed on the screen, you must output an alpha value of zero.** 
+
 Additionally The clear color for the deferred framebuffer also has an alpha of zero, so unwritten
 portions of the buffer are ignored just as well.
 
