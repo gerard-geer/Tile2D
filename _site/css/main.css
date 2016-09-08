@@ -15,7 +15,7 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 1.0em;
   line-height: 1.6;
-  text-shadow: 0px 0px 2px RGBA(0, 0, 0, 0.125);
+  text-shadow: 0px 0px 0.001em RGBA(0, 0, 0, 0.125);
   -webkit-font-smoothing: antialiased;
   background-image: url("/Tile2D/assets/bg.png"); }
 
