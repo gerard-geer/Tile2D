@@ -1,6 +1,5 @@
 ---
 layout: default
-navtitle: Home
 ---
 
 A Tile-based 2D rendering engine.
