@@ -1,5 +1,6 @@
 ---
-layout: default
+layout: index-layout
+heythisisthehomepage: yep-sure-is
 ---
 
 A Tile-based 2D rendering engine.

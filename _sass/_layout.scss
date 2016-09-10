@@ -111,7 +111,7 @@ header {
 	max-width: $content-width;
 	padding: .0125em;
 	text-align: center;
-	margin: 90px auto 50px auto;
+	margin: 90px auto -1em auto;
 	min-height: 15vh;
 	display: flex;
 	justify-content: center;
@@ -120,10 +120,9 @@ header {
 main {
   background: white;
 	padding: 0em 1em 1em 1em; 
-	margin: 20px 80px 20px 80px;
     box-shadow: $shadow;
 	max-width: $content-width;
-	margin: 0 auto;
+	margin: 6.5em auto 1.5em auto;
 }
 time {
 	color: #898989;

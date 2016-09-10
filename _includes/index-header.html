@@ -5,10 +5,11 @@
 				{% for page in site.pages %} {% if page.navtitle %}
 				<li class="nav-li" ><a href="{{ page.url | prepend: site.baseurl }}">{{ page.navtitle }}</a></li>
 				{% endif %} {% endfor %}
-				{% for page in site.pages %} {% if page.heythisisthehomepage %}
-				<li class="nav-li" ><a href="{{ page.url | prepend: site.baseurl }}">Home</a></li>
-				{% endif %} {% endfor %}
 			</ul>
 		</nav>
 	</div>
 </aside>
+
+<header>
+	<h1><a id="header-text" href="{{ site.baseurl }}/">{{ site.title }}</a></h1>
+</header>

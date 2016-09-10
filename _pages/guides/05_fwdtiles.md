@@ -58,25 +58,3 @@ Usage Notes
 -----------
 Features such as ```Tile::setIgnoreScroll()``` ```Tile::setTextureFlip()``` and the passive parallax scrolling
 must be implemented GPU-side in the shader program in order to work.
-
-You can define extra uniform variables, but you will have to add them and set them outside of the rendering call. This means
-you'll have to bind to the shader, set the uniforms, then unbind.
-
-Adding a uniform:
-
-```cpp
-Shader * s = (Shader*)assetManager->getAsset("shader-key");
-s->use();
-// uniform_type is an enum value that describes the uniform datatype.
-s->addUniform("uniform-variable-name", uniform_type);
-```
-
-Setting the uniform:
-
-```cpp
-Shader * s = (Shader*)assetManager->getAsset("shader-key");
-s->use();
-s->setUniform("uniform-variable-name", &uniformvalue);
-```
-
-For more information, read the [shader uniform guide](/Tile2D/guides/uniforms/).
