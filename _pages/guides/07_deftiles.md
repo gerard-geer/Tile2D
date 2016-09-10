@@ -1,8 +1,9 @@
 ---
 layout: featuredoc
 title: Using DefTiles
-featuretitle: Using DefTiles
+featuretitle: DefTiles
 permalink: /guides/deftiles/
+isTileGuide: true
 ---
 
 Using DefTiles

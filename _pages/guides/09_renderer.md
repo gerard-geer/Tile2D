@@ -1,8 +1,9 @@
 ---
 layout: featuredoc
-title: Renderer Usage
-featuretitle: Renderer Usage
+title: The Renderer
+featuretitle: The Renderer
 permalink: /guides/renderer/
+isComponentGuide: true
 ---
 
 Advanced Renderer Usage
@@ -88,36 +89,16 @@ To completely clear the rendering queue, call
 void Renderer::flushRenderQueue();
 ```
 
-Writing a Custom Compositor Shader
+Writing Custom Compositor Shaders
 ----------------------------------
-The compositor is the functionality that stitches together both the forward and deferred passes into a
-coherent image. The clear color of the render buffers has an alpha of zero, and when the fragment shader
-of a DefTile fails its depth-test, it outputs zero as well. This greatly simplifies the logic regarding
-the decision of which buffer to display for a given fragment. It's simply:
+
+The compositor is what combines both passes as intended. Since the output value of DefTile shaders output an
+alpha of zero when its depth-test fails or when a Tile is not present in a certain spot in the deferred framebuffer,
+the math behind combining the passes is simply:
 
 ```glsl
 gl_FragColor.rgb = vec4( mix(fwdFB.rgb, defFB.rgb, defFB.a), 1.0 );
 ```
 
-The default shader does this quite well, but sadly, that's all it does. It's very reasonable to want
-to add some sort of effects to the final image, and to allow for this, custom shaders are allowed.
-When using a custom shader, these uniform variables are defined and populated:
-
-| ```uniform sampler2D fwdFB``` | The color buffer of the forward pass'' framebuffer. |
-| ```uniform sampler2D defFB``` | The color buffer of the deferred pass' framebuffer. |
-| ```uniform vec2 winResolution``` | The resolution of the window. |
-| ```uniform vec2 fbResolution``` | The resolution of the renderer's framebuffers. |
-| ```uniform float time``` | The time since the OpenGL context was created. |
-
-To write the shader, be sure to perform the operation listed above. Beyond that, go wild!
-
-In order to use your custom shader it must be added to the AssetManager, then you must call:
-
-```cpp
-void Renderer::setCustomShader(char * customCompositor);
-```
-
-| customCompositor | The key of the Shader to use. |
-
-If the shader does not exist or is removed then the Renderer will default back to the stock shader.
-If it has been removed, one must call ```setCustomShader()``` again to resume use.
+However, the compositor can be extended to do full screen, window-resolution effects. To do that read the 
+[custom compositor shader guide](/Tile2D/guides/fwdshaders/).

@@ -1,8 +1,9 @@
 ---
 layout: featuredoc
 title: Using SceneTiles
-featuretitle: Using SceneTiles
+featuretitle: SceneTiles
 permalink: /guides/scenetiles/
+isTileGuide: true
 ---
 
 Using SceneTiles

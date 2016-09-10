@@ -1,8 +1,9 @@
 ---
 layout: featuredoc
 title: Using FwdTiles
-featuretitle: Using FwdTiles
+featuretitle: FwdTiles
 permalink: /guides/fwdtiles/
+isTileGuide: true
 ---
 
 Using FwdTiles

@@ -3,6 +3,7 @@ layout: featuredoc
 title: Writing FwdTile Shaders
 featuretitle: Writing FwdTile Shaders
 permalink: /guides/fwdshaders/
+isShaderGuide: true
 ---
 
 {::options parse_block_html="true" /}

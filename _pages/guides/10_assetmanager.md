@@ -3,6 +3,7 @@ layout: featuredoc
 title: The AssetManager
 featuretitle: The AssetManager
 permalink: /guides/assetmanager/
+isComponentGuide: true
 ---
 
 The AssetManager

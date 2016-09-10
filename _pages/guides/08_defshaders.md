@@ -3,6 +3,7 @@ layout: featuredoc
 title: Writing DefTile Shaders
 featuretitle: Writing DefTile Shaders
 permalink: /guides/defshaders/
+isShaderGuide: true
 ---
 
 {::options parse_block_html="true" /}

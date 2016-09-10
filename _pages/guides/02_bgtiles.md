@@ -1,8 +1,9 @@
 ---
 layout: featuredoc
 title: Using BGTiles
-featuretitle: Using BGTiles
+featuretitle: BGTiles
 permalink: /guides/bgtiles/
+isTileGuide: true
 ---
 
 Using BGTiles

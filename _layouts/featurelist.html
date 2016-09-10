@@ -3,9 +3,23 @@ layout: default
 ---
 <div>
     {{ content }}
-    <ul>
-        {% for page in site.pages %} {% if page.featuretitle %}
-        <li><a href="{{ page.url | prepend: site.baseurl }}">{{ page.title }}</a></li>
+        <h3>Tile2D Components and Structures</h3>
+        <ul>
+        {% for page in site.pages %} {% if page.featuretitle and page.isComponentGuide %}
+        <li><a href="{{ page.url | prepend: site.baseurl }}">{{ page.featuretitle }}</a></li>
         {% endif %} {% endfor %}
+        </ul>
+        <h3>Tile Setup and Usage </h3>
+        <ul>
+        {% for page in site.pages %} {% if page.featuretitle and page.isTileGuide %}
+        <li><a href="{{ page.url | prepend: site.baseurl }}">{{ page.featuretitle }}</a></li>
+        {% endif %} {% endfor %}
+        </ul>
+        <h3>Shader Writing Guides</h3>
+        <ul>
+        {% for page in site.pages %} {% if page.featuretitle and page.isShaderGuide %}
+        <li><a href="{{ page.url | prepend: site.baseurl }}">{{ page.featuretitle }}</a></li>
+        {% endif %} {% endfor %}
+        </ul>
     </ul>
 </div>

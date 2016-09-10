@@ -3,6 +3,7 @@ layout: featuredoc
 title: Advanced Tile Features
 featuretitle: Advanced Tile Features
 permalink: /guides/tilefeatures/
+isTileGuide: true
 ---
 
 Advanced Tile Features

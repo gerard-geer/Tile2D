@@ -1,8 +1,9 @@
 ---
 layout: featuredoc
 title: Using AnimTiles
-featuretitle: Using AnimTiles
+featuretitle: AnimTiles
 permalink: /guides/animtiles/
+isTileGuide: true
 ---
 
 Using AnimTiles
