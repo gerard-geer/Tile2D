@@ -199,6 +199,11 @@ bool tileSortingPredicate(TileWithType lhs, TileWithType rhs)
 {
     Tile * a = lhs.second;
     Tile * b = rhs.second;
+    
+    // Let's first split things up into fwd and def tiles.
+    if( lhs.first == DEF_TILE && rhs.first != DEF_TILE ) return false;
+    if( lhs.first != DEF_TILE && rhs.first == DEF_TILE ) return true;
+    
     // We need to render transparent objects last.
     if(  a->hasTrans() && !b->hasTrans() ) return false;
     if( !a->hasTrans() &&  b->hasTrans() ) return true;
@@ -350,6 +355,8 @@ void Renderer::render(Window * window)
     float total, fwd, def;
     #endif
     
+    float cur = 0;
+    
     // Print a header to delineate each frame.
     #ifdef T2D_PER_TILE_STATS
     std::cout << "START OF FRAME" << std::endl;
@@ -384,7 +391,7 @@ void Renderer::render(Window * window)
         // it->second is the Tile*.
         
         // If this is a DefTile, then we go ahead and save it for later.
-        if( it->first == DEF_TILE ) continue;
+        if( it->first == DEF_TILE ) break;
         
         // Also if it's offscreen we don't need to render it.
         if( !this->onScreenTest(it->second) ) 
@@ -407,6 +414,11 @@ void Renderer::render(Window * window)
         #ifdef T2D_PER_FRAME_STATS
         ++ drawn;
         #endif
+        
+        // Update how many tiles we've drawn so we can start the second loop at the start of
+        // the DefTiles.
+        ++cur;
+        
     }
     
     // Clock the forward pass and
@@ -419,11 +431,10 @@ void Renderer::render(Window * window)
     // Now for the DefTiles we flip to the second framebuffer.
     this->defFB->setAsRenderTarget();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Flush again.
+    
     // Now that the primary-pass Tiles have been rendered...
-    for(std::vector<TileWithType>::iterator it = renderQueue.begin(); it != renderQueue.end(); ++it)
+    for(std::vector<TileWithType>::iterator it = renderQueue.begin() + cur; it != renderQueue.end(); ++it)
     {
-        // Now we only render DefTiles.
-        if( it->first != DEF_TILE ) continue;
         
         // Again, if it's offscreen we don't need to render it.
         if( !this->onScreenTest(it->second) )
