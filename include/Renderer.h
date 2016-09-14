@@ -30,11 +30,6 @@ class DefTile;
 class FwdTile;
 
 /*
- * A type definition that links a Tile with the subclass it was cast from.
- */
-typedef std::pair<tile_type, Tile*> TileWithType;
-
-/*
  * A type definition that links a Tile's ID with its index in the rendering queue.
  */
 typedef std::pair<unsigned long, unsigned int> IdAndIndex;
