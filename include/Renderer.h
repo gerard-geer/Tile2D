@@ -16,6 +16,7 @@
 #include "DefTile.h"
 #include "FwdTile.h"
 #include "Framebuffer.h"
+#include "RenderQueue.h"
 #include "Window.h"
 #include "shader_source.h"
 
@@ -28,11 +29,6 @@ class SceneTile;
 class AnimTile;
 class DefTile;
 class FwdTile;
-
-/*
- * A type definition that links a Tile's ID with its index in the rendering queue.
- */
-typedef std::pair<unsigned long, unsigned int> IdAndIndex;
 
 /**
  * @class Renderer
