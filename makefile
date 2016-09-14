@@ -39,15 +39,21 @@ CFLAGS= -c -g -I $(HDR_DIR) $(subst  T2D_, -D T2D_,$(strip $(DBFLAGS)))
 LFLAGS= -lglfw -lGL -lGLU -lpng -lGLEW -lm -lz -ldl
 
 # The source files to be built.
-FILES=$(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o      \
-	  $(BLD_DIR)Texture.o $(BLD_DIR)ShaderUniform.o   \
-	  $(BLD_DIR)Shader.o $(BLD_DIR)Camera.o           \
-	  $(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o    \
-	  $(BLD_DIR)Window.o $(BLD_DIR)BasicMatrix.o      \
-	  $(BLD_DIR)Tile.o $(BLD_DIR)BGTile.o             \
-	  $(BLD_DIR)SceneTile.o $(BLD_DIR)AnimTile.o      \
-	  $(BLD_DIR)DefTile.o $(BLD_DIR)FwdTile.o
+FILES=$(BLD_DIR)Asset.o 	  $(BLD_DIR)AssetManager.o 		\
+	  $(BLD_DIR)Texture.o 	  $(BLD_DIR)ShaderUniform.o   	\
+	  $(BLD_DIR)Shader.o 	  $(BLD_DIR)Camera.o           	\
+	  $(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o    		\
+	  $(BLD_DIR)Window.o 	  $(BLD_DIR)BasicMatrix.o      	\
+	  $(BLD_DIR)Tile.o 		  $(BLD_DIR)BGTile.o            \
+	  $(BLD_DIR)SceneTile.o   $(BLD_DIR)AnimTile.o      	\
+	  $(BLD_DIR)DefTile.o 	  $(BLD_DIR)FwdTile.o
 	
+# The shader source files to consolidate.
+SHADER_FILES=$(HDR_DIR)shader_source.h \
+			 $(SDR_DIR)bg_tile_shader.vert    $(SDR_DIR)bg_tile_shader.frag        \
+			 $(SDR_DIR)scene_tile_shader.vert $(SDR_DIR)scene_tile_shader.frag     \
+			 $(SDR_DIR)anim_tile_shader.vert  $(SDR_DIR)anim_tile_shader.frag      \
+			 $(SDR_DIR)final_pass_shader.vert $(SDR_DIR)final_pass_shader.frag
 all:
 	@echo ""
 	@echo "Welcome to the Tile2D makefile!"
@@ -113,11 +119,7 @@ setup_library_dir:
 SHADERS:
 	@echo "Consolidating shaders into header file named \"shader_source.h\""
 	@rm -f $(HDR_DIR)shader_source.h
-	@python glsl-to-header.py $(HDR_DIR)shader_source.h \
-							  $(SDR_DIR)bg_tile_shader.vert    $(SDR_DIR)bg_tile_shader.frag        \
-							  $(SDR_DIR)scene_tile_shader.vert $(SDR_DIR)scene_tile_shader.frag     \
-							  $(SDR_DIR)anim_tile_shader.vert  $(SDR_DIR)anim_tile_shader.frag      \
-							  $(SDR_DIR)final_pass_shader.vert $(SDR_DIR)final_pass_shader.frag
+	@python glsl-to-header.py $(SHADER_FILES)
 
 # Compiles all of Tile2D's source into .o files.
 OBJ_FILES_MESSAGE: setup_build_dir 
