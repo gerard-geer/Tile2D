@@ -250,26 +250,9 @@ void Renderer::addToRenderQueue(tile_type type, Tile * tile)
 bool Renderer::removeFromRenderQueue(Tile* tile)
 {
     // Check to make sure the Tile is in the memoization.
-    if ( this->rqMemo.find(tile->getID()) != this->rqMemo.end() )
-    {
-        // If it is we get the index of the item from the memoization.
-        unsigned int index = this->rqMemo[tile->getID()];
-        
-        // Use that index to erase.
-        renderQueue.erase(renderQueue.begin()+index);
-        
-        // Also erase the memoization entry.
-        rqMemo.erase(tile->getID());
-        
-        this->memoize();
-        
-        // Oh hey we did it! Return true as a reward.
-        return true;
-    }
-    
-    // Didn't exist in the queue! Return false to say so.
-    return false;
-    
+    if ( fwdQueue->removeFromRenderQueue(tile) ) return true;
+    else if( defQueue->removeFromRenderQueue(tile) ) return true;
+    else return false;
 }
 
 void Renderer::flushRenderQueue()
