@@ -44,14 +44,15 @@
 repository and makes use of the example assets. <strong>Note that all file paths described below must be
 relative to your executable (or be  definite paths.)</strong></p>
 
-<p><strong>Step 1:</strong> Build. Download the source and run <code class="highlighter-rouge">make</code> to view the avaiable build options, then
-build with your preferred method. Make sure you have all the <a href="/Tile2D/dependencies/">dependencies</a>! (Listed below.)</p>
+<p><strong>Step 1:</strong> Build and test. Download the source and run <code class="highlighter-rouge">make</code> to view the avaiable build options, then
+build with your preferred method. Make sure you have all the <a href="/Tile2D/dependencies/">dependencies</a>!</p>
 
 <p><strong>Step 2:</strong> Setup. Include the common header <code class="highlighter-rouge">tile2d.h</code> in your project, as well as the results of
-the build.</p>
+the build (the object or library files.)</p>
 
 <p><strong>Step 3:</strong> Create a window! This creates a Tile2D Window, which is simply just a managed GLFW window.
 Also, it’s also a good idea to store local pointers to the <code class="highlighter-rouge">Renderer</code> and <code class="highlighter-rouge">AssetManager</code>.</p>
+
 <div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">Window</span> <span class="n">w</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Window</span><span class="p">();</span>
 <span class="n">w</span><span class="o">-&gt;</span><span class="n">create</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="s">"Tile2D Window"</span><span class="p">);</span>
 <span class="n">Renderer</span> <span class="o">*</span> <span class="n">r</span> <span class="o">=</span> <span class="n">w</span><span class="o">-&gt;</span><span class="n">getRenderer</span><span class="p">();</span>
@@ -63,23 +64,27 @@ Also, it’s also a good idea to store local pointers to the <code class="highli
 shaders and textures are considered to be Assets. Assets are stored in a key-value structure called
 an AssetManager, contained within the renderer itself. It provides factory functions for both textures
 and shaders.</p>
+
 <div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">a</span><span class="o">-&gt;</span><span class="n">addNewTexture</span><span class="p">(</span><span class="s">"puppy"</span><span class="p">,</span> <span class="s">"../ExampleAssets/puppy.png"</span><span class="p">);</span>
 </code></pre>
 </div>
 
 <p><strong>Step 5:</strong> Create some Tiles. The Renderer contains several factory methods to easily create Tiles.
 Note though that there are more types of Tiles, and more options than apparent here.</p>
+
 <div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">SceneTile</span> <span class="o">*</span> <span class="n">st</span> <span class="o">=</span> <span class="n">r</span><span class="o">-&gt;</span><span class="n">makeSceneTile</span><span class="p">(</span><span class="mf">.25</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">PLANE_NEG_2</span><span class="p">,</span> <span class="mf">.5</span><span class="p">,</span> <span class="mf">.5</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="s">"puppy"</span><span class="p">);</span>
 </code></pre>
 </div>
 
 <p><strong>Step 6:</strong> Add the Tiles to the rendering queue. The rendering queue is an opaque list that
 automatically sorts the Tiles when added to minimize overdraw and maximize efficiency.</p>
+
 <div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">r</span><span class="o">-&gt;</span><span class="n">addToRenderQueue</span><span class="p">(</span><span class="n">BG_TILE</span><span class="p">,</span> <span class="n">bg</span><span class="p">);</span>
 </code></pre>
 </div>
 
 <p><strong>Step 7:</strong> Render! (In the style of GLFW)</p>
+
 <div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">glfwPollEvents</span><span class="p">();</span>
 <span class="n">glClear</span><span class="p">(</span> <span class="n">GL_COLOR_BUFFER_BIT</span> <span class="o">|</span> <span class="n">GL_DEPTH_BUFFER_BIT</span> <span class="p">);</span>
 <span class="n">r</span><span class="o">-&gt;</span><span class="n">render</span><span class="p">(</span><span class="o">&amp;</span><span class="n">window</span><span class="p">);</span>
