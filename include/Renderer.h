@@ -144,7 +144,14 @@ private:
      */
     std::map< unsigned long, unsigned int > rqMemo;
     
+    /*
+		 * The RenderQueue that stores the Tiles of the first pass.
+		 */
     RenderQueue * fwdQueue;
+    
+    /*
+		 * The RenderQueue that sotres the Tiles of the second pass.
+		 */
     RenderQueue * defQueue;
     
     

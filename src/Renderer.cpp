@@ -249,9 +249,14 @@ void Renderer::addToRenderQueue(tile_type type, Tile * tile)
 
 bool Renderer::removeFromRenderQueue(Tile* tile)
 {
-    // Check to make sure the Tile is in the memoization.
+    // Check to see if we could remove it from the fwdQueue.
     if ( fwdQueue->removeFromRenderQueue(tile) ) return true;
+    
+    // If not, then we try the other queue, which is less likely to
+    // be used.
     else if( defQueue->removeFromRenderQueue(tile) ) return true;
+    
+    // If that doesn't work, oh well it didn't exist.
     else return false;
 }
 
