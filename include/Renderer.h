@@ -144,6 +144,10 @@ private:
      */
     std::map< unsigned long, unsigned int > rqMemo;
     
+    RenderQueue * fwdQueue;
+    RenderQueue * defQueue;
+    
+    
     /*
      * After the Tiles are drawn into the framebuffer, we need a
      * way to draw that framebuffer to the screen. How about atop

@@ -46,7 +46,8 @@ FILES=$(BLD_DIR)Asset.o 	  $(BLD_DIR)AssetManager.o 		\
 	  $(BLD_DIR)Window.o 	  $(BLD_DIR)BasicMatrix.o      	\
 	  $(BLD_DIR)Tile.o 		  $(BLD_DIR)BGTile.o            \
 	  $(BLD_DIR)SceneTile.o   $(BLD_DIR)AnimTile.o      	\
-	  $(BLD_DIR)DefTile.o 	  $(BLD_DIR)FwdTile.o
+	  $(BLD_DIR)DefTile.o 	  $(BLD_DIR)FwdTile.o			\
+	  $(BLD_DIR)RenderQueue.o
 	
 # The shader source files to consolidate.
 SHADER_FILES=$(HDR_DIR)shader_source.h \
