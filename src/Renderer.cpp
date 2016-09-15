@@ -88,6 +88,10 @@ bool Renderer::init(GLuint width, GLuint height)
     this->assets = new AssetManager();
     this->vitalAssets = new AssetManager();
     
+    // Next we initialize the RenderQueues.
+    this->fwdQueue = new RenderQueue();
+    this->defQueue = new RenderQueue();
+    
     // Next initialize the Camera.
     this->camera = new Camera(0.0, 0.0);
         
