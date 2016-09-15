@@ -262,7 +262,8 @@ bool Renderer::removeFromRenderQueue(Tile* tile)
 
 void Renderer::flushRenderQueue()
 {
-    this->renderQueue.clear();
+    this->fwdQueue->flush();
+    this->defQueue->flush();
 }
 
 bool Renderer::onScreenTest(Tile * t)
