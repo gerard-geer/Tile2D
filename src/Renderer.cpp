@@ -238,13 +238,16 @@ bool tileSortingPredicate(TileWithType lhs, TileWithType rhs)
 void Renderer::addToRenderQueue(tile_type type, Tile * tile)
 {
     // Just tack the Tile on the end since it'll be sorted.
-    this->renderQueue.push_back(TileWithType(type,tile));
+    if(type != DEF_TILE)
+        this->fwdQueue->addToRenderQueue(type, tile);
+    else
+        this->defQueue->addToRenderQueue(type, tile);
     
     // Sort the Tiles to cut down on overdraw.
-    std::sort(this->renderQueue.begin(), this->renderQueue.end(), tileSortingPredicate);
+    //std::sort(this->renderQueue.begin(), this->renderQueue.end(), tileSortingPredicate);
     
     // Now that it's sorted, we need to re-memoize.
-    this->memoize();
+    //this->memoize();
 }
 
 bool Renderer::removeFromRenderQueue(Tile* tile)
@@ -376,18 +379,20 @@ void Renderer::render(Window * window)
     this->fwdFB->setAsRenderTarget();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear out what was in the framebuffer.
     
-    // Now that we've sorted things, we go through and render the
-    // non-post-process Tiles.
-    for(std::vector<TileWithType>::iterator it = renderQueue.begin(); it != renderQueue.end(); ++it)
+    // Create a TileWithType to load the queries from the render queues into.
+    TileWithType t;
+    
+    // Go through and render the forward tiles.
+    for(unsigned int i = 0; i < this->fwdQueue->size(); ++i)
     {
-        // it->first is the tile_type;
-        // it->second is the Tile*.
         
+        t = fwdQueue->get(i);
+        std::cout << "asdf" << std::endl;
         // If this is a DefTile, then we go ahead and save it for later.
-        if( it->first == DEF_TILE ) break;
+        if( t.first == DEF_TILE ) break;
         
         // Also if it's offscreen we don't need to render it.
-        if( !this->onScreenTest(it->second) ) 
+        if( !this->onScreenTest(t.second) ) 
         {
     
             #ifdef T2D_PER_FRAME_STATS
@@ -397,11 +402,11 @@ void Renderer::render(Window * window)
         }
         
         // Otherwise we render the tile.
-        it->second->render(this);
+        t.second->render(this);
     
         // Print out the current tile if necessary.
         #ifdef T2D_PER_TILE_STATS
-        it->second->report();
+        t.second->report();
         #endif
         
         #ifdef T2D_PER_FRAME_STATS
@@ -426,13 +431,14 @@ void Renderer::render(Window * window)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Flush again.
     
     // Now that the primary-pass Tiles have been rendered...
-    for(std::vector<TileWithType>::iterator it = renderQueue.begin() + cur; it != renderQueue.end(); ++it)
+    for(unsigned int i = 0; i < this->defQueue->size(); ++i)
     {
+        // Get the current Tile.
+        t = this->defQueue->get(i);
         
         // Again, if it's offscreen we don't need to render it.
-        if( !this->onScreenTest(it->second) )
+        if( !this->onScreenTest(t.second) )
         {
-    
             #ifdef T2D_PER_FRAME_STATS
             ++ culled;
             #endif
@@ -440,17 +446,16 @@ void Renderer::render(Window * window)
         }
         
         // Render the DefTile.
-        it->second->render(this);
+        t.second->render(this);
     
         #ifdef T2D_PER_TILE_STATS
-        it->second->report();
+        t.second->report();
         #endif
         
         #ifdef T2D_PER_FRAME_STATS
         ++ drawn;
         #endif
     }
-    
     // Clock the final pass.
     #ifdef T2D_PER_FRAME_STATS
     def = glfwGetTime()-def;
