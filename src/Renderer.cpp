@@ -367,9 +367,9 @@ void Renderer::render(Window * window)
     // Go through and render the forward tiles.
     for(unsigned int i = 0; i < this->fwdQueue->size(); ++i)
     {
-        
+        // Get the current tile.
         t = fwdQueue->get(i);
-        std::cout << "asdf" << std::endl;
+        
         // If this is a DefTile, then we go ahead and save it for later.
         if( t.first == DEF_TILE ) break;
         
