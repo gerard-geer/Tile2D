@@ -3,6 +3,8 @@
 
 #include <GLFW/glfw3.h>
 #include <cmath>
+#include <utility>
+
 #include "BasicMatrix.h"
 
 // Forward definitions of Tile and Renderer since these two
@@ -51,6 +53,11 @@ enum tile_type
     DEF_TILE,
     FWD_TILE
 };
+
+/*
+ * A type definition that links a Tile with the subclass it was cast from.
+ */
+typedef std::pair<tile_type, Tile*> TileWithType; 
 
 class Tile
 {

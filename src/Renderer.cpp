@@ -88,6 +88,10 @@ bool Renderer::init(GLuint width, GLuint height)
     this->assets = new AssetManager();
     this->vitalAssets = new AssetManager();
     
+    // Next we initialize the RenderQueues.
+    this->fwdQueue = new RenderQueue();
+    this->defQueue = new RenderQueue();
+    
     // Next initialize the Camera.
     this->camera = new Camera(0.0, 0.0);
         
@@ -176,18 +180,6 @@ unsigned int Renderer::getHeight()
     return this->fwdFB->getHeight();
 }
 
-void Renderer::memoize()
-{
-    unsigned int i = 0;
-    for(std::vector<TileWithType>::iterator it = renderQueue.begin(); it != renderQueue.end(); ++it)
-    {
-        /* it->first: TileType
-         * it->second: Tile* */
-        this->rqMemo.insert(IdAndIndex(it->second->getID(), i));
-        ++i;
-    }
-}
-
 /**
  * @brief This is used as the predicate when sorting Tiles. It places opaque
  *        from front to back, then transparent Tiles from back to front.
@@ -234,43 +226,29 @@ bool tileSortingPredicate(TileWithType lhs, TileWithType rhs)
 void Renderer::addToRenderQueue(tile_type type, Tile * tile)
 {
     // Just tack the Tile on the end since it'll be sorted.
-    this->renderQueue.push_back(TileWithType(type,tile));
-    
-    // Sort the Tiles to cut down on overdraw.
-    std::sort(this->renderQueue.begin(), this->renderQueue.end(), tileSortingPredicate);
-    
-    // Now that it's sorted, we need to re-memoize.
-    this->memoize();
+    if(type != DEF_TILE)
+        this->fwdQueue->addToRenderQueue(type, tile);
+    else
+        this->defQueue->addToRenderQueue(type, tile);
 }
 
 bool Renderer::removeFromRenderQueue(Tile* tile)
 {
-    // Check to make sure the Tile is in the memoization.
-    if ( this->rqMemo.find(tile->getID()) != this->rqMemo.end() )
-    {
-        // If it is we get the index of the item from the memoization.
-        unsigned int index = this->rqMemo[tile->getID()];
-        
-        // Use that index to erase.
-        renderQueue.erase(renderQueue.begin()+index);
-        
-        // Also erase the memoization entry.
-        rqMemo.erase(tile->getID());
-        
-        this->memoize();
-        
-        // Oh hey we did it! Return true as a reward.
-        return true;
-    }
+    // Check to see if we could remove it from the fwdQueue.
+    if ( fwdQueue->removeFromRenderQueue(tile) ) return true;
     
-    // Didn't exist in the queue! Return false to say so.
-    return false;
+    // If not, then we try the other queue, which is less likely to
+    // be used.
+    else if( defQueue->removeFromRenderQueue(tile) ) return true;
     
+    // If that doesn't work, oh well it didn't exist.
+    else return false;
 }
 
 void Renderer::flushRenderQueue()
 {
-    this->renderQueue.clear();
+    this->fwdQueue->flush();
+    this->defQueue->flush();
 }
 
 bool Renderer::onScreenTest(Tile * t)
@@ -383,18 +361,20 @@ void Renderer::render(Window * window)
     this->fwdFB->setAsRenderTarget();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear out what was in the framebuffer.
     
-    // Now that we've sorted things, we go through and render the
-    // non-post-process Tiles.
-    for(std::vector<TileWithType>::iterator it = renderQueue.begin(); it != renderQueue.end(); ++it)
+    // Create a TileWithType to load the queries from the render queues into.
+    TileWithType t;
+    
+    // Go through and render the forward tiles.
+    for(unsigned int i = 0; i < this->fwdQueue->size(); ++i)
     {
-        // it->first is the tile_type;
-        // it->second is the Tile*.
+        // Get the current tile.
+        t = fwdQueue->get(i);
         
         // If this is a DefTile, then we go ahead and save it for later.
-        if( it->first == DEF_TILE ) break;
+        if( t.first == DEF_TILE ) break;
         
         // Also if it's offscreen we don't need to render it.
-        if( !this->onScreenTest(it->second) ) 
+        if( !this->onScreenTest(t.second) ) 
         {
     
             #ifdef T2D_PER_FRAME_STATS
@@ -404,11 +384,11 @@ void Renderer::render(Window * window)
         }
         
         // Otherwise we render the tile.
-        it->second->render(this);
+        t.second->render(this);
     
         // Print out the current tile if necessary.
         #ifdef T2D_PER_TILE_STATS
-        it->second->report();
+        t.second->report();
         #endif
         
         #ifdef T2D_PER_FRAME_STATS
@@ -433,13 +413,14 @@ void Renderer::render(Window * window)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Flush again.
     
     // Now that the primary-pass Tiles have been rendered...
-    for(std::vector<TileWithType>::iterator it = renderQueue.begin() + cur; it != renderQueue.end(); ++it)
+    for(unsigned int i = 0; i < this->defQueue->size(); ++i)
     {
+        // Get the current Tile.
+        t = this->defQueue->get(i);
         
         // Again, if it's offscreen we don't need to render it.
-        if( !this->onScreenTest(it->second) )
+        if( !this->onScreenTest(t.second) )
         {
-    
             #ifdef T2D_PER_FRAME_STATS
             ++ culled;
             #endif
@@ -447,17 +428,16 @@ void Renderer::render(Window * window)
         }
         
         // Render the DefTile.
-        it->second->render(this);
+        t.second->render(this);
     
         #ifdef T2D_PER_TILE_STATS
-        it->second->report();
+        t.second->report();
         #endif
         
         #ifdef T2D_PER_FRAME_STATS
         ++ drawn;
         #endif
     }
-    
     // Clock the final pass.
     #ifdef T2D_PER_FRAME_STATS
     def = glfwGetTime()-def;
@@ -658,10 +638,19 @@ void Renderer::destroyAssetManagers()
     delete this->vitalAssets;
 }
 
+void Renderer::destroyRenderQueues()
+{
+    this->fwdQueue->flush();
+    this->defQueue->flush();
+    delete this->fwdQueue;
+    delete this->defQueue;
+}
+
 void Renderer::destroy()
 {
     this->destroyAssetManagers();
     this->destroyTileVAO();
     this->destroyFBOs();
+    this->destroyRenderQueues();
 }
 

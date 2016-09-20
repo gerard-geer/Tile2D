@@ -38,6 +38,23 @@ CFLAGS= -c -g -I $(HDR_DIR) $(subst  T2D_, -D T2D_,$(strip $(DBFLAGS)))
 # Linking flags to make sure everything is bound up tight.
 LFLAGS= -lglfw -lGL -lGLU -lpng -lGLEW -lm -lz -ldl
 
+# The source files to be built.
+FILES=$(BLD_DIR)Asset.o 	  $(BLD_DIR)AssetManager.o 		\
+	  $(BLD_DIR)Texture.o 	  $(BLD_DIR)ShaderUniform.o   	\
+	  $(BLD_DIR)Shader.o 	  $(BLD_DIR)Camera.o           	\
+	  $(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o    		\
+	  $(BLD_DIR)Window.o 	  $(BLD_DIR)BasicMatrix.o      	\
+	  $(BLD_DIR)Tile.o 		  $(BLD_DIR)BGTile.o            \
+	  $(BLD_DIR)SceneTile.o   $(BLD_DIR)AnimTile.o      	\
+	  $(BLD_DIR)DefTile.o 	  $(BLD_DIR)FwdTile.o			\
+	  $(BLD_DIR)RenderQueue.o
+	
+# The shader source files to consolidate.
+SHADER_FILES=$(HDR_DIR)shader_source.h \
+			 $(SDR_DIR)bg_tile_shader.vert    $(SDR_DIR)bg_tile_shader.frag        \
+			 $(SDR_DIR)scene_tile_shader.vert $(SDR_DIR)scene_tile_shader.frag     \
+			 $(SDR_DIR)anim_tile_shader.vert  $(SDR_DIR)anim_tile_shader.frag      \
+			 $(SDR_DIR)final_pass_shader.vert $(SDR_DIR)final_pass_shader.frag
 all:
 	@echo ""
 	@echo "Welcome to the Tile2D makefile!"
@@ -103,11 +120,7 @@ setup_library_dir:
 SHADERS:
 	@echo "Consolidating shaders into header file named \"shader_source.h\""
 	@rm -f $(HDR_DIR)shader_source.h
-	@python glsl-to-header.py $(HDR_DIR)shader_source.h \
-							  $(SDR_DIR)bg_tile_shader.vert    $(SDR_DIR)bg_tile_shader.frag        \
-							  $(SDR_DIR)scene_tile_shader.vert $(SDR_DIR)scene_tile_shader.frag     \
-							  $(SDR_DIR)anim_tile_shader.vert  $(SDR_DIR)anim_tile_shader.frag      \
-							  $(SDR_DIR)final_pass_shader.vert $(SDR_DIR)final_pass_shader.frag
+	@python glsl-to-header.py $(SHADER_FILES)
 
 # Compiles all of Tile2D's source into .o files.
 OBJ_FILES_MESSAGE: setup_build_dir 
@@ -122,40 +135,21 @@ $(BLD_DIR)%.o: $(SRC_DIR)%.cpp $(HDR_DIR)%.h
 %.o: $(BLD_DIR)%.o
 
 	
-OBJ_FILES: SHADERS OBJ_FILES_MESSAGE $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o $(BLD_DIR)Texture.o	\
-		   $(BLD_DIR)Camera.o $(BLD_DIR)ShaderUniform.o $(BLD_DIR)Shader.o $(BLD_DIR)BasicMatrix.o	\
-		   $(BLD_DIR)Tile.o $(BLD_DIR)BGTile.o $(BLD_DIR)SceneTile.o $(BLD_DIR)AnimTile.o	        \
-		   $(BLD_DIR)DefTile.o $(BLD_DIR)FwdTile.o $(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o     \
-           $(BLD_DIR)Window.o
+OBJ_FILES: SHADERS OBJ_FILES_MESSAGE $(FILES)
 	@echo "Done creating object files. Note: some may not have been recompiled."
 	
 # Compiles all of Tile2D into object files then archives them into a
 # static library.
 STATIC: setup_library_dir OBJ_FILES
 	@echo "Using ar to create static library in \"$(LIB_DIR)\" preserving original timestamps."
-	@ar rc $(BLD_DIR)$(ST_NAME) $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o      \
-							   $(BLD_DIR)Texture.o $(BLD_DIR)ShaderUniform.o    \
-							   $(BLD_DIR)Shader.o $(BLD_DIR)Camera.o            \
-							   $(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o     \
-							   $(BLD_DIR)Window.o $(BLD_DIR)BasicMatrix.o       \
-							   $(BLD_DIR)Tile.o $(BLD_DIR)BGTile.o              \
-							   $(BLD_DIR)SceneTile.o $(BLD_DIR)AnimTile.o       \
-							   $(BLD_DIR)DefTile.o $(BLD_DIR)FwdTile.o -o -v
+	@ar rc $(BLD_DIR)$(ST_NAME) $(FILES) -o -v
 	@echo "Done archiving."
 							  
 # Compiles Tile2D and links it up with its dependencies (you better have them)
 # into a dynamic library.
 DYNAMIC: setup_library_dir OBJ_FILES
 	@echo "Creating shared library \"$(DY_NAME)\" in \"$(LIB_DIR)\"."
-	@$(CC) -shared $(BLD_DIR)Asset.o $(BLD_DIR)AssetManager.o   \
-				$(BLD_DIR)Texture.o $(BLD_DIR)ShaderUniform.o   \
-				$(BLD_DIR)Shader.o $(BLD_DIR)Camera.o           \
-				$(BLD_DIR)Framebuffer.o $(BLD_DIR)Renderer.o    \
-				$(BLD_DIR)Window.o $(BLD_DIR)BasicMatrix.o      \
-				$(BLD_DIR)Tile.o $(BLD_DIR)BGTile.o             \
-				$(BLD_DIR)SceneTile.o $(BLD_DIR)AnimTile.o      \
-				$(BLD_DIR)DefTile.o $(BLD_DIR)FwdTile.o         \
-				$(LFLAGS) -o $(LIB_DIR)$(DY_NAME)
+	@$(CC) -shared $(FILES) -o $(LIB_DIR)$(DY_NAME)
 	@echo "Done creating shared library."
 	
 # Compiles main.cpp

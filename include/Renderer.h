@@ -2,9 +2,6 @@
 #define RENDERER_H
 
 #include <iostream>
-#include <vector>
-#include <valarray>
-#include <map>
 #include "AssetManager.h"
 #include "Shader.h"
 #include "Texture.h"
@@ -16,6 +13,7 @@
 #include "DefTile.h"
 #include "FwdTile.h"
 #include "Framebuffer.h"
+#include "RenderQueue.h"
 #include "Window.h"
 #include "shader_source.h"
 
@@ -28,16 +26,6 @@ class SceneTile;
 class AnimTile;
 class DefTile;
 class FwdTile;
-
-/*
- * A type definition that links a Tile with the subclass it was cast from.
- */
-typedef std::pair<tile_type, Tile*> TileWithType;
-
-/*
- * A type definition that links a Tile's ID with its index in the rendering queue.
- */
-typedef std::pair<unsigned long, unsigned int> IdAndIndex;
 
 /**
  * @class Renderer
@@ -140,18 +128,14 @@ private:
     char * customCompositor;
     
     /*
-     * The render queue. The way framebuilding works here is that
-     * one adds Tiles to the renderQueue, and then calls render()
-     * to render them all.
+     * The RenderQueue that stores the Tiles of the first pass.
      */
-    std::vector< TileWithType > renderQueue;
+    RenderQueue * fwdQueue;
     
     /*
-     * A memoization of all the Tiles' position in the sorted render queue,
-     * so that single Tiles can be removed in O(1) time. It's just a mapping
-     * of Tile IDs to indices.
-     */
-    std::map< unsigned long, unsigned int > rqMemo;
+	 * The RenderQueue that sotres the Tiles of the second pass.
+	 */
+    RenderQueue * defQueue;
     
     /*
      * After the Tiles are drawn into the framebuffer, we need a
@@ -177,6 +161,7 @@ private:
      *        use when DefTiles don't specify one or more of their textures.
      */
     void initPlaceholderTexture();
+    
     /**
      * @brief Loads the stock shaders of the BGTile, SceneTile and AnimTile
      * and puts them in the AssetManager.
@@ -194,11 +179,6 @@ private:
      * @return Whether or not the Tile is on screen.
      */
     bool onScreenTest(Tile * t);
-    
-    /**
-     * @brief Memoizes or re-memoizes the rendering queue.
-     */
-    void memoize();
     
     /**
      * @brief Draws the finished framebuffer onto a full screen Tile and
@@ -220,6 +200,11 @@ private:
      * @brief Destroys the AssetManager.
      */
     void destroyAssetManagers();
+    
+    /**
+	 * @brief Destroys the RenderQueues.
+	 */
+    void destroyRenderQueues();
     
 public:
 
