@@ -64,6 +64,17 @@ void RenderQueue::addToRenderQueue(tile_type type, Tile * tile)
     this->memoize();
 }
 
+TileWithType RenderQueue::get(unsigned int index)
+{
+    return this->queue.at(index);
+}
+
+unsigned int RenderQueue::size()
+{
+    return this->queue.size();
+}
+
+
 bool RenderQueue::removeFromRenderQueue(Tile* tile)
 {
     // Check to make sure the Tile is in the memoization.

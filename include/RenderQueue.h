@@ -65,6 +65,19 @@ public:
      */
     void flush();
     
+    /**
+    * @brief Returns the item at the specified index in the queue.
+    * @param index The index to retrieve from.
+	* @return The item at the specified index in the queue.
+    */
+    TileWithType get(unsigned int index);
+    
+    /**
+	 * @brief Returns the size of this RenderQueue.
+	 * @return The size of this RenderQueue.
+	 */
+    unsigned int size();
+    
 };
 
 #endif // RENDERQUEUE_H
