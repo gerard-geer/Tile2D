@@ -180,18 +180,6 @@ unsigned int Renderer::getHeight()
     return this->fwdFB->getHeight();
 }
 
-void Renderer::memoize()
-{
-    unsigned int i = 0;
-    for(std::vector<TileWithType>::iterator it = renderQueue.begin(); it != renderQueue.end(); ++it)
-    {
-        /* it->first: TileType
-         * it->second: Tile* */
-        this->rqMemo.insert(IdAndIndex(it->second->getID(), i));
-        ++i;
-    }
-}
-
 /**
  * @brief This is used as the predicate when sorting Tiles. It places opaque
  *        from front to back, then transparent Tiles from back to front.
@@ -242,12 +230,6 @@ void Renderer::addToRenderQueue(tile_type type, Tile * tile)
         this->fwdQueue->addToRenderQueue(type, tile);
     else
         this->defQueue->addToRenderQueue(type, tile);
-    
-    // Sort the Tiles to cut down on overdraw.
-    //std::sort(this->renderQueue.begin(), this->renderQueue.end(), tileSortingPredicate);
-    
-    // Now that it's sorted, we need to re-memoize.
-    //this->memoize();
 }
 
 bool Renderer::removeFromRenderQueue(Tile* tile)
@@ -656,10 +638,19 @@ void Renderer::destroyAssetManagers()
     delete this->vitalAssets;
 }
 
+void Renderer::destroyRenderQueues()
+{
+    this->fwdQueue->flush();
+    this->defQueue->flush();
+    delete this->fwdQueue;
+    delete this->defQueue;
+}
+
 void Renderer::destroy()
 {
     this->destroyAssetManagers();
     this->destroyTileVAO();
     this->destroyFBOs();
+    this->destroyRenderQueues();
 }
 

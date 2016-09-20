@@ -2,9 +2,6 @@
 #define RENDERER_H
 
 #include <iostream>
-#include <vector>
-#include <valarray>
-#include <map>
 #include "AssetManager.h"
 #include "Shader.h"
 #include "Texture.h"
@@ -131,29 +128,14 @@ private:
     char * customCompositor;
     
     /*
-     * The render queue. The way framebuilding works here is that
-     * one adds Tiles to the renderQueue, and then calls render()
-     * to render them all.
+     * The RenderQueue that stores the Tiles of the first pass.
      */
-    std::vector< TileWithType > renderQueue;
-    
-    /*
-     * A memoization of all the Tiles' position in the sorted render queue,
-     * so that single Tiles can be removed in O(1) time. It's just a mapping
-     * of Tile IDs to indices.
-     */
-    std::map< unsigned long, unsigned int > rqMemo;
-    
-    /*
-		 * The RenderQueue that stores the Tiles of the first pass.
-		 */
     RenderQueue * fwdQueue;
     
     /*
-		 * The RenderQueue that sotres the Tiles of the second pass.
-		 */
+	 * The RenderQueue that sotres the Tiles of the second pass.
+	 */
     RenderQueue * defQueue;
-    
     
     /*
      * After the Tiles are drawn into the framebuffer, we need a
@@ -179,6 +161,7 @@ private:
      *        use when DefTiles don't specify one or more of their textures.
      */
     void initPlaceholderTexture();
+    
     /**
      * @brief Loads the stock shaders of the BGTile, SceneTile and AnimTile
      * and puts them in the AssetManager.
@@ -196,11 +179,6 @@ private:
      * @return Whether or not the Tile is on screen.
      */
     bool onScreenTest(Tile * t);
-    
-    /**
-     * @brief Memoizes or re-memoizes the rendering queue.
-     */
-    void memoize();
     
     /**
      * @brief Draws the finished framebuffer onto a full screen Tile and
@@ -222,6 +200,11 @@ private:
      * @brief Destroys the AssetManager.
      */
     void destroyAssetManagers();
+    
+    /**
+	 * @brief Destroys the RenderQueues.
+	 */
+    void destroyRenderQueues();
     
 public:
 
