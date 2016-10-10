@@ -265,6 +265,16 @@ unsigned int Window::getHeight() const
     return this->height;
 }
 
+bool Window::isFullscreen() const
+{
+    return this->fullscreen;
+}
+
+unsigned long Window::framecount() const
+{
+    return this->fc;
+}
+
 Renderer * Window::getRenderer()
 {
     return this->renderer;
@@ -272,7 +282,13 @@ Renderer * Window::getRenderer()
 
 void Window::setAsRenderTarget()
 {
+    // Bind teh current framebuffer to zero, which tells OpenGL
+    // to not actually use a user-defined framebuffer, but to
+    // fall back to the window context itself.
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    
+    // Update the OpenGL state to recognize the dimensions of
+    // the window.
     glViewport(0,0,this->width, this->height);
 }
 
@@ -289,6 +305,9 @@ void Window::update()
     
     // Flip front/back buffers.
     glfwSwapBuffers(this->getWindow());
+    
+    // Increment the framecount.
+    ++fc;
 }
 
 const char * Window::getErrorDesc(window_error e)

@@ -60,6 +60,11 @@ private:
     bool fullscreen;
     
     /*
+     * The current framecount.
+     */
+    unsigned long fc;
+    
+    /*
      * the underlying GLFWwindow.
      */
     GLFWwindow * baseWindow;
@@ -145,6 +150,18 @@ public:
      * @return The height/vertical resolution of the Window.
      */
     unsigned int getHeight() const;
+    
+    /**
+	 * @brief Returns whether or not this Window is fullscreen.
+	 * @return Whether or not this Window is fullscreen.
+	 */
+    bool isFullscreen() const;
+     
+    /**
+     * @brief Returns the current framecount, or how many frames have been rendered.
+     * @return How many frames have been rendered.
+     */
+    unsigned long framecount() const;
     
     /**
      * @brief Returns a reference to this window's Renderer.
