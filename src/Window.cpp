@@ -265,12 +265,12 @@ unsigned int Window::getHeight() const
     return this->height;
 }
 
-bool isFullscreen() const
+bool Window::isFullscreen() const
 {
     return this->fullscreen;
 }
 
-bool framecount() const
+unsigned long Window::framecount() const
 {
     return this->fc;
 }
