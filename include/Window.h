@@ -161,7 +161,7 @@ public:
      * @brief Returns the current framecount, or how many frames have been rendered.
      * @return How many frames have been rendered.
      */
-    unsigned long framecount();
+    unsigned long framecount() const;
     
     /**
      * @brief Returns a reference to this window's Renderer.
