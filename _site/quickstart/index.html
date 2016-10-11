@@ -85,11 +85,9 @@ automatically sorts the Tiles when added to minimize overdraw and maximize effic
 
 <p><strong>Step 7:</strong> Render! (In the style of GLFW)</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">glfwPollEvents</span><span class="p">();</span>
-<span class="n">glClear</span><span class="p">(</span> <span class="n">GL_COLOR_BUFFER_BIT</span> <span class="o">|</span> <span class="n">GL_DEPTH_BUFFER_BIT</span> <span class="p">);</span>
-<span class="n">r</span><span class="o">-&gt;</span><span class="n">render</span><span class="p">(</span><span class="o">&amp;</span><span class="n">window</span><span class="p">);</span>
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">glfwPollEvents</span><span class="p">();</span> <span class="c1">// Required for keyboard input to be seen.
+</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">render</span><span class="p">(</span><span class="o">&amp;</span><span class="n">window</span><span class="p">);</span>
 <span class="n">glfwSwapBuffers</span><span class="p">(</span><span class="n">window</span><span class="p">.</span><span class="n">getWindow</span><span class="p">());</span>
-<span class="o">++</span><span class="n">framecount</span><span class="p">;</span>
 </code></pre>
 </div>
 

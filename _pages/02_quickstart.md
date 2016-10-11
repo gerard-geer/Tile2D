@@ -54,9 +54,7 @@ r->addToRenderQueue(BG_TILE, bg);
 **Step 7:** Render! (In the style of GLFW)
 
 ```cpp
-glfwPollEvents();
-glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+glfwPollEvents(); // Required for keyboard input to be seen.
 r->render(&window);
 glfwSwapBuffers(window.getWindow());
-++framecount;
 ```

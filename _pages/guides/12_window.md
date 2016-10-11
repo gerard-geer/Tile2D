@@ -41,8 +41,8 @@ To change the resolution of the window, call:
 void Window::setResolution(unsigned int width, unsigned int height);
 ```
 
-|  width The new width of the window.
-|  height The new height of the window.
+|  ```width``` | The new width of the window. |
+|  ```height``` | The new height of the window. |
 
 This has two effects:
 When in full screen mode, it simply changes the resolution the compositor outputs. When in
@@ -56,6 +56,9 @@ To change the resolution of the forward and deferred framebuffers:
 void Window::setFBResolution(unsigned int width, unsigned int height);
 ```
 
+| ```width``` | The new horizontal resolution of the internal framebuffers. |
+| ```height``` | The new vertical resolution of the internal framebuffers. |
+
 Like when resizing the window, this causes the framebuffers to be recreated and reinitialized, but in practice that's not
 terribly expensive when working with low-resolution framebuffers.
 
@@ -67,12 +70,18 @@ To toggle between full screen and windowed modes, call:
 window_error Window::setFullscreen(bool fullscreen);
 ```
 
-| fullscreen | Whether or not you want this window to become fullscreen. |
+| ```fullscreen``` | Whether or not you want this window to become fullscreen. |
 | Returns | A window_error, if any. |
 
 Due to some implementation choices in GLFW, this forces the entire window to be destroyed
 then recreated from its ashes. It's a cumbersome process, and may error out. Check the
 error if things go wrong.
+
+To know programmatically whether or not the window is currently in fullscreen mode, call:
+
+```cpp
+bool Window::isFullscreen();
+```
 
 Setting and Getting
 -------------------
@@ -111,6 +120,8 @@ Renderer * Window::getRenderer();
 
 | Returns | A pointer to the Window's personal Renderer instance. |
 
+To learn more about Renderer, visit its [documentation.](/Tile2D/guides/renderer)
+
 Advanced Usage
 --------------
 
@@ -130,5 +141,16 @@ To get a description of an error if you got one, pass it to the static function:
 static const char * Window::getErrorDesc(window_error e);
 ```
 
-| e | The window_error to describe. |
+| ```e``` | The window_error to describe. |
 | Returns | A const char* describing the error. |
+
+<h3>Using the Framecounter</h3>
+
+The Window has an internal framecounter that keeps track of how many frames
+have been renderered.
+
+```cpp
+unsigned long Window::framecount() const;
+```
+
+| Returns | The number of frames that have been rendered, or rather the calls to ```Window::update()```.|
