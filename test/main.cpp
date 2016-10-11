@@ -7,52 +7,52 @@ using namespace std;
 int main(int argc, char **argv)
 {
     Window window = Window();
-    window.create(1000, 700, 256, 224, (char*)"WOO");
+    window.create(1280, 800, 256, 160, (char*)"WOO");
     Renderer * r = window.getRenderer();
     AssetManager * a = r->getAssetManager();
+        
+    a->addNewTexture("bg",    "../ExampleAssets/bg.png");
+    a->addNewTexture("neg1",  "../ExampleAssets/neg1.png");
+    a->addNewTexture("neg2",  "../ExampleAssets/neg2.png");
+    a->addNewTexture("neg3",  "../ExampleAssets/neg3.png");
+    a->addNewTexture("neg4",  "../ExampleAssets/neg4.png");
+    a->addNewTexture("playA", "../ExampleAssets/playA.png");
+    a->addNewTexture("pos1",  "../ExampleAssets/pos1.png");
     
-    a->addNewTexture("puppy", "../ExampleAssets/puppy.png");
-    
-    a->addNewTexture("kitten", "../ExampleAssets/kitten.png");
-    
-    a->addNewTexture("fish", "../ExampleAssets/fish.png");
-    
-    a->addNewTexture("yumetarou", "../ExampleAssets/yumetarou_frame16x20.png");
-    
-    a->addNewShader("example_def_shader", "../ExampleAssets/ex_def_tile_shader.vert",
-                                                           "../ExampleAssets/ex_def_tile_shader.frag");
-                                                           
+    a->addNewShader("wrapping-tex", "../ExampleAssets/wrapping-tex.vert",
+                                    "../ExampleAssets/wrapping-tex.frag");
     a->addNewShader("example_cust_comp_shader", "../ExampleAssets/ex_compositor_shader.vert",
                                                 "../ExampleAssets/ex_compositor_shader.frag");
     r->setCustomShader("example_cust_comp_shader");
-                                                           
-    a->addNewShader("example_fwd_shader", "../ExampleAssets/ex_fwd_tile_shader.vert",
-                                                           "../ExampleAssets/ex_fwd_tile_shader.frag");
-    BGTile * bg = r->makeBGTile(0.0, 0.0, 1.5, 1.5, false, "puppy");
-    r->addToRenderQueue(BG_TILE, bg);
-    
-    DefTile * dt = r->makeDefTile(.025, .25, PLANE_POS_1, .5, .5, false, "kitten", "kitten", NULL, NULL, "example_def_shader");
-    r->addToRenderQueue(DEF_TILE, dt);
-    
-    FwdTile * ft = r->makeFwdTile(-.25, .25, PLANE_NEG_1, .7, .5, false, NULL, NULL, NULL, NULL, "example_fwd_shader");
-    r->addToRenderQueue(FWD_TILE, ft);
-    ft->setIgnoreScroll(true);
-    ft->setTransparency(true);
 
+    FwdTile * bg = r->makeFwdTile(0, 0, PLANE_BG, 192, 160, true, "bg", NULL, NULL, NULL, "wrapping-tex");
+    FwdTile * neg1 = r->makeFwdTile(0, 0, PLANE_NEG_1, 192, 160, true, "neg1", NULL, NULL, NULL, "wrapping-tex");
+    FwdTile * neg2 = r->makeFwdTile(0, 0, PLANE_NEG_2, 192, 160, true, "neg2", NULL, NULL, NULL, "wrapping-tex");
+    FwdTile * neg3 = r->makeFwdTile(0, 0, PLANE_NEG_3, 192, 160, true, "neg3", NULL, NULL, NULL, "wrapping-tex");
+    FwdTile * neg4 = r->makeFwdTile(0, 0, PLANE_NEG_4, 192, 160, true, "neg4", NULL, NULL, NULL, "wrapping-tex");
+    FwdTile * playA = r->makeFwdTile(0, 0, PLANE_PLAYFIELD_A, 192, 160, true, "playA", NULL, NULL, NULL, "wrapping-tex");
+    FwdTile * playC = r->makeFwdTile(0, 0, PLANE_PLAYFIELD_C, 192, 160, true, "pos1", NULL, NULL, NULL, "wrapping-tex");
+    bg->setIgnoreScroll(true);
+    neg1->setIgnoreScroll(true);
+    neg2->setIgnoreScroll(true);
+    neg3->setIgnoreScroll(true);
+    neg4->setIgnoreScroll(true);
+    playA->setIgnoreScroll(true);
+    playC->setIgnoreScroll(true);
     
-    SceneTile * st = r->makeSceneTile(.25, 0, PLANE_NEG_2, .5, .5, false, "fish");
-    r->addToRenderQueue(SCENE_TILE, st);
-    st->setTransparency(true);
-    st->setIgnoreScroll(true);
+    r->addToRenderQueue(FWD_TILE, bg);
+    r->addToRenderQueue(FWD_TILE, neg1);
+    r->addToRenderQueue(FWD_TILE, neg2);
+    r->addToRenderQueue(FWD_TILE, neg3);
+    //r->addToRenderQueue(FWD_TILE, neg4);
+    r->addToRenderQueue(FWD_TILE, playA);
+    r->addToRenderQueue(FWD_TILE, playC);
     
-    AnimTile * at = r->makeAnimTile(100.0, 40.0, PLANE_PLAYFIELD_A, 16.0, 20.0, true, "yumetarou", 6, 16, 20, 1.0/20.0);
-    r->addToRenderQueue(ANIM_TILE, at);
-
+    window.setFullscreen(true);
     while(!glfwWindowShouldClose(window.getWindow()))
     {
-    	r->getCamera()->setPos(3.0*sin(glfwGetTime()*4.0), 0.0);
-        at->setRotation(at->getRotation()+.01);
         window.update();
+        r->getCamera()->setX(glfwGetTime()*.25);
     }
     window.destroy();
     return 0;
