@@ -68,6 +68,7 @@ private:
 	 * A mapping of plane scrolling coefficients.
 	 */
     static std::map<tile_plane, float> planeCoeffs;
+    
     /*
      * The plane of this Tile.
      */
@@ -271,6 +272,13 @@ public:
     unsigned long getID() const;
     
     /**
+	 * Returns the current scrolling coefficient of a parallax plane.
+	 * @param The plane to query.
+	 * @return The scrolling coefficient of the queried plane.
+	 */
+    float getScrollCoeff(tile_plane plane) const;
+    
+    /**
      * @brief Changes the X position of this Tile. Useful for animation.
      * @param x The new X position.
      */
@@ -325,6 +333,13 @@ public:
      * @param flip The new texture flip mode.
      */
     void setTextureFlip(GLuint flip);
+    
+    /**
+	 * @brief Sets the scrolling coefficient of a parallax plane.
+	 * @param plane The plane to update.
+	 * @param coeff The new scrolling coefficient.
+	 */
+    void setScrollCoeff(tile_plane plane, float coeff);
     
     /**
      * @brief A virtual function that provides a rendering interface for
