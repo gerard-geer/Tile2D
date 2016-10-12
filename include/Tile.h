@@ -8,6 +8,9 @@
 
 #include "BasicMatrix.h"
 
+// Number of planes.
+#define NUM_PLANES 10
+
 // Forward definitions of Tile and Renderer since these two
 // classes are interdependent.
 class Tile;
@@ -67,7 +70,7 @@ private:
     /*
 	 * A mapping of plane scrolling coefficients.
 	 */
-    static std::map<tile_plane, float> planeCoeffs;
+    static float * planeCoeffs;
     
     /*
      * The plane of this Tile.
