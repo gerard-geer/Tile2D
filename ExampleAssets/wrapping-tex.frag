@@ -46,5 +46,4 @@ void main(void)
     vec2 uv = fragUV;
     uv.x *= 2.0;
     gl_FragColor = texture2D(texA, uv+pos);
-    gl_FragCoord.z += 999.0*gl_FragColor.a;
 }
