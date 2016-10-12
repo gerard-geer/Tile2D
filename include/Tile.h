@@ -70,7 +70,7 @@ private:
     /*
 	 * A mapping of plane scrolling coefficients.
 	 */
-    static float * planeCoeffs;
+    static float planeCoeffs[10];
     
     /*
      * The plane of this Tile.

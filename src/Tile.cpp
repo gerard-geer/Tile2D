@@ -1,9 +1,8 @@
 #include "Tile.h"
 #include <iostream>
 
-
-
-float * Tile::planeCoeffs = (float*)malloc(sizeof(float)*NUM_PLANES);
+// Initialize the scrolling coefficients.
+float Tile::planeCoeffs[10] = {1.5, 1.25, 1.0, 1.0, 1.0, .8, .4, .2, .1, .05};
 
 Tile::Tile()
 {
@@ -43,19 +42,7 @@ void Tile::init(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, GLfloat h
 
 GLfloat Tile::getParallaxFactor(tile_plane plane)
 {
-    switch(plane)
-    {
-        case PLANE_BG: return .1;
-        case PLANE_NEG_4: return .2;
-        case PLANE_NEG_3: return .4;
-        case PLANE_NEG_2: return .6;
-        case PLANE_NEG_1: return .8;
-        case PLANE_PLAYFIELD_A: return 1.0;
-        case PLANE_PLAYFIELD_B: return 1.0;
-        case PLANE_PLAYFIELD_C: return 1.0;
-        case PLANE_POS_1: return 2.0;
-        case PLANE_POS_2: return 4.0;
-    }
+    return Tile::planeCoeffs[plane%NUM_PLANES];
 }
 
 GLfloat Tile::getTileDepth(tile_plane plane)
