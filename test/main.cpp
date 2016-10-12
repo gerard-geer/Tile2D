@@ -35,7 +35,8 @@ int main(int argc, char **argv)
     FwdTile * neg4 = r->makeFwdTile(0, 0, PLANE_NEG_4, 192, 160, true, "neg4", NULL, NULL, NULL, "wrapping-tex");
     FwdTile * playA = r->makeFwdTile(0, 0, PLANE_PLAYFIELD_A, 192, 160, true, "playA", NULL, NULL, NULL, "wrapping-tex");
     FwdTile * playC = r->makeFwdTile(0, 0, PLANE_PLAYFIELD_C, 192, 160, true, "pos1", NULL, NULL, NULL, "wrapping-tex");
-    DefTile * crep = r->makeDefTile(0, 0, PLANE_NEG_2, 192, 160, true, "noise", NULL, NULL, NULL, "crepuscular");
+    DefTile * crepA = r->makeDefTile(0, 0, PLANE_NEG_1, 192, 160, true, "noise", NULL, NULL, NULL, "crepuscular");
+    DefTile * crepB = r->makeDefTile(0, 0, PLANE_PLAYFIELD_A, 192, 160, true, "noise", NULL, NULL, NULL, "crepuscular");
     bg->setIgnoreScroll(true);
     neg1->setIgnoreScroll(true);
     neg2->setIgnoreScroll(true);
@@ -43,12 +44,14 @@ int main(int argc, char **argv)
     neg4->setIgnoreScroll(true);
     playA->setIgnoreScroll(true);
     playC->setIgnoreScroll(true);
-    crep->setIgnoreScroll(true);
+    crepA->setIgnoreScroll(true);
+    crepB->setIgnoreScroll(true);
     
     r->addToRenderQueue(FWD_TILE, bg);
     r->addToRenderQueue(FWD_TILE, neg1);
     r->addToRenderQueue(FWD_TILE, neg2);
-    r->addToRenderQueue(DEF_TILE, crep);
+    r->addToRenderQueue(DEF_TILE, crepA);
+    r->addToRenderQueue(DEF_TILE, crepB);
     r->addToRenderQueue(FWD_TILE, neg3);
     r->addToRenderQueue(FWD_TILE, neg4);
     r->addToRenderQueue(FWD_TILE, playA);

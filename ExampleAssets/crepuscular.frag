@@ -41,6 +41,9 @@ uniform sampler2D texD;
 // The texture coordinate we get from the vertex stage.
 varying vec2 fragUV;
 
+// The position of the Tile itself.
+varying vec2 pos;
+
 /**
  * Performs the depth test.
  */
@@ -49,15 +52,42 @@ bool depthTest(float existingDepth)
     return (gl_FragCoord.z < existingDepth);
 }
 
+// OH WAIT GLSL 1.2 ISN'T GUARANTEED TO HAVE SMOOTHSTEP.
+float ss( in float edge0, in float edge1, in float x )
+{
+    float t = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
+    return t * t * (3.0 - 2.0 * t);
+}
+
+// Since textures are sampled nearest neighbor style, we have
+// to overcome that.
+vec4 linearSample(vec2 uv, vec2 texDim, sampler2D tex)
+{
+    vec3 px = vec3(1.0/texDim,0);
+    uv *= texDim;
+    vec2 local = fract(uv);
+    uv = floor(uv)*px.xy;
+    
+    vec4 s00 = texture2D(tex, uv+px.zz);
+    vec4 s01 = texture2D(tex, uv+px.zy);
+    vec4 s11 = texture2D(tex, uv+px.xy);
+    vec4 s10 = texture2D(tex, uv+px.xz);
+    
+    return mix( mix(s00, s10, local.x), mix(s01, s11, local.x), local.y );
+}
+
 /**
  * Creates crepuscular rays.
  */
 float crepuscular(vec2 uv)
 {
-    float n = texture2D(texA, uv.xx).r;
-    n += texture2D(texA, uv.xx*2.0).r*.5;
+    uv.x += .05*uv.y;
+    uv *= .05;
+    vec2 dim = vec2(256);
+    float n = linearSample(uv.xx, dim, texA).r;
+    n += linearSample(uv.xx*2.0, dim, texA).r*.5;
     n /= 1.5;
-    return smoothstep(.6, 1.0, n);
+    return ss(.4, 1.0, n);
 }
 /**
  * The entry point of this shader.
@@ -72,13 +102,13 @@ void main(void)
     float depth = texture2D(fwdDepth, uv).r;
     
     // Do the depth test, and if we fail set the fragment to transparent.
-    //if( !depthTest(depth) )
-    //{
-    //    // Transparent green.
-    //    gl_FragColor = vec4(0, 1, 0, 0);
-    //    return;
-    //}
-    
+    if( !depthTest(depth) )
+    {
+        // Transparent green.
+        gl_FragColor = vec4(0, 1, 0, 0);
+        return;
+    }
     // If we don't fail we set it to some cool colors.
-    gl_FragColor = vec4( depth, depth, depth, 1.0);//vec3(crepuscular(uv)), 1.0 );
+    float c = crepuscular((uv+pos*.5));
+    gl_FragColor = vec4(c,c,c,.75*c);
 }
