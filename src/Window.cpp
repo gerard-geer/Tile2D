@@ -72,7 +72,7 @@ window_error Window::initGLState(unsigned int width, unsigned int height)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
     // Enable alpha testing.
-    glAlphaFunc(GL_GREATER, 0.5);
+    glAlphaFunc(GL_GREATER, 0.005);
     glEnable(GL_ALPHA_TEST);
     
     // Enable use of vertex arrays, so that we can pack our vertex positions
