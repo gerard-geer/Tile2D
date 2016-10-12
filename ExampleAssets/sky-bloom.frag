@@ -38,9 +38,6 @@ uniform sampler2D texB;
 uniform sampler2D texC;
 uniform sampler2D texD;
 
-// The texture coordinate we get from the vertex stage.
-varying vec2 fragUV;
-
 float isItBG(in vec2 uv)
 {
     float depth = texture2D(fwdDepth, uv).r;

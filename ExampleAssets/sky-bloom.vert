@@ -48,39 +48,11 @@ uniform float depth;
 uniform int hFlip;
 uniform int vFlip;
 
-// We want to give the fragment shader a texture coordinate, right?
-varying vec2 fragUV;
-
-/**
- * This modifies the transformation matrix by making it into a modelview 
- * projection matrix that performs parallax scrolling.
- */
-mat3 parallaxSetup()
-{
-    // One can't edit uniforms, so we need to make a copy.
-    mat3 m = transform;
-    
-    // Check to see if we need to ignore scrolling.
-    if(ignoreScroll  < .5)
-    {
-		// Now we do the actual math to enable the parallax.
-		// This boils down to essentially:
-		// TilePosition = (TilePosition - CameraPosition) / ParallaxFactor
-		m[2][0] = (m[2][0] - camera.x) * pFactor;
-		m[2][1] = (m[2][1] - camera.y) * pFactor;
-	}
-    
-    return m;
-}
-
 /**
  * The entry point into the shader.
  */
 void main(void)
 {
-    // Get the parallax matrix.
-    mat3 m = parallaxSetup();
-    
     // Multiply the vertex position by the parallax projection matrix.
     gl_Position.xyz = (vertPos*2.0);
     
@@ -88,13 +60,4 @@ void main(void)
     // Z axis goes into the screen, a Z coordinate <depth> deep would be
     // at -depth.
     gl_Position.zw = vec2(depth,1);
-    
-    // Oh, let's not forget to send over a texture coordinate.
-    fragUV = vertUV;
-    
-    // If we've got horizontal flip, we need to flip.
-    if( hFlip > 0 ) fragUV.x = 1.0-fragUV.x;
-    
-    // Do the same for horizontal.
-    if( vFlip > 0 ) fragUV.y = 1.0-fragUV.y;
 }
