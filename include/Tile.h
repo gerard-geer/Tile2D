@@ -358,5 +358,4 @@ public:
      */
     void destroy();
 };
-
 #endif

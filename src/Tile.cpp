@@ -1,5 +1,19 @@
 #include "Tile.h"
 #include <iostream>
+
+std::map<tile_plane, float> Tile::planeCoeffs = std::map<tile_plane, float>();
+
+Tile::planeCoeffs[PLANE_BG] = .999;
+Tile::planeCoeffs[PLANE_NEG_4] = .9;
+Tile::planeCoeffs[PLANE_NEG_3] = .8;
+Tile::planeCoeffs[PLANE_NEG_2] = .7;
+Tile::planeCoeffs[PLANE_NEG_1] = .6;
+Tile::planeCoeffs[PLANE_PLAYFIELD_A] = .5;
+Tile::planeCoeffs[PLANE_PLAYFIELD_B] = .4;
+Tile::planeCoeffs[PLANE_PLAYFIELD_C] = .3;
+Tile::planeCoeffs[PLANE_POS_1] = .2;
+Tile::planeCoeffs[PLANE_POS_2] = .101;
+
 Tile::Tile()
 {
 }
@@ -145,6 +159,11 @@ unsigned long Tile::getID() const
     return this->id;
 }
 
+float Tile::getScrollCoeff(tile_plane plane) const
+{
+    return Tile::planeCoeffs[plane];
+}
+
 void Tile::setX(GLfloat x)
 {
     this->pd->set(0,2, x);
@@ -192,6 +211,11 @@ void Tile::setRotation(GLfloat rotation)
 void Tile::setTextureFlip(GLuint flip)
 {
     this->texFlip = flip;
+}
+
+void Tile::setScrollCoeff(tile_plane plane, float coeff)
+{
+    planeCoeffs[plane] = coeff;
 }
 
 void Tile::report()
