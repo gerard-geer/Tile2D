@@ -44,6 +44,8 @@ varying vec2 fragUV;
 // The position of the Tile itself.
 varying vec2 pos;
 
+const vec4 SUN_COLOR = vec4(1.0, 1.0, 1.0, 1.0);
+
 /**
  * Performs the depth test.
  */
@@ -101,6 +103,8 @@ void main(void)
     // Get the existing depth.
     float depth = texture2D(fwdDepth, uv).r;
     
+    // Get the existing color.
+    vec4 color = texture2D(fwdColor, uv);
     // Do the depth test, and if we fail set the fragment to transparent.
     if( !depthTest(depth) )
     {
@@ -110,5 +114,7 @@ void main(void)
     }
     // If we don't fail we set it to some cool colors.
     float c = crepuscular((uv+pos*.5));
-    gl_FragColor = vec4(c,c,c,.75*c);
+    
+    float isItNotBG = step(.01,abs(depth-.999));
+    gl_FragColor = mix(color, color+SUN_COLOR*.333, c*isItNotBG);
 }
