@@ -3,6 +3,7 @@
 
 #include <GLFW/glfw3.h>
 #include <cmath>
+#include <map>
 #include <utility>
 
 #include "BasicMatrix.h"
@@ -63,6 +64,10 @@ class Tile
 {
 private:
     
+    /*
+	 * A mapping of plane scrolling coefficients.
+	 */
+    static std::map<tile_plane, float> planeCoeffs;
     /*
      * The plane of this Tile.
      */
