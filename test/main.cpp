@@ -24,6 +24,8 @@ int main(int argc, char **argv)
                                     "../ExampleAssets/wrapping-tex.frag");
     a->addNewShader("crepuscular",  "../ExampleAssets/crepuscular.vert",
                                     "../ExampleAssets/crepuscular.frag");
+    a->addNewShader("sky-bloom",  "../ExampleAssets/sky-bloom.vert",
+                                  "../ExampleAssets/sky-bloom.frag");
     a->addNewShader("example_cust_comp_shader", "../ExampleAssets/ex_compositor_shader.vert",
                                                 "../ExampleAssets/ex_compositor_shader.frag");
     r->setCustomShader("example_cust_comp_shader");
@@ -37,6 +39,7 @@ int main(int argc, char **argv)
     FwdTile * playC = r->makeFwdTile(0, 0, PLANE_PLAYFIELD_C, 192, 160, true, "pos1", NULL, NULL, NULL, "wrapping-tex");
     DefTile * crepA = r->makeDefTile(0, 0, PLANE_NEG_1, 192, 160, true, "noise", NULL, NULL, NULL, "crepuscular");
     DefTile * crepB = r->makeDefTile(0, 0, PLANE_PLAYFIELD_A, 192, 160, true, "noise", NULL, NULL, NULL, "crepuscular");
+    DefTile * bloom = r->makeDefTile(0, 0, PLANE_POS_2, 192, 160, true, NULL, NULL, NULL, NULL, "sky-bloom");
     bg->setIgnoreScroll(true);
     neg1->setIgnoreScroll(true);
     neg2->setIgnoreScroll(true);
@@ -46,6 +49,7 @@ int main(int argc, char **argv)
     playC->setIgnoreScroll(true);
     crepA->setIgnoreScroll(true);
     crepB->setIgnoreScroll(true);
+    bloom->setIgnoreScroll(true);
     
     r->addToRenderQueue(FWD_TILE, bg);
     r->addToRenderQueue(FWD_TILE, neg1);
@@ -56,6 +60,7 @@ int main(int argc, char **argv)
     r->addToRenderQueue(FWD_TILE, neg4);
     r->addToRenderQueue(FWD_TILE, playA);
     r->addToRenderQueue(FWD_TILE, playC);
+    r->addToRenderQueue(DEF_TILE, bloom);
     
     window.setFullscreen(true);
     while(!glfwWindowShouldClose(window.getWindow()))
