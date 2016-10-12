@@ -26,6 +26,12 @@ uniform float time;
 // The resolution of the framebuffer being rendered into.
 uniform vec2 resolution;
 
+// The color buffer of the first pass.
+uniform sampler2D fwdColor;
+
+// The depth buffer of the first pass.
+uniform sampler2D fwdDepth;
+
 // The four custom textures.
 uniform sampler2D texA;
 uniform sampler2D texB;
@@ -35,16 +41,44 @@ uniform sampler2D texD;
 // The texture coordinate we get from the vertex stage.
 varying vec2 fragUV;
 
-// The position matrix of the Tile.
-varying vec2 pos;
+/**
+ * Performs the depth test.
+ */
+bool depthTest(float existingDepth)
+{
+    return (gl_FragCoord.z < existingDepth);
+}
 
+/**
+ * Creates crepuscular rays.
+ */
+float crepuscular(vec2 uv)
+{
+    float n = texture2D(texA, uv.xx).r;
+    n += texture2D(texA, uv.xx*2.0).r*.5;
+    n /= 1.5;
+    return smoothstep(.6, 1.0, n);
+}
 /**
  * The entry point of this shader.
  */
 void main(void)
 {
-    vec2 uv = fragUV;
-    uv.x *= 2.0;
-    gl_FragColor = texture2D(texA, uv+pos);
-    gl_FragCoord.z += 999.0*gl_FragColor.a;
+    
+    // First we need a screen-relative normalized coordinate.
+    vec2 uv = gl_FragCoord.xy/resolution;
+    
+    // Get the existing depth.
+    float depth = texture2D(fwdDepth, uv).r;
+    
+    // Do the depth test, and if we fail set the fragment to transparent.
+    //if( !depthTest(depth) )
+    //{
+    //    // Transparent green.
+    //    gl_FragColor = vec4(0, 1, 0, 0);
+    //    return;
+    //}
+    
+    // If we don't fail we set it to some cool colors.
+    gl_FragColor = vec4( depth, depth, depth, 1.0);//vec3(crepuscular(uv)), 1.0 );
 }

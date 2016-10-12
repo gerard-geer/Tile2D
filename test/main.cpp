@@ -18,9 +18,12 @@ int main(int argc, char **argv)
     a->addNewTexture("neg4",  "../ExampleAssets/neg4.png");
     a->addNewTexture("playA", "../ExampleAssets/playA.png");
     a->addNewTexture("pos1",  "../ExampleAssets/pos1.png");
+    a->addNewTexture("noise", "../ExampleAssets/noise.png");
     
     a->addNewShader("wrapping-tex", "../ExampleAssets/wrapping-tex.vert",
                                     "../ExampleAssets/wrapping-tex.frag");
+    a->addNewShader("crepuscular",  "../ExampleAssets/crepuscular.vert",
+                                    "../ExampleAssets/crepuscular.frag");
     a->addNewShader("example_cust_comp_shader", "../ExampleAssets/ex_compositor_shader.vert",
                                                 "../ExampleAssets/ex_compositor_shader.frag");
     r->setCustomShader("example_cust_comp_shader");
@@ -32,6 +35,7 @@ int main(int argc, char **argv)
     FwdTile * neg4 = r->makeFwdTile(0, 0, PLANE_NEG_4, 192, 160, true, "neg4", NULL, NULL, NULL, "wrapping-tex");
     FwdTile * playA = r->makeFwdTile(0, 0, PLANE_PLAYFIELD_A, 192, 160, true, "playA", NULL, NULL, NULL, "wrapping-tex");
     FwdTile * playC = r->makeFwdTile(0, 0, PLANE_PLAYFIELD_C, 192, 160, true, "pos1", NULL, NULL, NULL, "wrapping-tex");
+    DefTile * crep = r->makeDefTile(0, 0, PLANE_NEG_2, 192, 160, true, "noise", NULL, NULL, NULL, "crepuscular");
     bg->setIgnoreScroll(true);
     neg1->setIgnoreScroll(true);
     neg2->setIgnoreScroll(true);
@@ -39,12 +43,14 @@ int main(int argc, char **argv)
     neg4->setIgnoreScroll(true);
     playA->setIgnoreScroll(true);
     playC->setIgnoreScroll(true);
+    crep->setIgnoreScroll(true);
     
     r->addToRenderQueue(FWD_TILE, bg);
     r->addToRenderQueue(FWD_TILE, neg1);
     r->addToRenderQueue(FWD_TILE, neg2);
+    r->addToRenderQueue(DEF_TILE, crep);
     r->addToRenderQueue(FWD_TILE, neg3);
-    //r->addToRenderQueue(FWD_TILE, neg4);
+    r->addToRenderQueue(FWD_TILE, neg4);
     r->addToRenderQueue(FWD_TILE, playA);
     r->addToRenderQueue(FWD_TILE, playC);
     
