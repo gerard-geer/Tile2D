@@ -101,4 +101,4 @@ gl_FragColor.rgb = vec4( mix(fwdFB.rgb, defFB.rgb, defFB.a), 1.0 );
 ```
 
 However, the compositor can be extended to do full screen, window-resolution effects. To do that read the 
-[custom compositor shader guide](/Tile2D/guides/fwdshaders/).
+[custom compositor shader guide](/Tile2D/guides/compositorshaders/).
