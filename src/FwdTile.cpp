@@ -90,6 +90,11 @@ void FwdTile::render(Renderer * r)
     FwdTile::camPosition[0] = (GLfloat)(r->getCamera()->getX());
     FwdTile::camPosition[1] = (GLfloat)(r->getCamera()->getY());
     program->setUniform("camera", &(FwdTile::camPosition));
+
+    // Send in the parallax offset center as well.
+    FwdTile::pOffset[0] = (GLfloat)(r->getCamera()->getOffX());
+    FwdTile::pOffset[1] = (GLfloat)(r->getCamera()->getOffY());
+    program->setUniform("pOffset", &(FwdTile::pOffset));
     
     // Since FwdTiles do the parallax effect entirely in the vertex shader,
     // we can send them a virgin matrix.
