@@ -53,7 +53,8 @@ testing when z-ordering. However they are still less complex to draw than Anim-,
 
 **AnimTiles** animate their textures, stepping through several frames contained within it at a constant
 but configurable interval. As you might imagine, there is more to do on the GPU for AnimTiles.
-FwdTiles are fully programmable Tiles. They feature custom shaders that have access to global time,
+
+**FwdTiles** are fully programmable Tiles. They feature custom shaders that have access to global time,
 framecount, Tile position and size, and four specifiable textures. These can become very complex
 Tiles, and because of uniform variable and texture overhead, even the simplest FwdTile is more consuming
 to draw than any Tile type discussed yet. Additionally, for maximum programmability another responsibility
@@ -63,7 +64,7 @@ is accrued: The camera and parallax scrolling must be done by the shader program
 **DefTiles** are the golden child of the Tiles. They're the same as FwdTiles with one key difference: They're
 drawn to their own framebuffer after every other Tile has been drawn, and have access to the color and
 depth buffer of that first rendering pass. This allows them to do post-processing effects on the rest of
-the pass. However, since it is likely that a post-tile might want to insert itself into the scene
+the pass. However, since it is likely that such a DefTile might want to insert itself into the scene
 alongside the Tiles of the first pass, the depth-test must be done in the fragment shader.
 
 Rendering
