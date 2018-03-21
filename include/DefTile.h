@@ -51,6 +51,7 @@ private:
      */
     static GLfloat * resolution;
     static GLfloat * camPosition;
+    static GLfloat * pOffset;
 
 public:
     
