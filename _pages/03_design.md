@@ -33,8 +33,7 @@ to the 2D transformation matrix and throttling it by a constant based upon the T
 plane. This moves parallax plane scrolling--often a non-negligibly complex CPU-side task--to the
 vertex shader, which is often under-utilized in 2D games.
 ![The parallax scrolling transformation matrix]({{ site.baseurl }}/assets/transmat.svg){:class="inline-image"}
-*Where Fp is the plane-dependent parallax scrolling factor. This curtails the movements made by
-either the camera or the Tile itself.*{:class="image-text"}
+*Where **Fp** is the plane-dependent parallax scrolling factor, and **λ** is the center-of-parallax offset. This curtails the movements made by either the camera or the Tile itself.*{:class="image-text"}
 
 Tile Types
 ----------
