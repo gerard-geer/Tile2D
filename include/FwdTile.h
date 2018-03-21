@@ -46,6 +46,13 @@ private:
      * The key to the DefTile's custom shader.
      */
     char * shader;
+
+    /*
+     * Static members so we don't have to malloc in the render function.
+     */
+    static GLfloat * resolution;
+    static GLfloat * camPosition;
+
 public:
     
     /**

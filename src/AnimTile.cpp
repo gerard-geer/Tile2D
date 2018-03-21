@@ -44,11 +44,9 @@ void AnimTile::render(Renderer* r)
     glUseProgram(program->getID());
     
     // Send the fractional dimensions of each frame.
-    GLfloat * fractFrameDim = (GLfloat*) malloc(sizeof(GLfloat)*2);
-    fractFrameDim[0] = ((GLfloat)this->frameWidth/(GLfloat)frames->getWidth());
-    fractFrameDim[1] = ((GLfloat)this->frameHeight/(GLfloat)frames->getHeight());
-    program->setUniform("fractFrameDim", &fractFrameDim);
-    free(fractFrameDim);
+    AnimTile::fractFrameDim[0] = ((GLfloat)this->frameWidth/(GLfloat)frames->getWidth());
+    AnimTile::fractFrameDim[1] = ((GLfloat)this->frameHeight/(GLfloat)frames->getHeight());
+    program->setUniform("fractFrameDim", (float**)(&(AnimTile::fractFrameDim)));
     
     // Send the current frame index.
     program->setUniform("curFrame", &this->curFrame);
@@ -155,3 +153,6 @@ void AnimTile::report()
               << " plane: " << this->getPlane()
               << " tex: " << this->texture << std::endl;
 }
+
+// I'm so sorry, but this memory is gone forever.
+GLfloat* AnimTile::fractFrameDim = (GLfloat*) malloc(sizeof(GLfloat)*2);
