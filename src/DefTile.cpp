@@ -94,6 +94,11 @@ void DefTile::render(Renderer * r)
     DefTile::camPosition[0] = (GLfloat)(r->getCamera()->getX());
     DefTile::camPosition[1] = (GLfloat)(r->getCamera()->getY());
     program->setUniform("camera", &(DefTile::camPosition));
+
+    // Send in the parallax center offset.
+    // Optimize all of this later.
+    DefTile::pOffset[0] = (GLfloat)(r->getCamera()->getOffX());
+    DefTile::pOffset[1] = (GLfloat)(r->getCamera()->getOffY());
     
     // Since DefTiles do the parallax effect entirely in the vertex shader,
     // we can send them a virgin matrix.
@@ -140,3 +145,4 @@ void DefTile::report()
 // IT'S GONE IN THE NAME OF not malloc'ing in the innermost function call.
 GLfloat * DefTile::resolution = (GLfloat*) malloc(sizeof(GLfloat)*2);
 GLfloat * DefTile::camPosition = (GLfloat*) malloc(sizeof(GLfloat)*2);
+GLfloat * DefTile::pOffset = (GLfloat*) malloc(sizeof(GLfloat)*2);
