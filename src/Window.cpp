@@ -71,6 +71,10 @@ window_error Window::initGLState(unsigned int width, unsigned int height)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
+    // Enable alpha testing.
+    glAlphaFunc(GL_GREATER, 0.005);
+    glEnable(GL_ALPHA_TEST);
+    
     // Enable use of vertex arrays, so that we can pack our vertex positions
     // and texture coordinates into a single OpenGL object.
     glEnable(GL_VERTEX_ARRAY);

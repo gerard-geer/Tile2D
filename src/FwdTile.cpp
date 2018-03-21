@@ -82,17 +82,14 @@ void FwdTile::render(Renderer * r)
     program->setTextureUniform("texD", d->getID(), 3);
     
     // Send in the resolution.
-    GLfloat * resolution = (GLfloat*) malloc(sizeof(GLfloat)*2);
-    resolution[0] = (GLfloat)(r->getDefPass()->getWidth());
-    resolution[1] = (GLfloat)(r->getDefPass()->getHeight());
-    program->setUniform("resolution", &resolution);
-    free(resolution);
+    FwdTile::resolution[0] = (GLfloat)(r->getDefPass()->getWidth());
+    FwdTile::resolution[1] = (GLfloat)(r->getDefPass()->getHeight());
+    program->setUniform("resolution", &(FwdTile::resolution));
+    
     // Send in the camera position.
-    GLfloat * camPosition = (GLfloat*) malloc(sizeof(GLfloat)*2);
-    camPosition[0] = (GLfloat)(r->getCamera()->getX());
-    camPosition[1] = (GLfloat)(r->getCamera()->getY());
-    program->setUniform("camera", &camPosition);
-    free(camPosition);
+    FwdTile::camPosition[0] = (GLfloat)(r->getCamera()->getX());
+    FwdTile::camPosition[1] = (GLfloat)(r->getCamera()->getY());
+    program->setUniform("camera", &(FwdTile::camPosition));
     
     // Since FwdTiles do the parallax effect entirely in the vertex shader,
     // we can send them a virgin matrix.
@@ -135,3 +132,7 @@ void FwdTile::report()
               << " texC: " << this->texC 
               << " texD: " << this->texD << std::endl;
 }
+
+// IT'S GONE IN THE NAME OF not malloc'ing in the innermost function call.
+GLfloat * FwdTile::resolution = (GLfloat*) malloc(sizeof(GLfloat)*2);
+GLfloat * FwdTile::camPosition = (GLfloat*) malloc(sizeof(GLfloat)*2);

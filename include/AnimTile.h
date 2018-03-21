@@ -55,6 +55,12 @@ private:
      */
     char * texture;
 
+    /*
+     * A static copy of a multidimensional value that we would otherwise need
+     * to malloc during the render call.
+     */
+    static GLfloat* fractFrameDim;
+
 public:
 
     /**
@@ -154,5 +160,4 @@ public:
     void report();
 
 };
-
 #endif // ANIMTILE_H

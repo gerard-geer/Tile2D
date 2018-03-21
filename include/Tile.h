@@ -3,9 +3,13 @@
 
 #include <GLFW/glfw3.h>
 #include <cmath>
+#include <map>
 #include <utility>
 
 #include "BasicMatrix.h"
+
+// Number of planes.
+#define NUM_PLANES 10
 
 // Forward definitions of Tile and Renderer since these two
 // classes are interdependent.
@@ -62,6 +66,11 @@ typedef std::pair<tile_type, Tile*> TileWithType;
 class Tile
 {
 private:
+    
+    /*
+	 * A mapping of plane scrolling coefficients.
+	 */
+    static float planeCoeffs[10];
     
     /*
      * The plane of this Tile.
@@ -266,6 +275,13 @@ public:
     unsigned long getID() const;
     
     /**
+	 * Returns the current scrolling coefficient of a parallax plane.
+	 * @param The plane to query.
+	 * @return The scrolling coefficient of the queried plane.
+	 */
+    float getScrollCoeff(tile_plane plane) const;
+    
+    /**
      * @brief Changes the X position of this Tile. Useful for animation.
      * @param x The new X position.
      */
@@ -322,6 +338,13 @@ public:
     void setTextureFlip(GLuint flip);
     
     /**
+	 * @brief Sets the scrolling coefficient of a parallax plane.
+	 * @param plane The plane to update.
+	 * @param coeff The new scrolling coefficient.
+	 */
+    void setScrollCoeff(tile_plane plane, float coeff);
+    
+    /**
      * @brief A virtual function that provides a rendering interface for
      *        any Tile subclasses.
      */
@@ -338,5 +361,4 @@ public:
      */
     void destroy();
 };
-
 #endif

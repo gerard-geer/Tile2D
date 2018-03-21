@@ -86,17 +86,14 @@ void DefTile::render(Renderer * r)
     program->setTextureUniform("fwdDepth", r->getFwdPass()->getDepthTexture(), 5);
     
     // Send in the resolution.
-    GLfloat * resolution = (GLfloat*) malloc(sizeof(GLfloat)*2);
-    resolution[0] = (GLfloat)(r->getDefPass()->getWidth());
-    resolution[1] = (GLfloat)(r->getDefPass()->getHeight());
-    program->setUniform("resolution", &resolution);
-    free(resolution);
+    DefTile::resolution[0] = (GLfloat)(r->getDefPass()->getWidth());
+    DefTile::resolution[1] = (GLfloat)(r->getDefPass()->getHeight());
+    program->setUniform("resolution", &(DefTile::resolution));
+    
     // Send in the camera position.
-    GLfloat * camPosition = (GLfloat*) malloc(sizeof(GLfloat)*2);
-    camPosition[0] = (GLfloat)(r->getCamera()->getX());
-    camPosition[1] = (GLfloat)(r->getCamera()->getY());
-    program->setUniform("camera", &camPosition);
-    free(camPosition);
+    DefTile::camPosition[0] = (GLfloat)(r->getCamera()->getX());
+    DefTile::camPosition[1] = (GLfloat)(r->getCamera()->getY());
+    program->setUniform("camera", &(DefTile::camPosition));
     
     // Since DefTiles do the parallax effect entirely in the vertex shader,
     // we can send them a virgin matrix.
@@ -139,3 +136,7 @@ void DefTile::report()
               << " texC: " << this->texC 
               << " texD: " << this->texD << std::endl;
 }
+
+// IT'S GONE IN THE NAME OF not malloc'ing in the innermost function call.
+GLfloat * DefTile::resolution = (GLfloat*) malloc(sizeof(GLfloat)*2);
+GLfloat * DefTile::camPosition = (GLfloat*) malloc(sizeof(GLfloat)*2);
