@@ -20,6 +20,16 @@ void Camera::setY(GLfloat y)
     this->y = y;
 }
 
+void Camera::setOffX(GLfloat x)
+{
+    this->offx = x;
+}
+
+void Camera::setOffY(GLfloat y)
+{
+    this->offy = y;
+}
+
 void Camera::setPos(GLfloat x, GLfloat y)
 {
     this->x = x;
