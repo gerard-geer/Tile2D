@@ -42,6 +42,7 @@ int main(int argc, char **argv)
     DefTile * crepB = r->makeDefTile(0, 0, PLANE_PLAYFIELD_A, 192, 160, true, "noise", NULL, NULL, NULL, "crepuscular");
     DefTile * bloom = r->makeDefTile(0, 0, PLANE_POS_2, 192, 160, true, NULL, NULL, NULL, NULL, "sky-bloom");
     AnimTile * anim = r->makeAnimTile(20, 20, PLANE_PLAYFIELD_C, 16, 20, true, "anim", 6, 16, 20, .1);
+
     bg->setIgnoreScroll(true);
     neg1->setIgnoreScroll(true);
     neg2->setIgnoreScroll(true);
