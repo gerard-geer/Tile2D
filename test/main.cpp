@@ -14,49 +14,52 @@ int main(int argc, char **argv)
     a->addNewTexture("grid", "../ExampleAssets/grid.png");
     a->addNewTexture("maingrid", "../ExampleAssets/maingrid.png");
 
-    AnimTile * s0 = r->makeAnimTile(120,22, PLANE_BG, 16,16, true, "grid",1,16,16,1);
-    AnimTile * s1 = r->makeAnimTile(120,22, PLANE_NEG_4, 16,16, true, "grid",1,16,16,1);
-    AnimTile * s2 = r->makeAnimTile(120,22, PLANE_NEG_3, 16,16, true, "grid",1,16,16,1);
-    AnimTile * s3 = r->makeAnimTile(120,22, PLANE_NEG_2, 16,16, true, "grid",1,16,16,1);
-    AnimTile * s4 = r->makeAnimTile(120,22, PLANE_NEG_1, 16,16, true, "grid",1,16,16,1);
-    AnimTile * s5 = r->makeAnimTile(120,22, PLANE_PLAYFIELD_A, 16,16, true, "maingrid",1,16,16,1);
-    AnimTile * s6 = r->makeAnimTile(120,22, PLANE_PLAYFIELD_B, 16,16, true, "maingrid",1,16,16,1);
-    AnimTile * s7 = r->makeAnimTile(120,22, PLANE_PLAYFIELD_C, 16,16, true, "maingrid",1,16,16,1);
-    AnimTile * s8 = r->makeAnimTile(120,22, PLANE_POS_1, 16,16, true, "grid",1,16,16,1);
-    AnimTile * s9 = r->makeAnimTile(120,22, PLANE_POS_2, 16,16, true, "grid",1,16,16,1);
+    a->addNewShader("def", "../ExampleAssets/ex_def_tile_shader.vert",
+                           "../ExampleAssets/ex_def_tile_shader.frag");
 
-    AnimTile * t0 = r->makeAnimTile(120,62, PLANE_BG, 16,16, true, "grid",1,16,16,1);
-    AnimTile * t1 = r->makeAnimTile(120,62, PLANE_NEG_4, 16,16, true, "grid",1,16,16,1);
-    AnimTile * t2 = r->makeAnimTile(120,62, PLANE_NEG_3, 16,16, true, "grid",1,16,16,1);
-    AnimTile * t3 = r->makeAnimTile(120,62, PLANE_NEG_2, 16,16, true, "grid",1,16,16,1);
-    AnimTile * t4 = r->makeAnimTile(120,62, PLANE_NEG_1, 16,16, true, "grid",1,16,16,1);
-    AnimTile * t5 = r->makeAnimTile(120,62, PLANE_PLAYFIELD_A, 16,16, true, "maingrid",1,16,16,1);
-    AnimTile * t6 = r->makeAnimTile(120,62, PLANE_PLAYFIELD_B, 16,16, true, "maingrid",1,16,16,1);
-    AnimTile * t7 = r->makeAnimTile(120,62, PLANE_PLAYFIELD_C, 16,16, true, "maingrid",1,16,16,1);
-    AnimTile * t8 = r->makeAnimTile(120,62, PLANE_POS_1, 16,16, true, "grid",1,16,16,1);
-    AnimTile * t9 = r->makeAnimTile(120,62, PLANE_POS_2, 16,16, true, "grid",1,16,16,1);
+    DefTile * s0 = r->makeDefTile(120,22, PLANE_BG, 16,16, true, "grid",NULL,NULL,NULL,"def");
+    DefTile * s1 = r->makeDefTile(120,22, PLANE_NEG_4, 16,16, true, "grid",NULL,NULL,NULL,"def");
+    DefTile * s2 = r->makeDefTile(120,22, PLANE_NEG_3, 16,16, true, "grid",NULL,NULL,NULL,"def");
+    DefTile * s3 = r->makeDefTile(120,22, PLANE_NEG_2, 16,16, true, "grid",NULL,NULL,NULL,"def");
+    DefTile * s4 = r->makeDefTile(120,22, PLANE_NEG_1, 16,16, true, "grid",NULL,NULL,NULL,"def");
+    DefTile * s5 = r->makeDefTile(120,22, PLANE_PLAYFIELD_A, 16,16, true, "maingrid",NULL,NULL,NULL,"def");
+    DefTile * s6 = r->makeDefTile(120,22, PLANE_PLAYFIELD_B, 16,16, true, "maingrid",NULL,NULL,NULL,"def");
+    DefTile * s7 = r->makeDefTile(120,22, PLANE_PLAYFIELD_C, 16,16, true, "maingrid",NULL,NULL,NULL,"def");
+    DefTile * s8 = r->makeDefTile(120,22, PLANE_POS_1, 16,16, true, "grid",NULL,NULL,NULL,"def");
+    DefTile * s9 = r->makeDefTile(120,22, PLANE_POS_2, 16,16, true, "grid",NULL,NULL,NULL,"def");
+
+    DefTile * t0 = r->makeDefTile(120,62, PLANE_BG, 16,16, true, "grid",NULL,NULL,NULL,"def");
+    DefTile * t1 = r->makeDefTile(120,62, PLANE_NEG_4, 16,16, true, "grid",NULL,NULL,NULL,"def");
+    DefTile * t2 = r->makeDefTile(120,62, PLANE_NEG_3, 16,16, true, "grid",NULL,NULL,NULL,"def");
+    DefTile * t3 = r->makeDefTile(120,62, PLANE_NEG_2, 16,16, true, "grid",NULL,NULL,NULL,"def");
+    DefTile * t4 = r->makeDefTile(120,62, PLANE_NEG_1, 16,16, true, "grid",NULL,NULL,NULL,"def");
+    DefTile * t5 = r->makeDefTile(120,62, PLANE_PLAYFIELD_A, 16,16, true, "maingrid",NULL,NULL,NULL,"def");
+    DefTile * t6 = r->makeDefTile(120,62, PLANE_PLAYFIELD_B, 16,16, true, "maingrid",NULL,NULL,NULL,"def");
+    DefTile * t7 = r->makeDefTile(120,62, PLANE_PLAYFIELD_C, 16,16, true, "maingrid",NULL,NULL,NULL,"def");
+    DefTile * t8 = r->makeDefTile(120,62, PLANE_POS_1, 16,16, true, "grid",NULL,NULL,NULL,"def");
+    DefTile * t9 = r->makeDefTile(120,62, PLANE_POS_2, 16,16, true, "grid",NULL,NULL,NULL,"def");
     
-    r->addToRenderQueue(ANIM_TILE, s0);
-    r->addToRenderQueue(ANIM_TILE, s1);
-    r->addToRenderQueue(ANIM_TILE, s2);
-    r->addToRenderQueue(ANIM_TILE, s3);
-    r->addToRenderQueue(ANIM_TILE, s4);
-    r->addToRenderQueue(ANIM_TILE, s5);
-    r->addToRenderQueue(ANIM_TILE, s6);
-    r->addToRenderQueue(ANIM_TILE, s7);
-    r->addToRenderQueue(ANIM_TILE, s8);
-    r->addToRenderQueue(ANIM_TILE, s9);
+    r->addToRenderQueue(DEF_TILE, s0);
+    r->addToRenderQueue(DEF_TILE, s1);
+    r->addToRenderQueue(DEF_TILE, s2);
+    r->addToRenderQueue(DEF_TILE, s3);
+    r->addToRenderQueue(DEF_TILE, s4);
+    r->addToRenderQueue(DEF_TILE, s5);
+    r->addToRenderQueue(DEF_TILE, s6);
+    r->addToRenderQueue(DEF_TILE, s7);
+    r->addToRenderQueue(DEF_TILE, s8);
+    r->addToRenderQueue(DEF_TILE, s9);
     
-    r->addToRenderQueue(ANIM_TILE, t0);
-    r->addToRenderQueue(ANIM_TILE, t1);
-    r->addToRenderQueue(ANIM_TILE, t2);
-    r->addToRenderQueue(ANIM_TILE, t3);
-    r->addToRenderQueue(ANIM_TILE, t4);
-    r->addToRenderQueue(ANIM_TILE, t5);
-    r->addToRenderQueue(ANIM_TILE, t6);
-    r->addToRenderQueue(ANIM_TILE, t7);
-    r->addToRenderQueue(ANIM_TILE, t8);
-    r->addToRenderQueue(ANIM_TILE, t9);
+    r->addToRenderQueue(DEF_TILE, t0);
+    r->addToRenderQueue(DEF_TILE, t1);
+    r->addToRenderQueue(DEF_TILE, t2);
+    r->addToRenderQueue(DEF_TILE, t3);
+    r->addToRenderQueue(DEF_TILE, t4);
+    r->addToRenderQueue(DEF_TILE, t5);
+    r->addToRenderQueue(DEF_TILE, t6);
+    r->addToRenderQueue(DEF_TILE, t7);
+    r->addToRenderQueue(DEF_TILE, t8);
+    r->addToRenderQueue(DEF_TILE, t9);
     
     window.setFullscreen(false);
 
