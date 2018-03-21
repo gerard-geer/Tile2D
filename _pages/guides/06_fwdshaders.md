@@ -95,7 +95,7 @@ To describe how parallax scrolling can be implemented it's best to look directly
 the transformation matrix that performs such scrolling.
 
 ![The parallax scrolling transformation matrix]({{ site.baseurl }}/assets/transmat.svg){:class="inline-image"}
-*Where **Fp** is the plane-dependent parallax scrolling factor.*{:class="image-text"}
+*Where **Fp** is the plane-dependent parallax scrolling factor, and **λ** is the center-of-parallax offset.*{:class="image-text"}
 
 In this ***Fp*** is the *parallax factor* stored in ```pFactor```. Notice how without ***Fp*** this is
 simply a matrix that scales the Tile to its size, then translates it according to its position relative

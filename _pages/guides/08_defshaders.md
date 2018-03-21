@@ -79,7 +79,7 @@ void setupTextureFlip(inout uv)
 Once again let us look at the parallax transformation matrix:
 
 ![The parallax scrolling transformation matrix]({{ site.baseurl }}/assets/transmat.svg){:class="inline-image"}
-*Where **Fp** is the plane-dependent parallax scrolling factor.*{:class="image-text"}
+*Where **Fp** is the plane-dependent parallax scrolling factor, and **λ** is the center-of-parallax offset.*{:class="image-text"}
 
 ***Fp*** throttles Tile translation relative to both its location and the camera, giving the 
 effect of parallax.
