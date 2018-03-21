@@ -99,6 +99,7 @@ void DefTile::render(Renderer * r)
     // Optimize all of this later.
     DefTile::pOffset[0] = (GLfloat)(r->getCamera()->getOffX());
     DefTile::pOffset[1] = (GLfloat)(r->getCamera()->getOffY());
+    program->setUniform("pOffset", &(DefTile::pOffset));
     
     // Since DefTiles do the parallax effect entirely in the vertex shader,
     // we can send them a virgin matrix.
