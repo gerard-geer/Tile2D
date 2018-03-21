@@ -21,6 +21,14 @@ private:
      * The Y position of the Camera.
      */
     GLfloat y;
+    /*
+     * The X offset of the Camera.
+     */
+    GLfloat offx;
+    /*
+     * The Y offset of the Camera.
+     */
+    GLfloat offy;
 public:
 
     /**
@@ -48,11 +56,30 @@ public:
     void setY(GLfloat y);
     
     /**
+     * @brief Sets the X offset of the Camera.
+     * @param x The new X offset of the Camera.
+     */
+    void setOffX(GLfloat x);
+    
+    /**
+     * @brief Sets the Y offset of the Camera.
+     * @param y The new X offset of the Camera.
+     */
+    void setOffY(GLfloat y);
+    
+    /**
      * @brief Sets the position of the Camera.
      * @param x The new X position of the Camera.
      * @param y The new Y position of the Camera.
      */
     void setPos(GLfloat x, GLfloat y);
+
+    /**
+     * @brief Sets the offset position of the Camera.
+     * @param x The new X offset of the Camera.
+     * @param y The new Y offset of the Camera.
+     */
+    void setOffset(GLfloat x, GLfloat y);
     
     /**
      * @brief Returns the X position of the Camera.
@@ -65,6 +92,18 @@ public:
      * @return The Y position of the Camera.
      */
     GLfloat getY() const;
+    
+    /**
+     * @brief Returns the X offset of the Camera.
+     * @return The X offset of the Camera.
+     */
+    GLfloat getOffX() const;
+    
+    /**
+     * @brief Returns the Y offset of the Camera.
+     * @return The Y offset of the Camera.
+     */
+    GLfloat getOffY() const;
 };
 
 #endif // CAMERA_H

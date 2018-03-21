@@ -43,15 +43,17 @@ void BGTile::render(Renderer * r)
     float Fp = this->getParallaxFactor(this->getPlane());
     
 	// Now we set up the matrix. There's documentation on how this works.
+    BasicMatrix *pm = this->getPositionMat();
     if( this->ignoresScroll() )
     {
-		this->getPositionMat()->set(0,2, this->getX() );
-		this->getPositionMat()->set(1,2, this->getY() );
+		pm->set(0,2, x );
+		pm->set(1,2, y );
 	}
     else
-    {	
-		this->getPositionMat()->set(0,2, ( this->getX() - r->getCamera()->getX() )*Fp );
-		this->getPositionMat()->set(1,2, ( this->getY() - r->getCamera()->getY() )*Fp );
+    {
+        Camera * c = r->getCamera();
+		pm->set(0,2, ( x - c->getX() )*Fp - c->getOffX()*(1.0-Fp) );
+		pm->set(1,2, ( y - c->getY() )*Fp - c->getOffY()*(1.0-Fp) );
 	}
     
     // Alrighty! Now that that's done, we can feed the matrix to the shader.

@@ -7,72 +7,68 @@ using namespace std;
 int main(int argc, char **argv)
 {
     Window window = Window();
-    window.create(1280, 800, 256, 160, (char*)"WOO");
+    window.create(1000, 600, 250, 150, (char*)"WOO");
     Renderer * r = window.getRenderer();
     AssetManager * a = r->getAssetManager();
         
-    a->addNewTexture("bg",    "../ExampleAssets/bg.png");
-    a->addNewTexture("neg1",  "../ExampleAssets/neg1.png");
-    a->addNewTexture("neg2",  "../ExampleAssets/neg2.png");
-    a->addNewTexture("neg3",  "../ExampleAssets/neg3.png");
-    a->addNewTexture("neg4",  "../ExampleAssets/neg4.png");
-    a->addNewTexture("playA", "../ExampleAssets/playA.png");
-    a->addNewTexture("pos1",  "../ExampleAssets/pos1.png");
-    a->addNewTexture("noise", "../ExampleAssets/noise.png");
-    a->addNewTexture("anim", "../ExampleAssets/yumetarou_frame16x20.png");
-    
-    a->addNewShader("wrapping-tex", "../ExampleAssets/wrapping-tex.vert",
-                                    "../ExampleAssets/wrapping-tex.frag");
-    a->addNewShader("crepuscular",  "../ExampleAssets/crepuscular.vert",
-                                    "../ExampleAssets/crepuscular.frag");
-    a->addNewShader("sky-bloom",  "../ExampleAssets/sky-bloom.vert",
-                                  "../ExampleAssets/sky-bloom.frag");
-    a->addNewShader("example_cust_comp_shader", "../ExampleAssets/ex_compositor_shader.vert",
-                                                "../ExampleAssets/ex_compositor_shader.frag");
-    r->setCustomShader("example_cust_comp_shader");
+    a->addNewTexture("grid", "../ExampleAssets/grid.png");
+    a->addNewTexture("maingrid", "../ExampleAssets/maingrid.png");
 
-    FwdTile * bg = r->makeFwdTile(0, 0, PLANE_BG, 192, 160, true, "bg", NULL, NULL, NULL, "wrapping-tex");
-    FwdTile * neg1 = r->makeFwdTile(0, 0, PLANE_NEG_1, 192, 160, true, "neg1", NULL, NULL, NULL, "wrapping-tex");
-    FwdTile * neg2 = r->makeFwdTile(0, 0, PLANE_NEG_2, 192, 160, true, "neg2", NULL, NULL, NULL, "wrapping-tex");
-    FwdTile * neg3 = r->makeFwdTile(0, 0, PLANE_NEG_3, 192, 160, true, "neg3", NULL, NULL, NULL, "wrapping-tex");
-    FwdTile * neg4 = r->makeFwdTile(0, 0, PLANE_NEG_4, 192, 160, true, "neg4", NULL, NULL, NULL, "wrapping-tex");
-    FwdTile * playA = r->makeFwdTile(0, 0, PLANE_PLAYFIELD_A, 192, 160, true, "playA", NULL, NULL, NULL, "wrapping-tex");
-    FwdTile * playC = r->makeFwdTile(0, 0, PLANE_PLAYFIELD_C, 192, 160, true, "pos1", NULL, NULL, NULL, "wrapping-tex");
-    DefTile * crepA = r->makeDefTile(0, 0, PLANE_NEG_1, 192, 160, true, "noise", NULL, NULL, NULL, "crepuscular");
-    DefTile * crepB = r->makeDefTile(0, 0, PLANE_PLAYFIELD_A, 192, 160, true, "noise", NULL, NULL, NULL, "crepuscular");
-    DefTile * bloom = r->makeDefTile(0, 0, PLANE_POS_2, 192, 160, true, NULL, NULL, NULL, NULL, "sky-bloom");
-    AnimTile * anim = r->makeAnimTile(20, 20, PLANE_PLAYFIELD_C, 16, 20, true, "anim", 6, 16, 20, .1);
+    a->addNewShader("fwd", "../ExampleAssets/ex_fwd_tile_shader.vert",
+                           "../ExampleAssets/ex_fwd_tile_shader.frag");
 
-    bg->setIgnoreScroll(true);
-    neg1->setIgnoreScroll(true);
-    neg2->setIgnoreScroll(true);
-    neg3->setIgnoreScroll(true);
-    neg4->setIgnoreScroll(true);
-    playA->setIgnoreScroll(true);
-    playC->setIgnoreScroll(true);
-    crepA->setIgnoreScroll(true);
-    crepB->setIgnoreScroll(true);
-    bloom->setIgnoreScroll(true);
-    anim->setIgnoreScroll(true);
+    FwdTile * s0 = r->makeFwdTile(120,22, PLANE_BG, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
+    FwdTile * s1 = r->makeFwdTile(120,22, PLANE_NEG_4, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
+    FwdTile * s2 = r->makeFwdTile(120,22, PLANE_NEG_3, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
+    FwdTile * s3 = r->makeFwdTile(120,22, PLANE_NEG_2, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
+    FwdTile * s4 = r->makeFwdTile(120,22, PLANE_NEG_1, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
+    FwdTile * s5 = r->makeFwdTile(120,22, PLANE_PLAYFIELD_A, 16,16, true, "maingrid",NULL,NULL,NULL,"fwd");
+    FwdTile * s6 = r->makeFwdTile(120,22, PLANE_PLAYFIELD_B, 16,16, true, "maingrid",NULL,NULL,NULL,"fwd");
+    FwdTile * s7 = r->makeFwdTile(120,22, PLANE_PLAYFIELD_C, 16,16, true, "maingrid",NULL,NULL,NULL,"fwd");
+    FwdTile * s8 = r->makeFwdTile(120,22, PLANE_POS_1, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
+    FwdTile * s9 = r->makeFwdTile(120,22, PLANE_POS_2, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
+
+    FwdTile * t0 = r->makeFwdTile(120,62, PLANE_BG, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
+    FwdTile * t1 = r->makeFwdTile(120,62, PLANE_NEG_4, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
+    FwdTile * t2 = r->makeFwdTile(120,62, PLANE_NEG_3, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
+    FwdTile * t3 = r->makeFwdTile(120,62, PLANE_NEG_2, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
+    FwdTile * t4 = r->makeFwdTile(120,62, PLANE_NEG_1, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
+    FwdTile * t5 = r->makeFwdTile(120,62, PLANE_PLAYFIELD_A, 16,16, true, "maingrid",NULL,NULL,NULL,"fwd");
+    FwdTile * t6 = r->makeFwdTile(120,62, PLANE_PLAYFIELD_B, 16,16, true, "maingrid",NULL,NULL,NULL,"fwd");
+    FwdTile * t7 = r->makeFwdTile(120,62, PLANE_PLAYFIELD_C, 16,16, true, "maingrid",NULL,NULL,NULL,"fwd");
+    FwdTile * t8 = r->makeFwdTile(120,62, PLANE_POS_1, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
+    FwdTile * t9 = r->makeFwdTile(120,62, PLANE_POS_2, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
     
+    r->addToRenderQueue(FWD_TILE, s0);
+    r->addToRenderQueue(FWD_TILE, s1);
+    r->addToRenderQueue(FWD_TILE, s2);
+    r->addToRenderQueue(FWD_TILE, s3);
+    r->addToRenderQueue(FWD_TILE, s4);
+    r->addToRenderQueue(FWD_TILE, s5);
+    r->addToRenderQueue(FWD_TILE, s6);
+    r->addToRenderQueue(FWD_TILE, s7);
+    r->addToRenderQueue(FWD_TILE, s8);
+    r->addToRenderQueue(FWD_TILE, s9);
     
-    r->addToRenderQueue(FWD_TILE, bg);
-    r->addToRenderQueue(FWD_TILE, neg1);
-    r->addToRenderQueue(FWD_TILE, neg2);
-    r->addToRenderQueue(DEF_TILE, crepA);
-    r->addToRenderQueue(DEF_TILE, crepB);
-    r->addToRenderQueue(FWD_TILE, neg3);
-    r->addToRenderQueue(FWD_TILE, neg4);
-    r->addToRenderQueue(FWD_TILE, playA);
-    r->addToRenderQueue(FWD_TILE, playC);
-    r->addToRenderQueue(DEF_TILE, bloom);
-    r->addToRenderQueue(ANIM_TILE,anim);
+    r->addToRenderQueue(FWD_TILE, t0);
+    r->addToRenderQueue(FWD_TILE, t1);
+    r->addToRenderQueue(FWD_TILE, t2);
+    r->addToRenderQueue(FWD_TILE, t3);
+    r->addToRenderQueue(FWD_TILE, t4);
+    r->addToRenderQueue(FWD_TILE, t5);
+    r->addToRenderQueue(FWD_TILE, t6);
+    r->addToRenderQueue(FWD_TILE, t7);
+    r->addToRenderQueue(FWD_TILE, t8);
+    r->addToRenderQueue(FWD_TILE, t9);
     
-    window.setFullscreen(true);
+    window.setFullscreen(false);
+
     while(!glfwWindowShouldClose(window.getWindow()))
     {
         window.update();
-        r->getCamera()->setX(glfwGetTime()*.25);
+
+        r->getCamera()->setOffY( sin(glfwGetTime())*.8 );
+        r->getCamera()->setX( sin( glfwGetTime()*1.75 )*.4 );
     }
     window.destroy();
     return 0;

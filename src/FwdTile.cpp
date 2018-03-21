@@ -90,6 +90,11 @@ void FwdTile::render(Renderer * r)
     FwdTile::camPosition[0] = (GLfloat)(r->getCamera()->getX());
     FwdTile::camPosition[1] = (GLfloat)(r->getCamera()->getY());
     program->setUniform("camera", &(FwdTile::camPosition));
+
+    // Send in the parallax offset center as well.
+    FwdTile::pOffset[0] = (GLfloat)(r->getCamera()->getOffX());
+    FwdTile::pOffset[1] = (GLfloat)(r->getCamera()->getOffY());
+    program->setUniform("pOffset", &(FwdTile::pOffset));
     
     // Since FwdTiles do the parallax effect entirely in the vertex shader,
     // we can send them a virgin matrix.
@@ -136,3 +141,4 @@ void FwdTile::report()
 // IT'S GONE IN THE NAME OF not malloc'ing in the innermost function call.
 GLfloat * FwdTile::resolution = (GLfloat*) malloc(sizeof(GLfloat)*2);
 GLfloat * FwdTile::camPosition = (GLfloat*) malloc(sizeof(GLfloat)*2);
+GLfloat * FwdTile::pOffset = (GLfloat*) malloc(sizeof(GLfloat)*2);
