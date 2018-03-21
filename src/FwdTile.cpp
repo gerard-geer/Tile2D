@@ -136,3 +136,4 @@ void FwdTile::report()
 // IT'S GONE IN THE NAME OF not malloc'ing in the innermost function call.
 GLfloat * FwdTile::resolution = (GLfloat*) malloc(sizeof(GLfloat)*2);
 GLfloat * FwdTile::camPosition = (GLfloat*) malloc(sizeof(GLfloat)*2);
+GLfloat * FwdTile::pOffset = (GLfloat*) malloc(sizeof(GLfloat)*2);
