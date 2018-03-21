@@ -29,6 +29,7 @@ your shader at least exposes them.
 | ```uniform mat3``` | ```transform``` | The transformation matrix. Since we wish to allow these vertex shaders to optionally redefine how scrolling works, the transformation only contains position and scale. |
 | ```uniform vec2``` | ```camera``` | The X and Y coordinates of the camera. |
 | ```uniform float``` | ```pFactor``` | The factor by which scrolling is throttled to create parallax comes from a LUT and is passed in via this uniform. |
+| ```uniform vec2``` | ```pOffset``` | The offset to shift the center of parallax by. |
 | ```uniform float ``` | ```ignoreScroll``` | Whether or not it has been specified CPU-side that this Tile shall ignore camera scrolling. |
 | ```uniform float``` | ```depth``` | A depth value that corresponds with the current rendering plane to allow for z-ordering and cullling. |
 | ```uniform int``` | ```hFlip``` | 1 when horizontal texture flipping is desired CPU-side, 0 otherwise. |
@@ -109,11 +110,8 @@ mat3 parallaxSetup()
     mat3 m = transform;
     
     // Now we do the actual math to enable the parallax.
-    // This boils down to essentially:
-    // TilePosition = (TilePosition - CameraPosition) / ParallaxFactor
-    m[2][0] = ( m[2][0] - camera.x ) * pFactor;
-    m[2][1] = ( m[2][1] - camera.y ) * pFactor;
-    
+    m[2][0] = (m[2][0] - camera.x)*pFactor - pOffset.x*(1.0-pFactor);
+    m[2][1] = (m[2][1] - camera.y)*pFactor - pOffset.y*(1.0-pFactor);
     return m;
 }
 ```
@@ -134,9 +132,7 @@ mat3 parallaxSetup()
     mat3 m = transform;
     
     // Now we do the actual math to enable the parallax.
-    // This boils down to essentially:
-    // TilePosition = (TilePosition - CameraPosition) * ParallaxFactor
-    m[2].xy = ( m[2].xy - camera ) * pFactor;
+    m[2].xy = ( m[2].xy - camera )*pFactor - pOffset*(1.0-pFactor);
     
     return m;
 }
