@@ -17,14 +17,17 @@ int main(int argc, char **argv)
     a->addNewShader("fwd", "../ExampleAssets/ex_fwd_tile_shader.vert",
                            "../ExampleAssets/ex_fwd_tile_shader.frag");
 
+    a->addNewShader("def", "../ExampleAssets/ex_def_tile_shader.vert",
+                           "../ExampleAssets/ex_def_tile_shader.frag");
+
     FwdTile * s0 = r->makeFwdTile(120,22, PLANE_BG, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
     FwdTile * s1 = r->makeFwdTile(120,22, PLANE_NEG_4, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
     FwdTile * s2 = r->makeFwdTile(120,22, PLANE_NEG_3, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
     FwdTile * s3 = r->makeFwdTile(120,22, PLANE_NEG_2, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
     FwdTile * s4 = r->makeFwdTile(120,22, PLANE_NEG_1, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
-    FwdTile * s5 = r->makeFwdTile(120,22, PLANE_PLAYFIELD_A, 16,16, true, "maingrid",NULL,NULL,NULL,"fwd");
-    FwdTile * s6 = r->makeFwdTile(120,22, PLANE_PLAYFIELD_B, 16,16, true, "maingrid",NULL,NULL,NULL,"fwd");
-    FwdTile * s7 = r->makeFwdTile(120,22, PLANE_PLAYFIELD_C, 16,16, true, "maingrid",NULL,NULL,NULL,"fwd");
+    DefTile * s5 = r->makeDefTile(120,22, PLANE_PLAYFIELD_A, 16,16, true, "maingrid",NULL,NULL,NULL,"def");
+    DefTile * s6 = r->makeDefTile(120,22, PLANE_PLAYFIELD_B, 16,16, true, "maingrid",NULL,NULL,NULL,"def");
+    DefTile * s7 = r->makeDefTile(120,22, PLANE_PLAYFIELD_C, 16,16, true, "maingrid",NULL,NULL,NULL,"def");
     FwdTile * s8 = r->makeFwdTile(120,22, PLANE_POS_1, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
     FwdTile * s9 = r->makeFwdTile(120,22, PLANE_POS_2, 16,16, true, "grid",NULL,NULL,NULL,"fwd");
 
@@ -44,9 +47,9 @@ int main(int argc, char **argv)
     r->addToRenderQueue(FWD_TILE, s2);
     r->addToRenderQueue(FWD_TILE, s3);
     r->addToRenderQueue(FWD_TILE, s4);
-    r->addToRenderQueue(FWD_TILE, s5);
-    r->addToRenderQueue(FWD_TILE, s6);
-    r->addToRenderQueue(FWD_TILE, s7);
+    r->addToRenderQueue(DEF_TILE, s5);
+    r->addToRenderQueue(DEF_TILE, s6);
+    r->addToRenderQueue(DEF_TILE, s7);
     r->addToRenderQueue(FWD_TILE, s8);
     r->addToRenderQueue(FWD_TILE, s9);
     
