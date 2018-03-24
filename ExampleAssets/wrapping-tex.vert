@@ -38,6 +38,9 @@ uniform vec2 camera;
 // The factor by which scrolling is modified to facilitate the parallax effect.
 uniform float pFactor;
 
+// The center-of-parallax offset.
+uniform vec2 pOffset;
+
 // Whether or not to ignore scrolling.
 uniform float ignoreScroll;
 
@@ -66,8 +69,8 @@ mat3 parallaxSetup()
     // Now we do the actual math to enable the parallax.
     // This boils down to essentially:
     // TilePosition = (TilePosition - CameraPosition) / ParallaxFactor
-    m[2][0] = (m[2][0] - camera.x) * pFactor;
-    m[2][1] = (m[2][1] - camera.y) * pFactor;
+    m[2][0] = (m[2][0] - camera.x)*pFactor - pOffset.x*(1.0-pFactor);
+    m[2][1] = (m[2][1] - camera.y)*pFactor - pOffset.y*(1.0-pFactor);
     
     return m;
 }

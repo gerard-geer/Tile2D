@@ -59,7 +59,7 @@ float vignette()
 	uv.x *= winResolution.x/winResolution.y;
     
     // Do some vignetting.
-    return 1.0-dot(uv,uv)*.2;
+    return 1.0-dot(uv,uv)*.1;
 }
 
 float scanlines()
@@ -78,7 +78,7 @@ void main(void)
     vec4 raw = vec4(mix(fwd.rgb, def.rgb, def.a), 1.0);
     
     raw.rgb *= vignette();
-    raw.rgb *= scanlines();
+    raw.rgb *= .75 + .25*scanlines();
     
     gl_FragColor = raw;
 }

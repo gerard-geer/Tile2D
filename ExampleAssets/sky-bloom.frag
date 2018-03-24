@@ -72,7 +72,7 @@ void main(void)
     #undef V
     #undef S
     vec4 orig = texture2D(fwdColor, uv);
-    orig += orig*.125*isItBG(uv);
-    gl_FragColor = mix(orig, gl_FragColor, 1.0-isItBG(uv));
+    orig += orig*.5*isItBG(uv);
+    //gl_FragColor = mix(orig, gl_FragColor, 1.0-isItBG(uv));
     
 }
