@@ -261,14 +261,12 @@ void Renderer::renderFinalPass(Window * window)
 	// If we're using a custom shader, we pass in extra stuff that's useful.
 	if( this->customCompositor != NULL )
 	{
-		GLfloat * resolution = (GLfloat*) malloc(sizeof(GLfloat)*2);
-		resolution[0] = (GLfloat)(this->getWidth());
-		resolution[1] = (GLfloat)(this->getHeight());
+		Renderer::resolution[0] = (GLfloat)(this->getWidth());
+		Renderer::resolution[1] = (GLfloat)(this->getHeight());
 		program->setUniform("fbResolution", &resolution);
-		resolution[0] = (GLfloat)(window->getWidth());  // Oh yeah memory reuse.
-		resolution[1] = (GLfloat)(window->getHeight());
+		Renderer::resolution[0] = (GLfloat)(window->getWidth());  // Oh yeah memory reuse.
+		Renderer::resolution[1] = (GLfloat)(window->getHeight());
 		program->setUniform("winResolution", &resolution);
-		free(resolution);
 		float time = glfwGetTime();
 		program->setUniform("time", &time);
 	}
@@ -607,3 +605,4 @@ void Renderer::destroy()
     this->destroyRenderQueues();
 }
 
+GLfloat *Renderer::resolution = (GLfloat*) malloc(sizeof(GLfloat)*2);
