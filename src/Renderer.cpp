@@ -180,49 +180,6 @@ unsigned int Renderer::getHeight()
     return this->fwdFB->getHeight();
 }
 
-/**
- * @brief This is used as the predicate when sorting Tiles. It places opaque
- *        from front to back, then transparent Tiles from back to front.
- * @param lhs The left-hand-side Tile in the comparision.
- * @param rhs The right-hand-size Tile in the comparison.
- * @return Whether or not the first one is less than the second.
- */
-bool tileSortingPredicate(TileWithType lhs, TileWithType rhs)
-{
-    Tile * a = lhs.second;
-    Tile * b = rhs.second;
-    
-    // Let's first split things up into fwd and def tiles.
-    if( lhs.first == DEF_TILE && rhs.first != DEF_TILE ) return false;
-    if( lhs.first != DEF_TILE && rhs.first == DEF_TILE ) return true;
-    
-    // We need to render transparent objects last.
-    if(  a->hasTrans() && !b->hasTrans() ) return false;
-    if( !a->hasTrans() &&  b->hasTrans() ) return true;
-    
-    // At this point both operands will have the same transparency status.
-    
-    // When Tiles don't have transparency, we can draw them from front to
-    // back and take advantage of z-culling.
-    if( !a->hasTrans() )
-    {
-        // Now we're comparing rendering planes. We want to
-        // draw the closest Tiles first, so we can take
-        // advantage of depth testing and thusly minimize redraw.
-        if( a->getPlane() <= b->getPlane() ) return true;
-        if( a->getPlane() >  b->getPlane() ) return false;
-    }
-    
-    // Otherwise we need to draw from back to front in order for transparency
-    // to work right.
-    else
-    {
-        if( a->getPlane() <= b->getPlane() ) return false;
-        if( a->getPlane() >  b->getPlane() ) return true;
-    }
-    return true; // Just to get rid of the warnings.
-}
-
 void Renderer::addToRenderQueue(tile_type type, Tile * tile)
 {
     // Just tack the Tile on the end since it'll be sorted.
