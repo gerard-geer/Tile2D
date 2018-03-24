@@ -211,17 +211,13 @@ void Renderer::flushRenderQueue()
 bool Renderer::onScreenTest(Tile * t)
 {
 	// Get the Tile's projected screen coordinates.
-    float tx, ty;
-    float Fp = t->getParallaxFactor(t->getPlane());
-    if( t->ignoresScroll() )
+    float tx = t->getX(), ty = t->getY();
+    if( !t->ignoresScroll() )
     {
-    	tx = t->getX();
-    	ty = t->getY();
-    }
-    else
-    {
-    	tx = ( t->getX() - this->getCamera()->getX() )*Fp;
-    	ty = ( t->getY() - this->getCamera()->getY() )*Fp;
+        Camera * c = this->getCamera();
+        float Fp = t->getParallaxFactor(t->getPlane());
+    	tx = ( tx - c->getX() )*Fp - c->getOffX()*(1.0-Fp);
+    	ty = ( ty - c->getY() )*Fp - c->getOffX()*(1.0-Fp);
     }
     	
     // First we check if the distance between the center of the screen and the
@@ -328,7 +324,7 @@ void Renderer::render(Window * window)
         t = fwdQueue->get(i);
         
         // If this is a DefTile, then we go ahead and save it for later.
-        if( t.first == DEF_TILE ) break;
+        //if( t.first == DEF_TILE ) break;
         
         // Also if it's offscreen we don't need to render it.
         if( !this->onScreenTest(t.second) ) 
