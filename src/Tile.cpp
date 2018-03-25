@@ -47,7 +47,7 @@ GLfloat Tile::getParallaxFactor(tile_plane plane)
 
 GLfloat Tile::getTileDepth(tile_plane plane)
 {
-    return plane*.00625;
+    return plane*.0625;
 }
 
 GLfloat Tile::getX() const
