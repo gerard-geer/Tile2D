@@ -180,49 +180,6 @@ unsigned int Renderer::getHeight()
     return this->fwdFB->getHeight();
 }
 
-/**
- * @brief This is used as the predicate when sorting Tiles. It places opaque
- *        from front to back, then transparent Tiles from back to front.
- * @param lhs The left-hand-side Tile in the comparision.
- * @param rhs The right-hand-size Tile in the comparison.
- * @return Whether or not the first one is less than the second.
- */
-bool tileSortingPredicate(TileWithType lhs, TileWithType rhs)
-{
-    Tile * a = lhs.second;
-    Tile * b = rhs.second;
-    
-    // Let's first split things up into fwd and def tiles.
-    if( lhs.first == DEF_TILE && rhs.first != DEF_TILE ) return false;
-    if( lhs.first != DEF_TILE && rhs.first == DEF_TILE ) return true;
-    
-    // We need to render transparent objects last.
-    if(  a->hasTrans() && !b->hasTrans() ) return false;
-    if( !a->hasTrans() &&  b->hasTrans() ) return true;
-    
-    // At this point both operands will have the same transparency status.
-    
-    // When Tiles don't have transparency, we can draw them from front to
-    // back and take advantage of z-culling.
-    if( !a->hasTrans() )
-    {
-        // Now we're comparing rendering planes. We want to
-        // draw the closest Tiles first, so we can take
-        // advantage of depth testing and thusly minimize redraw.
-        if( a->getPlane() <= b->getPlane() ) return true;
-        if( a->getPlane() >  b->getPlane() ) return false;
-    }
-    
-    // Otherwise we need to draw from back to front in order for transparency
-    // to work right.
-    else
-    {
-        if( a->getPlane() <= b->getPlane() ) return false;
-        if( a->getPlane() >  b->getPlane() ) return true;
-    }
-    return true; // Just to get rid of the warnings.
-}
-
 void Renderer::addToRenderQueue(tile_type type, Tile * tile)
 {
     // Just tack the Tile on the end since it'll be sorted.
@@ -254,17 +211,13 @@ void Renderer::flushRenderQueue()
 bool Renderer::onScreenTest(Tile * t)
 {
 	// Get the Tile's projected screen coordinates.
-    float tx, ty;
-    float Fp = t->getParallaxFactor(t->getPlane());
-    if( t->ignoresScroll() )
+    float tx = t->getX(), ty = t->getY();
+    if( !t->ignoresScroll() )
     {
-    	tx = t->getX();
-    	ty = t->getY();
-    }
-    else
-    {
-    	tx = ( t->getX() - this->getCamera()->getX() )*Fp;
-    	ty = ( t->getY() - this->getCamera()->getY() )*Fp;
+        Camera * c = this->getCamera();
+        float Fp = t->getParallaxFactor(t->getPlane());
+    	tx = ( tx - c->getX() )*Fp - c->getOffX()*(1.0-Fp);
+    	ty = ( ty - c->getY() )*Fp - c->getOffX()*(1.0-Fp);
     }
     	
     // First we check if the distance between the center of the screen and the
@@ -308,14 +261,12 @@ void Renderer::renderFinalPass(Window * window)
 	// If we're using a custom shader, we pass in extra stuff that's useful.
 	if( this->customCompositor != NULL )
 	{
-		GLfloat * resolution = (GLfloat*) malloc(sizeof(GLfloat)*2);
-		resolution[0] = (GLfloat)(this->getWidth());
-		resolution[1] = (GLfloat)(this->getHeight());
+		Renderer::resolution[0] = (GLfloat)(this->getWidth());
+		Renderer::resolution[1] = (GLfloat)(this->getHeight());
 		program->setUniform("fbResolution", &resolution);
-		resolution[0] = (GLfloat)(window->getWidth());  // Oh yeah memory reuse.
-		resolution[1] = (GLfloat)(window->getHeight());
+		Renderer::resolution[0] = (GLfloat)(window->getWidth());  // Oh yeah memory reuse.
+		Renderer::resolution[1] = (GLfloat)(window->getHeight());
 		program->setUniform("winResolution", &resolution);
-		free(resolution);
 		float time = glfwGetTime();
 		program->setUniform("time", &time);
 	}
@@ -371,7 +322,7 @@ void Renderer::render(Window * window)
         t = fwdQueue->get(i);
         
         // If this is a DefTile, then we go ahead and save it for later.
-        if( t.first == DEF_TILE ) break;
+        //if( t.first == DEF_TILE ) break;
         
         // Also if it's offscreen we don't need to render it.
         if( !this->onScreenTest(t.second) ) 
@@ -654,3 +605,4 @@ void Renderer::destroy()
     this->destroyRenderQueues();
 }
 
+GLfloat *Renderer::resolution = (GLfloat*) malloc(sizeof(GLfloat)*2);

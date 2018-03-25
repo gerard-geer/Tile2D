@@ -155,6 +155,11 @@ private:
      * rendering pass, but it does receive all the DefTiles.
      */
     Framebuffer * defFB;
+
+    /*
+     * A static float pointer to be used to remove the malloc from the renderer,
+     */
+    static GLfloat * resolution;
     
     /**
      * @brief Adds a single, empty placeholder texture to the AssetManager for 
