@@ -30,11 +30,14 @@ Quickstart
 ----------
 In just a few steps you can draw sprites to the screen.
 
-**Step 1:** Build. Download the source and run ```make``` to view the avaiable build options, then
-build with your preferred method. Make sure you have all the dependencies! (Listed below.)
+**Step 0:** Setup. If you're on Linux they should be available through your package manager. If you'd prefer to build things yourself, just follow their directions and use your linking instincts. If you're on Windows, download and run their installers.
 
-**Step 2:** Setup. Include the common header ```tile2d.h``` in your project, as well as the results of
-the build. 
+**Step 1:** Build. Download the source and run ```make``` to view the avaiable build options, then
+build with your preferred method. Make sure you have all the dependencies! (Mentioned above, listed below.)
+
+**Step 2:** Include. Include the common header ```tile2d.h``` in your project, as well as the results of
+the build.
+
 **Step 3:** Create a window! This creates a Tile2D Window, which is simply just a managed GLFW window. Also, it's also a good idea to store local pointers to the ```Renderer``` and ```AssetManager```.
 ```c++
 Window w = new Window();
@@ -42,6 +45,7 @@ w->create(1000, 700, 256, 224, (char*)"Tile2D Window");
 Renderer * r = w->getRenderer();
 AssetManager * a = r->getAssetManager();
 ```
+
 **Step 4:** Load some assets. Most Tiles need textures, and some even use custom shaders. In Tile2D, shaders and textures are
 considered to be Assets. Assets are stored in a key-value structure called an AssetManager, contained within the renderer itself.
 ```c++
