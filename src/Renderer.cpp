@@ -7,6 +7,7 @@ Renderer::Renderer()
     this->tileUvVBO = 0;
     this->defFB = NULL;
     this->fwdFB = NULL;
+    this->time = 0.000;
 }
 
 Renderer::~Renderer()
@@ -180,6 +181,11 @@ unsigned int Renderer::getHeight()
     return this->fwdFB->getHeight();
 }
 
+double Renderer::getCurFrameTime()
+{
+    return this->time;
+}
+
 void Renderer::addToRenderQueue(tile_type type, Tile * tile)
 {
     // Just tack the Tile on the end since it'll be sorted.
@@ -312,6 +318,9 @@ void Renderer::render(Window * window)
     this->fwdFB->setAsRenderTarget();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear out what was in the framebuffer.
     
+    // Set the current frame time.
+    this->time = glfwGetTime();
+
     // Create a TileWithType to load the queries from the render queues into.
     TileWithType t;
     
