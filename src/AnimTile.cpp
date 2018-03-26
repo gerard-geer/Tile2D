@@ -32,7 +32,7 @@ void AnimTile::render(Renderer* r)
     // First things first: Let's make sure we're drawing the correct frame.
     if( glfwGetTime() > this->lastChange+this->frameTime )
     {
-        this->lastChange = glfwGetTime();
+        this->lastChange = r->getCurFrameTime();
         this->curFrame = (this->curFrame + 1)%this->numFrames;
     }
     
