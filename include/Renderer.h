@@ -157,6 +157,12 @@ private:
     Framebuffer * defFB;
 
     /*
+     * The the time the current frame was started. This is here to keep all
+     * animations synchronised.
+     */
+    double time;
+
+    /*
      * A static float pointer to be used to remove the malloc from the renderer,
      */
     static GLfloat * resolution;
@@ -295,6 +301,12 @@ public:
      * @return The vertical resolution of the underlying FBOs.
      */
     unsigned int getHeight();
+
+    /**
+     * @brief Returns the current frame time.
+     * @return The current frame time.
+     */
+    double getCurFrameTime();
     
     /**
      * @brief Adds a Tile to the render queue. Whatever is in the render
