@@ -8,6 +8,7 @@ Renderer::Renderer()
     this->defFB = NULL;
     this->fwdFB = NULL;
     this->time = 0.000;
+    this->frameCount = 0;
 }
 
 Renderer::~Renderer()
@@ -184,6 +185,11 @@ unsigned int Renderer::getHeight()
 double Renderer::getCurFrameTime()
 {
     return this->time;
+}
+
+unsigned long Renderer::getFrameCount()
+{
+    return this->frameCount;
 }
 
 void Renderer::addToRenderQueue(tile_type type, Tile * tile)
@@ -402,11 +408,14 @@ void Renderer::render(Window * window)
     #ifdef T2D_PER_FRAME_STATS
     def = glfwGetTime()-def;
     #endif
-    
+
     // Now we go back to renderering to the window.
     window->setAsRenderTarget();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Jiggle the handle.
     this->renderFinalPass(window); // Draws a full screen quad with the two FBOs mixed.
+    
+    // Increment the frame count.
+    ++ this->frameCount;
     
     // Clock the entire frame and actually print the stats to the screen.
     #ifdef T2D_PER_FRAME_STATS
@@ -465,7 +474,7 @@ SceneTile * Renderer::makeSceneTile(GLfloat x, GLfloat y, tile_plane plane, GLfl
 AnimTile * Renderer::makeAnimTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
                                 GLfloat height, bool normalize, char* texture, 
                                 unsigned int numFrames, unsigned int frameWidth, 
-                                unsigned int frameHeight, float frameTime)
+                                unsigned int frameHeight, bool frameBased, float frameTime)
 {
     AnimTile * t = new AnimTile();
     if(normalize)
@@ -477,17 +486,17 @@ AnimTile * Renderer::makeAnimTile(GLfloat x, GLfloat y, tile_plane plane, GLfloa
     }
     t->init(x, y, plane, width, height, 
             ((Texture*)(this->getAssetManager()->get(texture)))->hasAlpha(),
-            texture, numFrames, frameWidth, frameHeight, frameTime);
+            texture, numFrames, frameWidth, frameHeight, frameBased, frameTime);
     return t;
 }
 
 AnimTile * Renderer::makeAnimTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
                                 GLfloat height, bool normalize, const char* texture, 
                                 unsigned int numFrames, unsigned int frameWidth, 
-                                unsigned int frameHeight, float frameTime)
+                                unsigned int frameHeight, bool frameBased, float frameTime)
 {
 	return this->makeAnimTile(x,y,plane,width,height,normalize,(char*)texture,numFrames,
-							  frameWidth,frameHeight,frameTime);
+							  frameWidth,frameHeight,frameBased,frameTime);
 }
 
 DefTile * Renderer::makeDefTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,

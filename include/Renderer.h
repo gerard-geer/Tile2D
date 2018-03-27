@@ -163,6 +163,12 @@ private:
     double time;
 
     /*
+     * Number of frames that have occurred.
+     */
+    unsigned long frameCount;
+
+
+    /*
      * A static float pointer to be used to remove the malloc from the renderer,
      */
     static GLfloat * resolution;
@@ -307,6 +313,12 @@ public:
      * @return The current frame time.
      */
     double getCurFrameTime();
+
+    /**
+     * @brief Returns the current frame count.
+     * @return The current frame count.
+     */
+    unsigned long getFrameCount();
     
     /**
      * @brief Adds a Tile to the render queue. Whatever is in the render
@@ -394,17 +406,18 @@ public:
      * @param numFrames The number of frames held in the texture.
      * @param framewidth The width of each individual frame.
      * @param frameHeight The height of each individual frame.
+     * @param frameBased If set, animation will be keyed to frame count, not actual time.
      * @param frameTime The duration of each frame.
      * @return 
      */
     AnimTile * makeAnimTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
                             GLfloat height, bool normalize, char * texture,
                             unsigned int numFrames, unsigned int framewidth, unsigned int frameHeight,
-                            float frameTime);
+                            bool frameBased,float frameTime);
     AnimTile * makeAnimTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
                             GLfloat height, bool normalize, const char * texture,
                             unsigned int numFrames, unsigned int framewidth, unsigned int frameHeight,
-                            float frameTime);
+                            bool frameBased,float frameTime);
     
     /**
      * @brief A factory method used to create a DefTile. Make sure that every
