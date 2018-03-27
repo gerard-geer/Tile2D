@@ -11,7 +11,7 @@ AnimTile::~AnimTile()
 void AnimTile::init(GLfloat x, GLfloat y, tile_plane plane, GLfloat width, 
                     GLfloat height, bool trans, char* texture, unsigned int numFrames,
                     unsigned int frameWidth, unsigned int frameHeight, 
-                    float frameTime)
+                    bool frameBased, float frameTime)
 {
     // Initialize the parent Tile.
     Tile::init(x, y, plane, width, height, trans);
@@ -23,6 +23,7 @@ void AnimTile::init(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
     this->frameHeight = frameHeight;
     this->frameTime = frameTime;
     this->lastChange =0.0;
+    this->frameBased = frameBased;
     this->texture = texture;
 }
 
@@ -30,10 +31,22 @@ void AnimTile::render(Renderer* r)
 {
         
     // First things first: Let's make sure we're drawing the correct frame.
-    if( r->getCurFrameTime() > this->lastChange+this->frameTime )
+    if( this->frameBased )
     {
-        this->lastChange = r->getCurFrameTime();
-        this->curFrame = (this->curFrame + 1)%this->numFrames;
+        unsigned long t = this->frameTime;
+        unsigned long c = r->getFrameCount();
+        if( c % t == 0 )
+        {
+            this->curFrame = (this->curFrame + 1)%this->numFrames;
+        }
+    }
+    else
+    {
+        if( r->getCurFrameTime() > this->lastChange+this->frameTime )
+        {
+            this->lastChange = r->getCurFrameTime();
+            this->curFrame = (this->curFrame + 1)%this->numFrames;
+        }
     }
     
     // Now let's get some stuff from the asset Manager.
