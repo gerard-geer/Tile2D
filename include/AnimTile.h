@@ -40,6 +40,11 @@ private:
     unsigned int frameHeight;
 
     /*
+     * Whether or not to time frame changes based on time or frame count.
+     */
+    bool frameBased;
+
+    /*
      * The amount of time to pass before moving
      * to the next sprite frame.
      */
@@ -85,12 +90,13 @@ public:
      * @param numFrames The number of frames held in the texture.
      * @param framewidth The width of each individual frame.
      * @param frameHeight The height of each individual frame.
+     * @param frameBased Whether or not to key frame changes based on frame count, or time.
      * @param frameTime The duration of each frame.
      */
     void init(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
               GLfloat height, bool trans, char * texture,
               unsigned int numFrames, unsigned int framewidth, unsigned int frameHeight,
-              float frameTime);
+              bool frameBased, float frameTime);
 
     /**
      * @brief Called by the Renderer to draw this AnimTile to the screen.
