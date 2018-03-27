@@ -22,7 +22,7 @@ void AnimTile::init(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
     this->frameWidth = frameWidth;
     this->frameHeight = frameHeight;
     this->frameTime = frameTime;
-    this->lastChange = glfwGetTime();
+    this->lastChange =0.0;
     this->texture = texture;
 }
 
@@ -30,7 +30,7 @@ void AnimTile::render(Renderer* r)
 {
         
     // First things first: Let's make sure we're drawing the correct frame.
-    if( glfwGetTime() > this->lastChange+this->frameTime )
+    if( r->getCurFrameTime() > this->lastChange+this->frameTime )
     {
         this->lastChange = r->getCurFrameTime();
         this->curFrame = (this->curFrame + 1)%this->numFrames;
