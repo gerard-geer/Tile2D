@@ -19,6 +19,9 @@ HDR_DIR=include/
 # The shader source directory.
 SDR_DIR=shaders/
 
+# The scripts directory.
+SCRIPTS=scripts/
+
 # The build directory.
 BLD_DIR=bin/
 
@@ -120,7 +123,7 @@ setup_library_dir:
 SHADERS:
 	@echo "Consolidating shaders into header file named \"shader_source.h\""
 	@rm -f $(HDR_DIR)shader_source.h
-	@python glsl-to-header.py $(SHADER_FILES)
+	@python $(SCRIPTS)glsl-to-header.py $(SHADER_FILES)
 
 # Compiles all of Tile2D's source into .o files.
 OBJ_FILES_MESSAGE: setup_build_dir 
