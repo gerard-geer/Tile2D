@@ -13,26 +13,26 @@ int main(int argc, char **argv)
     Renderer * r = window.getRenderer();
     AssetManager * a = r->getAssetManager();
          
-    a->addNewTexture("bg",    "../ExampleAssets/bg.png");
-    a->addNewTexture("neg1",  "../ExampleAssets/neg1.png");
-    a->addNewTexture("neg2",  "../ExampleAssets/neg2.png");
-    a->addNewTexture("neg3",  "../ExampleAssets/neg3.png");
-    a->addNewTexture("neg4",  "../ExampleAssets/neg4.png");
-    a->addNewTexture("playA", "../ExampleAssets/playA.png");
-    a->addNewTexture("noise", "../ExampleAssets/noise.png");
-    a->addNewTexture("ground", "../ExampleAssets/ground.png");
-    a->addNewTexture("pos", "../ExampleAssets/pos.png");
-    a->addNewTexture("pos1",  "../ExampleAssets/pos1.png");
-    a->addNewTexture("pos2",  "../ExampleAssets/pos2.png");
+    a->addNewTexture("bg",    "../../../ExampleAssets/bg.png");
+    a->addNewTexture("neg1",  "../../../ExampleAssets/neg1.png");
+    a->addNewTexture("neg2",  "../../../ExampleAssets/neg2.png");
+    a->addNewTexture("neg3",  "../../../ExampleAssets/neg3.png");
+    a->addNewTexture("neg4",  "../../../ExampleAssets/neg4.png");
+    a->addNewTexture("playA", "../../../ExampleAssets/playA.png");
+    a->addNewTexture("noise", "../../../ExampleAssets/noise.png");
+    a->addNewTexture("ground", "../../../ExampleAssets/ground.png");
+    a->addNewTexture("pos", "../../../ExampleAssets/pos.png");
+    a->addNewTexture("pos1",  "../../../ExampleAssets/pos1.png");
+    a->addNewTexture("pos2",  "../../../ExampleAssets/pos2.png");
      
-    a->addNewShader("wrapping-tex", "../ExampleAssets/wrapping-tex.vert",
-                                    "../ExampleAssets/wrapping-tex.frag");
-    a->addNewShader("crepuscular",  "../ExampleAssets/crepuscular.vert",
-                                    "../ExampleAssets/crepuscular.frag");
-    a->addNewShader("sky-bloom",  "../ExampleAssets/sky-bloom.vert",
-                                  "../ExampleAssets/sky-bloom.frag");
-    a->addNewShader("example_cust_comp_shader", "../ExampleAssets/ex_compositor_shader.vert",
-                                                "../ExampleAssets/ex_compositor_shader.frag");
+    a->addNewShader("wrapping-tex", "../../../ExampleAssets/wrapping-tex.vert",
+                                    "../../../ExampleAssets/wrapping-tex.frag");
+    a->addNewShader("crepuscular",  "../../../ExampleAssets/crepuscular.vert",
+                                    "../../../ExampleAssets/crepuscular.frag");
+    a->addNewShader("sky-bloom",  "../../../ExampleAssets/sky-bloom.vert",
+                                  "../../../ExampleAssets/sky-bloom.frag");
+    a->addNewShader("example_cust_comp_shader", "../../../ExampleAssets/ex_compositor_shader.vert",
+                                                "../../../ExampleAssets/ex_compositor_shader.frag");
     r->setCustomShader("example_cust_comp_shader");
  
     FwdTile * bg = r->makeFwdTile(0,    16, PLANE_BG, 320,200, true, "bg", NULL, NULL, NULL, "wrapping-tex");
