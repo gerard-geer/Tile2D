@@ -15,6 +15,8 @@ programmable pipeline for maximimum compatibility.
 shader. Just set a plane and that's it.
 - **Rotation.** Not too many sprite-based rendering libraries give you clear and
 simple rotation. (Also deferred to the vertex shader.)
+- **Frame- and Time-based Sprite Timing.** Sprites can be timed to change based on
+either frame count or current time.
 - **Extensive programability.** Custom shader code can be written for FwdTiles, 
 DefTiles and the screen compositor (which is what combines both passes). Even
 further, you can extend the base Tile class to create whatever kind of Tile you
