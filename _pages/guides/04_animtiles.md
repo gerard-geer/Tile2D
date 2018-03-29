@@ -20,7 +20,7 @@ To create an AnimTile use the static factory method in the Renderer class.
 AnimTile* Renderer::makeAnimTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat width,
                                  GLfloat height, bool normalize, char * texture,
                                  unsigned int numFrames, unsigned int framewidth,
-                                 unsigned int frameHeight, float frameTime);
+                                 unsigned int frameHeight, bool frameBased, float frameTime);
 ```
 
 | ```x``` | The X position of the new AnimTile. |
@@ -33,6 +33,7 @@ AnimTile* Renderer::makeAnimTile(GLfloat x, GLfloat y, tile_plane plane, GLfloat
 | ```numFrames``` | How many frames of animation the texture contains. |
 | ```frameWidth``` | The width of each frame, in pixels. |
 | ```frameHeight``` | The height of each frame, in pixels. |
+| ```frameBased``` | Whether or not to base frame changes on the frame count, rather than the current time. |
 | ```frameTime``` | How long to display each frame, in seconds. |
 | Returns | a pointer to a new ```AnimTile```. |
 
@@ -52,7 +53,7 @@ way for frames to be organized.
 - <p class='li-text'>```numFrames``` is the number of frames stored in the texture.</p>
 
 Yes, this does result in some very wide images, but restrictions--and in general, care--regarding texture
-dimensions has evaporated.
+dimensions have evaporated.
 
 Additional AnimTile Features
 ----------------------------
@@ -112,7 +113,7 @@ To set the duration of each frame:
 void setFrameTime(float animWait);
 ```
 
-|  animWait | The new amount of time to wait between frames. |
+|  animWait | The new amount of time (frames if frameBased) to wait between frames. |
 
 To override the underlying animation mechanics and set the frame yourself:
 
