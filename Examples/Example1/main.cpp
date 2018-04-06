@@ -13,18 +13,18 @@ int main(int argc, char **argv)
     Renderer * r = window.getRenderer();
     AssetManager * a = r->getAssetManager();
          
-    a->addNewTexture("bg", "../../../ExampleAssets/clouds.png");
-    a->addNewTexture("water", "../../../ExampleAssets/water.png");
-    a->addNewTexture("waterbg", "../../../ExampleAssets/waterbg.png");
-    a->addNewTexture("tallplat", "../../../ExampleAssets/tallplat.png");
-    a->addNewTexture("longplat", "../../../ExampleAssets/longplat.png");
-    a->addNewTexture("wall", "../../../ExampleAssets/wall.png");
-    a->addNewTexture("ceiling", "../../../ExampleAssets/ceiling.png");
-    a->addNewTexture("splash", "../../../ExampleAssets/splash.png");
-    a->addNewTexture("waves", "../../../ExampleAssets/waves.png");
-    a->addNewTexture("corner", "../../../ExampleAssets/corner.png");
+    a->addNewTexture("bg", "../assets/tex/clouds.png");
+    a->addNewTexture("water", "../assets/tex/water.png");
+    a->addNewTexture("waterbg", "../assets/tex/waterbg.png");
+    a->addNewTexture("tallplat", "../assets/tex/tallplat.png");
+    a->addNewTexture("longplat", "../assets/tex/longplat.png");
+    a->addNewTexture("wall", "../assets/tex/wall.png");
+    a->addNewTexture("ceiling", "../assets/tex/ceiling.png");
+    a->addNewTexture("splash", "../assets/tex/splash.png");
+    a->addNewTexture("waves", "../assets/tex/waves.png");
+    a->addNewTexture("corner", "../assets/tex/corner.png");
 
-    a->addNewShader("reflectiveWater", "../../../ExampleAssets/reflwater.vert", "../../../ExampleAssets/reflwater.frag");
+    a->addNewShader("reflectiveWater", "../assets/shaders/reflwater.vert", "../assets/shaders/reflwater.frag");
      
 
     // COORDINATES

@@ -11,16 +11,16 @@ ST_NAME=libTile2d.a
 DY_NAME=libTile2d.so
 
 # The source directory.
-SRC_DIR=src/
+SRC_DIR=../../src/
 
 # The header directory.
-HDR_DIR=include/
+HDR_DIR=../../include/
 
 # The shader source directory.
-SDR_DIR=shaders/
+SDR_DIR=../../shaders/
 
 # The scripts directory.
-SCRIPTS=scripts/
+SCRIPTS=../../scripts/
 
 # The build directory.
 BLD_DIR=bin/
@@ -29,7 +29,7 @@ BLD_DIR=bin/
 LIB_DIR=lib/
 
 # The test code directory.
-TST_DIR=test/
+TST_DIR=./
 
 # The build options variable, to be used to specify debug flags through make.
 DBFLAGS=''

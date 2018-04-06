@@ -26,12 +26,6 @@ uniform float time;
 // The resolution of the framebuffer being rendered into.
 uniform vec2 resolution;
 
-// The color buffer of the first pass.
-uniform sampler2D fwdColor;
-
-// The depth buffer of the first pass.
-uniform sampler2D fwdDepth;
-
 // The four custom textures.
 uniform sampler2D texA;
 uniform sampler2D texB;
@@ -41,48 +35,16 @@ uniform sampler2D texD;
 // The texture coordinate we get from the vertex stage.
 varying vec2 fragUV;
 
-/**
- * Performs the depth test.
- */
-bool depthTest(float existingDepth)
-{
-    return (gl_FragCoord.z < existingDepth);
-}
-
-/**
- * Gives a cool color value.
- */
-vec4 someCoolStuff(vec2 uv)
-{
-    vec4 kitten = texture2D(texA, fragUV);
-    
-    vec4 fwdPass = texture2D(fwdColor, fragUV*vec2(1,-1));
-    // Remember that the clear color of the fwd pass is 0.
-    fwdPass.a = 1.0;
-    
-    return mix(fwdPass, kitten, .66);
-}
+// The position matrix of the Tile.
+varying vec2 pos;
 
 /**
  * The entry point of this shader.
  */
 void main(void)
 {
-    
-    // First we need a screen-relative normalized coordinate.
-    vec2 uv = gl_FragCoord.xy/resolution;
-    
-    // Get the existing depth.
-    float depth = texture2D(fwdDepth, uv).r;
-    
-    // Do the depth test, and if we fail set the fragment to transparent.
-    if( !depthTest(depth) )
-    {
-        // Transparent green.
-        gl_FragColor = vec4(0, 1, 0, 0);
-        return;
-    }
-    
-    // If we don't fail we set it to some cool colors.
-    gl_FragColor = someCoolStuff(uv);
+    vec2 uv = fragUV;
+    uv.x *= 2.0;
+    //uv.x += pos.x;
+    gl_FragColor = texture2D(texA, uv+pos);
 }

@@ -38,9 +38,6 @@ uniform vec2 camera;
 // The factor by which scrolling is modified to facilitate the parallax effect.
 uniform float pFactor;
 
-// The offset of the center of parallax.
-uniform vec2 pOffset;
-
 // Whether or not to ignore scrolling.
 uniform float ignoreScroll;
 
@@ -54,6 +51,9 @@ uniform int vFlip;
 // We want to give the fragment shader a texture coordinate, right?
 varying vec2 fragUV;
 
+// The position of the Tile, since we only move the texture and not the geometry.
+varying vec2 pos;
+
 /**
  * This modifies the transformation matrix by making it into a modelview 
  * projection matrix that performs parallax scrolling.
@@ -63,13 +63,11 @@ mat3 parallaxSetup()
     // One can't edit uniforms, so we need to make a copy.
     mat3 m = transform;
     
-    // Check to see if we need to ignore scrolling.
-    if(ignoreScroll  < .5)
-    {
-		// Now we do the actual math to enable the parallax.
-		m[2][0] = (m[2][0] - camera.x)*pFactor - pOffset.x*(1.0-pFactor);
-		m[2][1] = (m[2][1] - camera.y)*pFactor - pOffset.y*(1.0-pFactor);
-	}
+    // Now we do the actual math to enable the parallax.
+    // This boils down to essentially:
+    // TilePosition = (TilePosition - CameraPosition) / ParallaxFactor
+    m[2][0] = (m[2][0] - camera.x) * pFactor;
+    m[2][1] = (m[2][1] - camera.y) * pFactor;
     
     return m;
 }
@@ -82,13 +80,18 @@ void main(void)
     // Get the parallax matrix.
     mat3 m = parallaxSetup();
     
-    // Multiply the vertex position by the parallax projection matrix.
-    gl_Position.xyz = m*vertPos;
+    // Set the output position to just that of full screen. We tell
+    // the fragment shader where the Tile is, so that rather than moving the
+    // the Tile, we just scroll the texture. 
+    gl_Position.xyz = (vertPos*2.0);
+    gl_Position.y = gl_Position.y;
     
     // Now we just need to set the depth and W term. Since the negative
     // Z axis goes into the screen, a Z coordinate <depth> deep would be
     // at -depth.
     gl_Position.zw = vec2(depth,1);
+    
+    pos = m[2].xy;
     
     // Oh, let's not forget to send over a texture coordinate.
     fragUV = vertUV;
